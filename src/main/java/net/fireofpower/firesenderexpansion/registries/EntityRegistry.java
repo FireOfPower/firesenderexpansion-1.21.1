@@ -18,7 +18,6 @@ public class EntityRegistry {
     public static void register(IEventBus eventBus) {
         ENTITIES.register(eventBus);
     }
-     io.redspace.ironsspellbooks.registries.EntityRegistry
 
     public static final DeferredHolder<EntityType<?>, EntityType<TeleportRend>> TELEPORT_REND =
             ENTITIES.register("teleport_rend", () -> EntityType.Builder.of(TeleportRend::new, MobCategory.MISC)
