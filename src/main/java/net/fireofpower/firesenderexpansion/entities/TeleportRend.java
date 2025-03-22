@@ -12,7 +12,9 @@ import io.redspace.ironsspellbooks.util.ParticleHelper;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -29,6 +31,19 @@ public class TeleportRend extends EchoingStrikeEntity {
         this.level = level;
         this.waitTime = waitTime;
     }
+
+//    public TeleportRend(EntityType<Entity> entityEntityType, Level level) {
+//        super((EntityType<? extends Projectile>) entityEntityType, level);
+//        this.level = level;
+//        this.waitTime = 1;
+//    }
+
+    public TeleportRend(EntityType<TeleportRend> teleportRendEntityType, Level level) {
+        super(teleportRendEntityType,level);
+        this.level = level;
+        this.waitTime = 1;
+    }
+
 
     @Override
     public void tick() {

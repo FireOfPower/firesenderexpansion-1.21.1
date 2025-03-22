@@ -1,6 +1,8 @@
 package net.fireofpower.firesenderexpansion.registries;
 
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
+import net.fireofpower.firesenderexpansion.entities.HollowCrystal;
+import net.fireofpower.firesenderexpansion.entities.MagicShulkerBullet;
 import net.fireofpower.firesenderexpansion.entities.TeleportRend;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -20,9 +22,21 @@ public class EntityRegistry {
     }
 
     public static final DeferredHolder<EntityType<?>, EntityType<TeleportRend>> TELEPORT_REND =
-            ENTITIES.register("teleport_rend", () -> EntityType.Builder.of(TeleportRend::new, MobCategory.MISC)
+            ENTITIES.register("teleport_rend", () -> EntityType.Builder.<TeleportRend>of(TeleportRend::new, MobCategory.MISC)
                     .sized(1f, 1f)
                     .clientTrackingRange(64)
-                    .build("fires_ender_expansion:teleport_rend"));
+                    .build((ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "teleport_rend")).toString()));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<MagicShulkerBullet>> MAGIC_SHULKER_BULLET =
+            ENTITIES.register("magic_shulker_bullet", () -> EntityType.Builder.<MagicShulkerBullet>of(MagicShulkerBullet::new, MobCategory.MISC)
+                    .sized(1f, 1f)
+                    .clientTrackingRange(64)
+                    .build((ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "magic_shulker_bullet")).toString()));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<HollowCrystal>> HOLLOW_CRYSTAL =
+            ENTITIES.register("hollow_crystal", () -> EntityType.Builder.<HollowCrystal>of(HollowCrystal::new, MobCategory.MISC)
+                    .sized(1f, 1f)
+                    .clientTrackingRange(64)
+                    .build((ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "hollow_crystal")).toString()));
 
 }

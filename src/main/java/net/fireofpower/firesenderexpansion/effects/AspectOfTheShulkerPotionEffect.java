@@ -7,6 +7,7 @@ import io.redspace.ironsspellbooks.entity.spells.EchoingStrikeEntity;
 import io.redspace.ironsspellbooks.entity.spells.magic_arrow.MagicArrowProjectile;
 import io.redspace.ironsspellbooks.entity.spells.magic_missile.MagicMissileProjectile;
 import net.fireofpower.firesenderexpansion.entities.MagicShulkerBullet;
+import net.fireofpower.firesenderexpansion.registries.EntityRegistry;
 import net.fireofpower.firesenderexpansion.registries.PotionEffectRegistry;
 import net.fireofpower.firesenderexpansion.registries.SpellRegistries;
 import net.minecraft.core.Direction;
@@ -35,7 +36,6 @@ public class AspectOfTheShulkerPotionEffect extends MagicMobEffect {
 
     @SubscribeEvent
     public static void handleAbility(LivingIncomingDamageEvent event) {
-        System.out.println("Internal Cooldown of Shulker aspect: " + internalCooldown);
         if (event.getSource().getEntity() instanceof ServerPlayer attackingPlayer && attackingPlayer.hasEffect(PotionEffectRegistry.ASPECT_OF_THE_SHULKER_POTION_EFFECT)) {
             if(event.getSource() instanceof SpellDamageSource && internalCooldown == 0){
                 LivingEntity victimPlayer = event.getEntity();

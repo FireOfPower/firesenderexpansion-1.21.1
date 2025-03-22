@@ -2,8 +2,10 @@ package net.fireofpower.firesenderexpansion.registries;
 
 import io.redspace.ironsspellbooks.api.spells.AbstractSpell;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
+import io.redspace.ironsspellbooks.spells.eldritch.AbyssalShroudSpell;
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
 import net.fireofpower.firesenderexpansion.spells.AspectOfTheShulkerSpell;
+import net.fireofpower.firesenderexpansion.spells.HollowCrystalSpell;
 import net.fireofpower.firesenderexpansion.spells.PartialTeleportSpell;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -22,5 +24,6 @@ public class SpellRegistries {
     }
 
     public static final Supplier<AbstractSpell> PARTIAL_TELEPORT = registerSpell(new PartialTeleportSpell());
-    public static final Supplier<AbstractSpell> ABSTRACT_SPELL_SUPPLIER = registerSpell(new AspectOfTheShulkerSpell());
+    public static final Supplier<AbstractSpell> ASPECT_OF_THE_SHULKER = registerSpell(new AspectOfTheShulkerSpell());
+    public static final Supplier<AbstractSpell> HOLLOW_CRYSTAL = registerSpell(new HollowCrystalSpell());
 }
