@@ -14,11 +14,17 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.animation.*;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.Optional;
 
-public class HollowCrystal extends AbstractMagicProjectile {
-    public static final AnimationState idleAnimationState = new AnimationState();
+public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity {
+    private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+
+
     public HollowCrystal(Level level, LivingEntity shooter) {
         this((EntityType) EntityRegistry.HOLLOW_CRYSTAL.get(), level);
         this.setOwner(shooter);
@@ -49,5 +55,24 @@ public class HollowCrystal extends AbstractMagicProjectile {
     @Override
     public Optional<Holder<SoundEvent>> getImpactSound() {
         return Optional.of(SoundRegistry.ABYSSAL_SHROUD);
+    }
+
+
+    private final AnimationController<HollowCrystal> animationController = new AnimationController<>(this, "controller", 0, this::predicate);
+
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
+        controllerRegistrar.add(animationController);
+    }
+
+    @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return cache;
+    }
+
+    private PlayState predicate(software.bernie.geckolib.animation.AnimationState<HollowCrystal> event){
+        event.getController().setAnimation(RawAnimation.begin().then("animation.hollow_crystal.animation", Animation.LoopType.LOOP));
+
+        return PlayState.CONTINUE;
     }
 }

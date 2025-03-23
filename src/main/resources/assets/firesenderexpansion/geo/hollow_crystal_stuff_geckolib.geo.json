@@ -1,0 +1,53 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.unknown",
+				"texture_width": 32,
+				"texture_height": 32,
+				"visible_bounds_width": 2,
+				"visible_bounds_height": 2.5,
+				"visible_bounds_offset": [0, 0.75, 0]
+			},
+			"bones": [
+				{
+					"name": "Everything",
+					"pivot": [1, 7, -1]
+				},
+				{
+					"name": "CenterHolder",
+					"parent": "Everything",
+					"pivot": [1, 0, -1],
+					"cubes": [
+						{"origin": [-1, 5, -3], "size": [4, 4, 4], "uv": [0, 16]}
+					]
+				},
+				{
+					"name": "bone3",
+					"parent": "Everything",
+					"pivot": [1, 7, -1],
+					"cubes": [
+						{"origin": [-3, 3, -5], "size": [8, 8, 8], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "bone",
+					"parent": "Everything",
+					"pivot": [1, 7, -1],
+					"cubes": [
+						{"origin": [-3, 3, -5], "size": [8, 8, 8], "inflate": 4, "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "bone2",
+					"parent": "Everything",
+					"pivot": [1, 7, -1],
+					"cubes": [
+						{"origin": [-3, 3, -5], "size": [8, 8, 8], "inflate": 4, "pivot": [1, 7, -1], "rotation": [-90, -90, 90], "uv": [0, 0]}
+					]
+				}
+			]
+		}
+	]
+}
