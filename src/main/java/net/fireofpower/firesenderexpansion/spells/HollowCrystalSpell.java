@@ -75,9 +75,9 @@ public class HollowCrystalSpell extends AbstractSpell {
             System.out.println("Launch a Hollow Crystal with " + serverPlayer.getEffect(PotionEffectRegistry.HOLLOW_CRYSTAL_POTION_EFFECT).getAmplifier() + " Power");
             serverPlayer.removeEffect(PotionEffectRegistry.HOLLOW_CRYSTAL_POTION_EFFECT);
             HollowCrystal hollowCrystal = new HollowCrystal(serverPlayer.level(), serverPlayer);
-            hollowCrystal.setPos(serverPlayer.position().add(0, serverPlayer.getEyeHeight() - hollowCrystal.getBoundingBox().getYsize() * .5f, 0).add(serverPlayer.getForward()));
+            hollowCrystal.setPos(serverPlayer.position().add(0, serverPlayer.getEyeHeight() + hollowCrystal.getBoundingBox().getYsize() * .5f, 0).add(serverPlayer.getForward().multiply(3,3,3)));
             hollowCrystal.shoot(serverPlayer.getLookAngle());
-            hollowCrystal.setDeltaMovement(hollowCrystal.getDeltaMovement().multiply(2,2,2));
+            hollowCrystal.setDeltaMovement(hollowCrystal.getDeltaMovement().multiply(0.25,0.25,0.25));
             hollowCrystal.setDamage(20);
             serverPlayer.level().addFreshEntity(hollowCrystal);
         }

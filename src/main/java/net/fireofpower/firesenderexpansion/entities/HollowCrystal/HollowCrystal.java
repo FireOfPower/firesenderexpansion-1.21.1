@@ -3,6 +3,8 @@ package net.fireofpower.firesenderexpansion.entities.HollowCrystal;
 import io.redspace.ironsspellbooks.api.util.Utils;
 import io.redspace.ironsspellbooks.capabilities.magic.MagicManager;
 import io.redspace.ironsspellbooks.entity.spells.AbstractMagicProjectile;
+import io.redspace.ironsspellbooks.particle.BlastwaveParticleOptions;
+import io.redspace.ironsspellbooks.particle.ZapParticle;
 import io.redspace.ironsspellbooks.particle.ZapParticleOption;
 import io.redspace.ironsspellbooks.registries.SoundRegistry;
 import io.redspace.ironsspellbooks.util.ParticleHelper;
@@ -28,6 +30,7 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity 
     public HollowCrystal(Level level, LivingEntity shooter) {
         this((EntityType) EntityRegistry.HOLLOW_CRYSTAL.get(), level);
         this.setOwner(shooter);
+        this.setNoGravity(true);
     }
 
     public HollowCrystal(EntityType<HollowCrystal> hollowCrystalEntityType, Level level) {
@@ -39,7 +42,7 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity 
         Vec3 pos = this.getBoundingBox().getCenter().add(this.getDeltaMovement());
         Vec3 random = Utils.getRandomVec3((double)1.0F).add(pos);
         pos = pos.add(this.getDeltaMovement());
-        this.level().addParticle(new ZapParticleOption(random), pos.x, pos.y, pos.z, (double)0.0F, (double)0.0F, (double)0.0F);
+        //this.level().addParticle(new ZapParticleOption(random), pos.x, pos.y, pos.z, (double)0.0F, (double)0.0F, (double)0.0F);
     }
 
     @Override
@@ -54,7 +57,7 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity 
 
     @Override
     public Optional<Holder<SoundEvent>> getImpactSound() {
-        return Optional.of(SoundRegistry.ABYSSAL_SHROUD);
+        return Optional.of(SoundRegistry.ENDER_CAST);
     }
 
 
