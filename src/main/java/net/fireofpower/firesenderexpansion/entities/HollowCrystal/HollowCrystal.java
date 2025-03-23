@@ -18,6 +18,7 @@ import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.*;
+import software.bernie.geckolib.constant.DefaultAnimations;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.Optional;
@@ -73,7 +74,7 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity 
     }
 
     private PlayState predicate(AnimationState<HollowCrystal> event){
-        event.getController().setAnimation(RawAnimation.begin().then("animation.hollow_crystal.animation", Animation.LoopType.LOOP));
+        event.getController().setAnimation(DefaultAnimations.IDLE);
         return PlayState.CONTINUE;
     }
 }

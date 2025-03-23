@@ -21,7 +21,7 @@ public class HollowCrystalRenderer extends GeoEntityRenderer<HollowCrystal> {
 
     @Override
     public ResourceLocation getTextureLocation(HollowCrystal hollowCrystal) {
-        return ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "textures/entity/hollow_crystal/hollow_crystal_model.png");
+        return ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "textures/entity/hollow_crystal.png");
     }
 
     @Override
