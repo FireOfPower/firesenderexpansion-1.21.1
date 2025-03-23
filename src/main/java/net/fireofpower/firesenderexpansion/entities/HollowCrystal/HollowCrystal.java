@@ -1,29 +1,24 @@
-package net.fireofpower.firesenderexpansion.entities;
+package net.fireofpower.firesenderexpansion.entities.HollowCrystal;
 
 import io.redspace.ironsspellbooks.api.util.Utils;
 import io.redspace.ironsspellbooks.capabilities.magic.MagicManager;
 import io.redspace.ironsspellbooks.entity.spells.AbstractMagicProjectile;
-import io.redspace.ironsspellbooks.entity.spells.ball_lightning.BallLightning;
-import io.redspace.ironsspellbooks.entity.spells.ball_lightning.BallLightningRenderer;
 import io.redspace.ironsspellbooks.particle.ZapParticleOption;
 import io.redspace.ironsspellbooks.registries.SoundRegistry;
 import io.redspace.ironsspellbooks.util.ParticleHelper;
 import net.fireofpower.firesenderexpansion.registries.EntityRegistry;
 import net.minecraft.core.Holder;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Optional;
 
 public class HollowCrystal extends AbstractMagicProjectile {
+    public static final AnimationState idleAnimationState = new AnimationState();
     public HollowCrystal(Level level, LivingEntity shooter) {
         this((EntityType) EntityRegistry.HOLLOW_CRYSTAL.get(), level);
         this.setOwner(shooter);

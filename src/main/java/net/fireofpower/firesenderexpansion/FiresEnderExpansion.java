@@ -1,6 +1,6 @@
 package net.fireofpower.firesenderexpansion;
 
-import net.fireofpower.firesenderexpansion.entities.render.HollowCrystalRenderer;
+import net.fireofpower.firesenderexpansion.entities.HollowCrystal.HollowCrystalRenderer;
 import net.fireofpower.firesenderexpansion.registries.EntityRegistry;
 import net.fireofpower.firesenderexpansion.registries.PotionEffectRegistry;
 import net.fireofpower.firesenderexpansion.registries.SpellRegistries;

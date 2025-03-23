@@ -1,7 +1,7 @@
 package net.fireofpower.firesenderexpansion.registries;
 
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
-import net.fireofpower.firesenderexpansion.entities.HollowCrystal;
+import net.fireofpower.firesenderexpansion.entities.HollowCrystal.HollowCrystal;
 import net.fireofpower.firesenderexpansion.entities.MagicShulkerBullet;
 import net.fireofpower.firesenderexpansion.entities.TeleportRend;
 import net.minecraft.core.registries.Registries;
@@ -11,8 +11,6 @@ import net.minecraft.world.entity.MobCategory;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
-
-import java.util.function.Supplier;
 
 public class EntityRegistry {
     private static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(Registries.ENTITY_TYPE, FiresEnderExpansion.MODID);
