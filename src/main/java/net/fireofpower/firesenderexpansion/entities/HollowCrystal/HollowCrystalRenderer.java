@@ -15,13 +15,13 @@ import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
 public class HollowCrystalRenderer extends GeoEntityRenderer<HollowCrystal> {
     public HollowCrystalRenderer(EntityRendererProvider.Context context) {
-        super(context, new HollowCrystalModel());
+        super(context, new HollowCrystalModel(ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "hollow_crystal")));
         this.shadowRadius = 0.5f;
     }
 
     @Override
     public ResourceLocation getTextureLocation(HollowCrystal hollowCrystal) {
-        return ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "textures/entities/hollow_crystal/hollow_crystal_model.png");
+        return ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "textures/entity/hollow_crystal/hollow_crystal_model.png");
     }
 
     @Override

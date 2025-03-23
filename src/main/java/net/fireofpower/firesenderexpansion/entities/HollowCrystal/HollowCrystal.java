@@ -11,7 +11,6 @@ import io.redspace.ironsspellbooks.util.ParticleHelper;
 import net.fireofpower.firesenderexpansion.registries.EntityRegistry;
 import net.minecraft.core.Holder;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
@@ -73,9 +72,8 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity 
         return cache;
     }
 
-    private PlayState predicate(software.bernie.geckolib.animation.AnimationState<HollowCrystal> event){
+    private PlayState predicate(AnimationState<HollowCrystal> event){
         event.getController().setAnimation(RawAnimation.begin().then("animation.hollow_crystal.animation", Animation.LoopType.LOOP));
-
         return PlayState.CONTINUE;
     }
 }
