@@ -5,6 +5,7 @@ import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
 import io.redspace.ironsspellbooks.spells.eldritch.AbyssalShroudSpell;
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
 import net.fireofpower.firesenderexpansion.spells.AspectOfTheShulkerSpell;
+import net.fireofpower.firesenderexpansion.spells.DimensionalTravellerSpell;
 import net.fireofpower.firesenderexpansion.spells.HollowCrystalSpell;
 import net.fireofpower.firesenderexpansion.spells.PartialTeleportSpell;
 import net.neoforged.bus.api.IEventBus;
@@ -26,4 +27,5 @@ public class SpellRegistries {
     public static final Supplier<AbstractSpell> PARTIAL_TELEPORT = registerSpell(new PartialTeleportSpell());
     public static final Supplier<AbstractSpell> ASPECT_OF_THE_SHULKER = registerSpell(new AspectOfTheShulkerSpell());
     public static final Supplier<AbstractSpell> HOLLOW_CRYSTAL = registerSpell(new HollowCrystalSpell());
+    public static final Supplier<AbstractSpell> DIMENSIONAL_TRAVELLER = registerSpell(new DimensionalTravellerSpell());
 }

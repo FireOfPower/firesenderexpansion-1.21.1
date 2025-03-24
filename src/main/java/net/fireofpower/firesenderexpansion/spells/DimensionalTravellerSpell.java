@@ -3,25 +3,31 @@ package net.fireofpower.firesenderexpansion.spells;
 import io.redspace.ironsspellbooks.api.config.DefaultConfig;
 import io.redspace.ironsspellbooks.api.magic.MagicData;
 import io.redspace.ironsspellbooks.api.registry.SchoolRegistry;
-import io.redspace.ironsspellbooks.api.spells.*;
+import io.redspace.ironsspellbooks.api.spells.AbstractSpell;
+import io.redspace.ironsspellbooks.api.spells.CastSource;
+import io.redspace.ironsspellbooks.api.spells.CastType;
+import io.redspace.ironsspellbooks.api.spells.SpellRarity;
 import io.redspace.ironsspellbooks.api.util.Utils;
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
-import net.fireofpower.firesenderexpansion.registries.PotionEffectRegistry;
-import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.Resource;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 
 import java.util.List;
 
-@AutoSpellConfig
-public class AspectOfTheShulkerSpell extends AbstractSpell {
-    private final ResourceLocation spellId = ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "aspect_of_the_shulker");
+public class DimensionalTravellerSpell extends AbstractSpell {
+    private final ResourceLocation spellId = ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "dimensional_traveller");
+
+    private final DefaultConfig defaultConfig = new DefaultConfig()
+            .setMaxLevel(5)
+            .setCooldownSeconds(60)
+            .setMinRarity(SpellRarity.RARE)
+            .setSchoolResource(SchoolRegistry.ENDER_RESOURCE)
+            .build();
 
     @Override
     public List<MutableComponent> getUniqueInfo(int spellLevel, LivingEntity caster) {
@@ -30,14 +36,7 @@ public class AspectOfTheShulkerSpell extends AbstractSpell {
         );
     }
 
-    private final DefaultConfig defaultConfig = new DefaultConfig()
-            .setMinRarity(SpellRarity.UNCOMMON)
-            .setSchoolResource(SchoolRegistry.ENDER_RESOURCE)
-            .setMaxLevel(5)
-            .setCooldownSeconds(40)
-            .build();
-
-    public AspectOfTheShulkerSpell()
+    public DimensionalTravellerSpell()
     {
         this.manaCostPerLevel = 25;
         this.baseSpellPower = 30;
@@ -48,8 +47,13 @@ public class AspectOfTheShulkerSpell extends AbstractSpell {
 
     @Override
     public void onCast(Level level, int spellLevel, LivingEntity entity, CastSource castSource, MagicData playerMagicData) {
-        entity.addEffect(new MobEffectInstance(PotionEffectRegistry.ASPECT_OF_THE_SHULKER_POTION_EFFECT, (int) getSpellPower(spellLevel, entity) * 20, 0, false, false, true));
-
+        if(entity.level().dimension() == Level.OVERWORLD){
+            entity.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, (int) getSpellPower(spellLevel, entity) * 20, 0, false, false, true));
+        } else if (entity.level().dimension() == Level.NETHER){
+            entity.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, (int) getSpellPower(spellLevel, entity) * 20, 0, false, false, true));
+        } else if (entity.level().dimension() == Level.END){
+            entity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, (int) getSpellPower(spellLevel, entity) * 20, 0, false, false, true));
+        }
         super.onCast(level, spellLevel, entity, castSource, playerMagicData);
     }
 

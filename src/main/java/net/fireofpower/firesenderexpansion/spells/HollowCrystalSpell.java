@@ -78,7 +78,7 @@ public class HollowCrystalSpell extends AbstractSpell {
             hollowCrystal.setPos(serverPlayer.position().add(0, serverPlayer.getEyeHeight() + hollowCrystal.getBoundingBox().getYsize() * .5f, 0).add(serverPlayer.getForward().multiply(3,3,3)));
             hollowCrystal.shoot(serverPlayer.getLookAngle());
             hollowCrystal.setDeltaMovement(hollowCrystal.getDeltaMovement().multiply(0.25,0.25,0.25));
-            hollowCrystal.setDamage(20);
+            hollowCrystal.setDamage(getDamage(serverPlayer));
             serverPlayer.level().addFreshEntity(hollowCrystal);
         }
     }
