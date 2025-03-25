@@ -2,17 +2,21 @@ package net.fireofpower.firesenderexpansion.entities.ObsidianRod;
 
 import io.redspace.ironsspellbooks.api.util.Utils;
 import io.redspace.ironsspellbooks.capabilities.magic.MagicManager;
+import io.redspace.ironsspellbooks.damage.DamageSources;
 import io.redspace.ironsspellbooks.entity.spells.AbstractMagicProjectile;
 import io.redspace.ironsspellbooks.registries.SoundRegistry;
 import io.redspace.ironsspellbooks.util.ParticleHelper;
 import net.fireofpower.firesenderexpansion.entities.HollowCrystal.HollowCrystal;
 import net.fireofpower.firesenderexpansion.registries.EntityRegistry;
+import net.fireofpower.firesenderexpansion.registries.PotionEffectRegistry;
 import net.minecraft.core.Holder;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib.animatable.GeoAnimatable;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -51,7 +55,7 @@ public class ObsidianRod extends AbstractMagicProjectile implements GeoEntity {
     public void shoot(Vec3 rotation, float inaccuracy) {
         double speed = rotation.length();
         Vec3 offset = Utils.getRandomVec3((double)1.0F).normalize().scale((double)inaccuracy);
-        Vec3 motion = rotation.normalize()/*.add(offset)*/.normalize().scale(speed);
+        Vec3 motion = rotation.normalize().add(offset).normalize().scale(speed);
         super.shoot(motion);
     }
 
@@ -59,6 +63,16 @@ public class ObsidianRod extends AbstractMagicProjectile implements GeoEntity {
         super.onHitBlock(blockHitResult);
         this.discard();
     }
+    @Override
+    protected void onHitEntity(EntityHitResult pResult) {
+        var target = pResult.getEntity();
+        if (target instanceof LivingEntity livingTarget)
+        {
+            livingTarget.addEffect(new MobEffectInstance(PotionEffectRegistry.ANCHORED_POTION_EFFECT, 100, 0));
+        }
+        discard();
+    }
+
 
     @Override
     public void impactParticles(double v, double v1, double v2) {
