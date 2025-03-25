@@ -50,7 +50,7 @@ public class ObsidianRod extends AbstractMagicProjectile implements GeoEntity {
 
     public void shoot(Vec3 rotation, float inaccuracy) {
         double speed = rotation.length();
-//        Vec3 offset = Utils.getRandomVec3((double)1.0F).normalize().scale((double)inaccuracy);
+        Vec3 offset = Utils.getRandomVec3((double)1.0F).normalize().scale((double)inaccuracy);
         Vec3 motion = rotation.normalize()/*.add(offset)*/.normalize().scale(speed);
         super.shoot(motion);
     }
