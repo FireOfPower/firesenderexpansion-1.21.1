@@ -1,6 +1,7 @@
 package net.fireofpower.firesenderexpansion;
 
 import net.fireofpower.firesenderexpansion.entities.HollowCrystal.HollowCrystalRenderer;
+import net.fireofpower.firesenderexpansion.entities.ObsidianRod.ObsidianRodRenderer;
 import net.fireofpower.firesenderexpansion.registries.EntityRegistry;
 import net.fireofpower.firesenderexpansion.registries.PotionEffectRegistry;
 import net.fireofpower.firesenderexpansion.registries.SpellRegistries;
@@ -57,6 +58,7 @@ public class FiresEnderExpansion
         @SubscribeEvent
         public static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
             event.registerEntityRenderer(EntityRegistry.HOLLOW_CRYSTAL.get(), HollowCrystalRenderer::new);
+            event.registerEntityRenderer(EntityRegistry.OBSIDIAN_ROD.get(), ObsidianRodRenderer::new);
         }
     }
 }

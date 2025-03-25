@@ -3,6 +3,8 @@ package net.fireofpower.firesenderexpansion.registries;
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
 import net.fireofpower.firesenderexpansion.entities.HollowCrystal.HollowCrystal;
 import net.fireofpower.firesenderexpansion.entities.MagicShulkerBullet;
+import net.fireofpower.firesenderexpansion.entities.ObsidianRod.ObsidianRod;
+import net.fireofpower.firesenderexpansion.entities.ObsidianRod.ObsidianRodModel;
 import net.fireofpower.firesenderexpansion.entities.TeleportRend;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -36,5 +38,11 @@ public class EntityRegistry {
                     .sized(1f, 1f)
                     .clientTrackingRange(64)
                     .build((ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "hollow_crystal")).toString()));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<ObsidianRod>> OBSIDIAN_ROD =
+            ENTITIES.register("obsidian_rod", () -> EntityType.Builder.<ObsidianRod>of(ObsidianRod::new, MobCategory.MISC)
+                    .sized(1f, 1f)
+                    .clientTrackingRange(64)
+                    .build((ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "obsidian_rod")).toString()));
 
 }
