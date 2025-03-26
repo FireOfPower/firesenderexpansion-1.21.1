@@ -6,6 +6,7 @@ import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
 import net.fireofpower.firesenderexpansion.effects.AnchoredPotionEffect;
 import net.fireofpower.firesenderexpansion.effects.AspectOfTheShulkerPotionEffect;
 import net.fireofpower.firesenderexpansion.effects.HollowCrystalPotionEffect;
+import net.fireofpower.firesenderexpansion.effects.InfiniteVoidPotionEffect;
 import net.fireofpower.firesenderexpansion.spells.PartialTeleportSpell;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.effect.MobEffect;
@@ -23,6 +24,8 @@ public class PotionEffectRegistry {
     public static final DeferredHolder<MobEffect, MobEffect> ASPECT_OF_THE_SHULKER_POTION_EFFECT = MOB_EFFECTS.register("aspect_of_the_shulker_potion_effect", () -> new AspectOfTheShulkerPotionEffect());
     public static final DeferredHolder<MobEffect, MobEffect> HOLLOW_CRYSTAL_POTION_EFFECT = MOB_EFFECTS.register("hollow_crystal_potion_effect", () -> new HollowCrystalPotionEffect());
     public static final DeferredHolder<MobEffect, MobEffect> ANCHORED_POTION_EFFECT = MOB_EFFECTS.register("anchored_potion_effect", () -> new AnchoredPotionEffect());
+    public static final DeferredHolder<MobEffect, MobEffect> INFINITE_VOID_POTION_EFFECT = MOB_EFFECTS.register("infinite_void_potion_effect", () -> new InfiniteVoidPotionEffect());
+
 
     public static void register(IEventBus eventBus)
     {

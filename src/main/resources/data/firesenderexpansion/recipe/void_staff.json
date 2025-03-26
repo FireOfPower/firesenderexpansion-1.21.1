@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "M": {
+      "item": "irons_spellbooks:mithril_ingot"},
+    "D": {
+      "item": "irons_spellbooks:dragonskin"
+    },
+    "N": {
+      "item": "minecraft:nether_star"
+    },
+    "E": {
+      "item": "irons_spellbooks:upgrade_orb"
+    }
+  },
+  "pattern": [
+    "DED",
+    "DND",
+    "DMD" ],
+  "result": {
+    "count": 1,
+    "id": "firesenderexpansion:void_staff"
+  }
+}

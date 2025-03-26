@@ -26,4 +26,5 @@ public class SpellRegistries {
     public static final Supplier<AbstractSpell> HOLLOW_CRYSTAL = registerSpell(new HollowCrystalSpell());
     public static final Supplier<AbstractSpell> DIMENSIONAL_TRAVELLER = registerSpell(new DimensionalTravellerSpell());
     public static final Supplier<AbstractSpell> OBSIDIAN_ROD = registerSpell(new ObsidianRodSpell());
+    public static final Supplier<AbstractSpell> INFINITE_VOID = registerSpell(new InfiniteVoidSpell());
 }

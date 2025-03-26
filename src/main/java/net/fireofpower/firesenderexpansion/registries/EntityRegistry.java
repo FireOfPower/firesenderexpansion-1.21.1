@@ -2,6 +2,7 @@ package net.fireofpower.firesenderexpansion.registries;
 
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
 import net.fireofpower.firesenderexpansion.entities.HollowCrystal.HollowCrystal;
+import net.fireofpower.firesenderexpansion.entities.InfiniteVoid.InfiniteVoid;
 import net.fireofpower.firesenderexpansion.entities.MagicShulkerBullet;
 import net.fireofpower.firesenderexpansion.entities.ObsidianRod.ObsidianRod;
 import net.fireofpower.firesenderexpansion.entities.ObsidianRod.ObsidianRodModel;
@@ -45,4 +46,9 @@ public class EntityRegistry {
                     .clientTrackingRange(64)
                     .build((ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "obsidian_rod")).toString()));
 
+    public static final DeferredHolder<EntityType<?>, EntityType<InfiniteVoid>> INFINITE_VOID =
+            ENTITIES.register("infinite_void", () -> EntityType.Builder.<InfiniteVoid>of(InfiniteVoid::new, MobCategory.MISC)
+                    .sized(1f, 1f)
+                    .clientTrackingRange(64)
+                    .build((ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "infinite_void")).toString()));
 }

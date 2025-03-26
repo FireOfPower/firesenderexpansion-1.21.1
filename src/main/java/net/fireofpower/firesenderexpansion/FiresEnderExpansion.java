@@ -1,8 +1,10 @@
 package net.fireofpower.firesenderexpansion;
 
 import net.fireofpower.firesenderexpansion.entities.HollowCrystal.HollowCrystalRenderer;
+import net.fireofpower.firesenderexpansion.entities.InfiniteVoid.InfiniteVoidRenderer;
 import net.fireofpower.firesenderexpansion.entities.ObsidianRod.ObsidianRodRenderer;
 import net.fireofpower.firesenderexpansion.registries.EntityRegistry;
+import net.fireofpower.firesenderexpansion.registries.ItemRegistry;
 import net.fireofpower.firesenderexpansion.registries.PotionEffectRegistry;
 import net.fireofpower.firesenderexpansion.registries.SpellRegistries;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
@@ -38,6 +40,7 @@ public class FiresEnderExpansion
         SpellRegistries.register(modEventBus);
         PotionEffectRegistry.register(modEventBus);
         EntityRegistry.register(modEventBus);
+        ItemRegistry.register(modEventBus);
         // Register our mod's ModConfigSpec so that FML can create and load the config file for us
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
@@ -59,6 +62,7 @@ public class FiresEnderExpansion
         public static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
             event.registerEntityRenderer(EntityRegistry.HOLLOW_CRYSTAL.get(), HollowCrystalRenderer::new);
             event.registerEntityRenderer(EntityRegistry.OBSIDIAN_ROD.get(), ObsidianRodRenderer::new);
+            event.registerEntityRenderer(EntityRegistry.INFINITE_VOID.get(), InfiniteVoidRenderer::new);
         }
     }
 }
