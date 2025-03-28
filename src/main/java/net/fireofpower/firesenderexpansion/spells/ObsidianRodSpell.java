@@ -14,6 +14,7 @@ import net.fireofpower.firesenderexpansion.registries.PotionEffectRegistry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -24,6 +25,7 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Optional;
 
 @AutoSpellConfig
 public class ObsidianRodSpell extends AbstractSpell {
@@ -32,7 +34,7 @@ public class ObsidianRodSpell extends AbstractSpell {
     @Override
     public List<MutableComponent> getUniqueInfo(int spellLevel, LivingEntity caster) {
         return List.of(
-                Component.translatable("ui.irons_spellbooks.effect_length", Utils.timeFromTicks(getSpellPower(spellLevel, caster) * 20, 1))
+                Component.translatable("ui.irons_spellbooks.effect_length", Utils.timeFromTicks(getEffectLength(spellLevel,caster), 1))
         );
     }
 
@@ -71,7 +73,7 @@ public class ObsidianRodSpell extends AbstractSpell {
 
     public void shootObsidianRod(Level world, int spellLevel, LivingEntity entity) {
         Vec3 origin = entity.getEyePosition().add(entity.getForward().normalize().scale((double)0.2F));
-        ObsidianRod rod = new ObsidianRod(world, entity);
+        ObsidianRod rod = new ObsidianRod(world, entity, getEffectLength(spellLevel,entity));
         rod.setPos(origin.subtract((double)0.0F, (double)rod.getBbHeight(), (double)0.0F));
         rod.shoot(entity.getLookAngle(), 0.05F);
         rod.setDamage(this.getDamage(spellLevel, entity));
@@ -79,8 +81,17 @@ public class ObsidianRodSpell extends AbstractSpell {
         world.addFreshEntity(rod);
     }
 
+    private int getEffectLength(int spellLevel, LivingEntity caster) {
+        return (int) (this.getSpellPower(spellLevel, caster) * 20 / 3);
+    }
+
     private float getDamage(int spellLevel, LivingEntity caster) {
-        return this.getSpellPower(spellLevel, caster) * 0.4F;
+        return this.getSpellPower(spellLevel, caster) * 0.01F;
+    }
+
+    @Override
+    public Optional<SoundEvent> getCastStartSound() {
+        return Optional.of(SoundEvents.ZOMBIE_VILLAGER_CURE);
     }
 
     @Override

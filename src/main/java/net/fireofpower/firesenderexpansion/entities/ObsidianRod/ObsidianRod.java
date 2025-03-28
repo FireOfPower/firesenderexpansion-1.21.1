@@ -9,6 +9,7 @@ import io.redspace.ironsspellbooks.util.ParticleHelper;
 import net.fireofpower.firesenderexpansion.entities.HollowCrystal.HollowCrystal;
 import net.fireofpower.firesenderexpansion.registries.EntityRegistry;
 import net.fireofpower.firesenderexpansion.registries.PotionEffectRegistry;
+import net.fireofpower.firesenderexpansion.registries.SpellRegistries;
 import net.minecraft.core.Holder;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -33,11 +34,13 @@ import java.util.Optional;
 
 public class ObsidianRod extends AbstractMagicProjectile implements GeoEntity {
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+    private int effectLength;
 
 
-    public ObsidianRod(Level level, LivingEntity shooter) {
+    public ObsidianRod(Level level, LivingEntity shooter, int effectLength) {
         this((EntityType) EntityRegistry.OBSIDIAN_ROD.get(), level);
         this.setOwner(shooter);
+        this.effectLength = effectLength;
     }
 
     public ObsidianRod(EntityType<ObsidianRod> obsidianRodEntityType, Level level) {
@@ -66,9 +69,11 @@ public class ObsidianRod extends AbstractMagicProjectile implements GeoEntity {
     @Override
     protected void onHitEntity(EntityHitResult pResult) {
         var target = pResult.getEntity();
+        DamageSources.applyDamage(target, damage,
+                SpellRegistries.OBSIDIAN_ROD.get().getDamageSource(this, getOwner()));
         if (target instanceof LivingEntity livingTarget)
         {
-            livingTarget.addEffect(new MobEffectInstance(PotionEffectRegistry.ANCHORED_POTION_EFFECT, 100, 0));
+            livingTarget.addEffect(new MobEffectInstance(PotionEffectRegistry.ANCHORED_POTION_EFFECT, effectLength, 0));
         }
         discard();
     }

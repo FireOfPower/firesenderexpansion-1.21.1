@@ -33,7 +33,7 @@ public class VoidStaff extends StaffItem implements IPresetSpellContainer {
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
         super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
-        tooltipComponents.add(Component.translatable("item.firesenderexpansion:void_staff_description").
+        tooltipComponents.add(Component.translatable("item.firesenderexpansion.void_staff.description").
                 withStyle(ChatFormatting.DARK_PURPLE).
                 withStyle(ChatFormatting.ITALIC));
     }
