@@ -75,7 +75,7 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
         if(soundCounter == 20){
             this.level().playLocalSound(this,SoundRegistry.BLACK_HOLE_LOOP.get(),SoundSource.PLAYERS,3f,1f);
         }
-        //ok this is just actual code I gave up (thank you Snack for the airblast code)
+        //ok this is just actual code I gave up (credit to Snack for the airblast code)
         this.level().getEntitiesOfClass(Projectile.class,
                         this.getBoundingBox()
                                 .inflate(1))
@@ -86,6 +86,7 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
                     if(e instanceof EsotericEdge){
                         e.discard();
                         allowIdleAnim = false;
+                        //setting deltaMovement here didn't work
                         Timer timer = new Timer();
                         timer.schedule(new TimerTask() {
                             @Override
