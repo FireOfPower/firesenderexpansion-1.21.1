@@ -100,6 +100,31 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
     }
 
     @Override
+    public void tick() {
+        if(!allowIdleAnim) {
+            for(int i = 0; i < 10; i++) {
+                this.level().addParticle(ParticleTypes.END_ROD, particleRangeX(10), particleRangeY(10), particleRangeZ(10), 0, 0, 0);
+            }
+        }else{
+            this.level().addParticle(ParticleHelper.PORTAL_FRAME, particleRangeX(2), particleRangeY(2), particleRangeZ(2), 0, 0, 0);
+        }
+        super.tick();
+    }
+
+    public double particleRangeX(float distance){
+        double range = Math.random() * distance;
+        return this.getX() + range - distance/2;
+    }
+    public double particleRangeY(float distance){
+        double range = Math.random() * distance;
+        return this.getY() + range - distance/2;
+    }
+    public double particleRangeZ(float distance){
+        double range = Math.random() * distance;
+        return this.getZ() + range - distance/2;
+    }
+
+    @Override
     public void impactParticles(double v, double v1, double v2) {
         MagicManager.spawnParticles(this.level(), ParticleHelper.COMET_FOG, v, v1, v2, 12, 0.08, 0.08, 0.08, 0.3, false);
     }
