@@ -1,8 +1,10 @@
 package net.fireofpower.firesenderexpansion.entities.HollowCrystal;
 
+import io.redspace.ironsspellbooks.api.magic.MagicData;
 import io.redspace.ironsspellbooks.api.util.Utils;
 import io.redspace.ironsspellbooks.capabilities.magic.MagicManager;
 import io.redspace.ironsspellbooks.damage.DamageSources;
+import io.redspace.ironsspellbooks.entity.mobs.AntiMagicSusceptible;
 import io.redspace.ironsspellbooks.entity.spells.AbstractMagicProjectile;
 import io.redspace.ironsspellbooks.entity.spells.black_hole.BlackHole;
 import io.redspace.ironsspellbooks.entity.spells.black_hole.BlackHoleRenderer;
@@ -12,19 +14,26 @@ import io.redspace.ironsspellbooks.particle.ZapParticle;
 import io.redspace.ironsspellbooks.particle.ZapParticleOption;
 import io.redspace.ironsspellbooks.registries.SoundRegistry;
 import io.redspace.ironsspellbooks.util.ParticleHelper;
+import net.acetheeldritchking.discerning_the_eldritch.entity.spells.esoteric_edge.EsotericEdge;
+import net.acetheeldritchking.discerning_the_eldritch.registries.DTEEntityRegistry;
 import net.fireofpower.firesenderexpansion.registries.EntityRegistry;
 import net.fireofpower.firesenderexpansion.registries.PotionEffectRegistry;
 import net.fireofpower.firesenderexpansion.registries.SpellRegistries;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3f;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -34,11 +43,14 @@ import software.bernie.geckolib.constant.DefaultAnimations;
 import software.bernie.geckolib.util.Color;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Timer;
+import java.util.TimerTask;
 
-public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity {
+public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity, AntiMagicSusceptible {
     private int soundCounter = 19;
+    private boolean allowIdleAnim = true;
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
 
@@ -54,14 +66,36 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity 
 
     @Override
     public void trailParticles() {
-        Vec3 pos = this.getBoundingBox().getCenter().add(this.getDeltaMovement());
-        Vec3 random = Utils.getRandomVec3((double)1.0F).add(pos);
-        pos = pos.add(this.getDeltaMovement());
+//        Vec3 pos = this.getBoundingBox().getCenter().add(this.getDeltaMovement());
+//        Vec3 random = Utils.getRandomVec3((double)1.0F).add(pos);
+//        pos = pos.add(this.getDeltaMovement());
         //this.level().addParticle(new ShockwaveParticleOptions(new Vector3f(255,0,255),5F,true), pos.x, pos.y, pos.z, (double)0.0F, (double)0.0F, (double)0.0F);
+        //ok i'm using it for sounds sue me
         soundCounter++;
         if(soundCounter == 20){
             this.level().playLocalSound(this,SoundRegistry.BLACK_HOLE_LOOP.get(),SoundSource.PLAYERS,3f,1f);
         }
+        //ok this is just actual code I gave up (thank you Snack for the airblast code)
+        this.level().getEntitiesOfClass(Projectile.class,
+                        this.getBoundingBox()
+                                .inflate(1))
+                .stream()
+                .filter(proj -> proj.distanceTo(this) < 5 /*&&
+                        !Objects.equals(proj.getOwner(), this.getOwner())*/)
+                .forEach(e -> {
+                    if(e instanceof EsotericEdge){
+                        e.discard();
+                        allowIdleAnim = false;
+                        Timer timer = new Timer();
+                        timer.schedule(new TimerTask() {
+                            @Override
+                            public void run() {
+                                discardThis();
+                                allowIdleAnim = true;
+                            }
+                        },3000);
+                    }
+                });
     }
 
     @Override
@@ -70,17 +104,12 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity 
     }
 
     @Override
-    protected void onHitEntity(EntityHitResult pResult) {
-        var target = pResult.getEntity();
-        DamageSources.applyDamage(target, damage,
-                SpellRegistries.HOLLOW_CRYSTAL.get().getDamageSource(this, getOwner()));
-        System.out.println("Did " + damage + " damage");
-
-    }
-
-    @Override
     public float getSpeed() {
         return 3.0F;
+    }
+
+    public void discardThis(){
+        this.discard();
     }
 
     @Override
@@ -102,7 +131,16 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity 
     }
 
     private PlayState predicate(AnimationState<HollowCrystal> event){
-        event.getController().setAnimation(DefaultAnimations.IDLE);
+        if (allowIdleAnim) {
+            event.getController().setAnimation(DefaultAnimations.IDLE);
+        }else{
+            event.getController().setAnimation(DefaultAnimations.DIE);
+        }
         return PlayState.CONTINUE;
+    }
+
+    @Override
+    public void onAntiMagic(MagicData playerMagicData) {
+
     }
 }

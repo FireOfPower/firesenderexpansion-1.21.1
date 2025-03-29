@@ -1,5 +1,7 @@
 package net.fireofpower.firesenderexpansion.entities.InfiniteVoid;
 
+import io.redspace.ironsspellbooks.api.magic.MagicData;
+import io.redspace.ironsspellbooks.entity.mobs.AntiMagicSusceptible;
 import software.bernie.geckolib.animatable.GeoAnimatable;
 
 import io.redspace.ironsspellbooks.api.util.Utils;
@@ -33,7 +35,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 import java.util.Optional;
 
 
-public class InfiniteVoid extends AbstractMagicProjectile implements GeoEntity {
+public class InfiniteVoid extends AbstractMagicProjectile implements GeoEntity, AntiMagicSusceptible {
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
 
@@ -100,6 +102,11 @@ public class InfiniteVoid extends AbstractMagicProjectile implements GeoEntity {
     private PlayState predicate(AnimationState<InfiniteVoid> event){
         event.getController().setAnimation(DefaultAnimations.IDLE);
         return PlayState.CONTINUE;
+    }
+
+    @Override
+    public void onAntiMagic(MagicData playerMagicData) {
+
     }
 }
 

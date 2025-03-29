@@ -205,6 +205,15 @@ dependencies {
 
     // JSON ******************************************************************************************************
     implementation "com.google.code.gson:gson:${gson_version}"
+
+    //OPTIONAL:
+
+    //DISCERNING THE ELDRITCH
+    implementation "curse.maven:discerning-the-eldritch-1143065:6090834"
+
+    //AZURELIB
+    implementation "curse.maven:azurelib-817423:6303718"
+
 }
 
 
