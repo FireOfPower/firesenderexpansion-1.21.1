@@ -89,6 +89,7 @@ public class HollowCrystalSpell extends AbstractSpell {
             hollowCrystal.setDamage(getDamage(serverPlayer));
             serverPlayer.removeEffect(PotionEffectRegistry.HOLLOW_CRYSTAL_POTION_EFFECT);
             serverPlayer.level().addFreshEntity(hollowCrystal);
+            serverPlayer.level().playLocalSound(serverPlayer,SoundRegistry.SONIC_BOOM.get(),SoundSource.PLAYERS,3f,1f);
         }
     }
 

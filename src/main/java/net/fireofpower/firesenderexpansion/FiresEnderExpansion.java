@@ -1,5 +1,6 @@
 package net.fireofpower.firesenderexpansion;
 
+import io.redspace.ironsspellbooks.registries.CreativeTabRegistry;
 import net.fireofpower.firesenderexpansion.entities.HollowCrystal.HollowCrystalRenderer;
 import net.fireofpower.firesenderexpansion.entities.InfiniteVoid.InfiniteVoidRenderer;
 import net.fireofpower.firesenderexpansion.entities.ObsidianRod.ObsidianRodRenderer;
@@ -7,7 +8,9 @@ import net.fireofpower.firesenderexpansion.registries.EntityRegistry;
 import net.fireofpower.firesenderexpansion.registries.ItemRegistry;
 import net.fireofpower.firesenderexpansion.registries.PotionEffectRegistry;
 import net.fireofpower.firesenderexpansion.registries.SpellRegistries;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -63,6 +66,14 @@ public class FiresEnderExpansion
             event.registerEntityRenderer(EntityRegistry.HOLLOW_CRYSTAL.get(), HollowCrystalRenderer::new);
             event.registerEntityRenderer(EntityRegistry.OBSIDIAN_ROD.get(), ObsidianRodRenderer::new);
             event.registerEntityRenderer(EntityRegistry.INFINITE_VOID.get(), InfiniteVoidRenderer::new);
+        }
+
+        @SubscribeEvent
+        public static void buildContents(BuildCreativeModeTabContentsEvent event) {
+            // Is this the tab we want to add to?
+            if (event.getTabKey() == CreativeModeTabs.COMBAT) {
+                event.accept(ItemRegistry.VOID_STAFF.get());
+            }
         }
     }
 }
