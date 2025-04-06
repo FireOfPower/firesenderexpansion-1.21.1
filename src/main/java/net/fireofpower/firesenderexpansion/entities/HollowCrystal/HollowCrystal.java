@@ -1,6 +1,8 @@
 package net.fireofpower.firesenderexpansion.entities.HollowCrystal;
 
 import io.redspace.ironsspellbooks.api.magic.MagicData;
+import io.redspace.ironsspellbooks.api.util.CameraShakeData;
+import io.redspace.ironsspellbooks.api.util.CameraShakeManager;
 import io.redspace.ironsspellbooks.api.util.Utils;
 import io.redspace.ironsspellbooks.capabilities.magic.MagicManager;
 import io.redspace.ironsspellbooks.damage.DamageSources;
@@ -75,6 +77,7 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
         if(soundCounter == 20){
             this.level().playLocalSound(this,SoundRegistry.BLACK_HOLE_LOOP.get(),SoundSource.PLAYERS,3f,1f);
         }
+        CameraShakeManager.addCameraShake(new CameraShakeData(20, this.position(), 20));
         //ok this is just actual code I gave up (credit to Snack for the airblast code)
         this.level().getEntitiesOfClass(Projectile.class,
                         this.getBoundingBox()

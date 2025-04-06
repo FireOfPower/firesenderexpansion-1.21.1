@@ -5,6 +5,8 @@ import io.redspace.ironsspellbooks.api.magic.MagicData;
 import io.redspace.ironsspellbooks.api.registry.SchoolRegistry;
 import io.redspace.ironsspellbooks.api.spells.*;
 import io.redspace.ironsspellbooks.api.util.AnimationHolder;
+import io.redspace.ironsspellbooks.api.util.CameraShakeData;
+import io.redspace.ironsspellbooks.api.util.CameraShakeManager;
 import io.redspace.ironsspellbooks.api.util.Utils;
 import io.redspace.ironsspellbooks.registries.SoundRegistry;
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
@@ -68,6 +70,7 @@ public class InfiniteVoidSpell extends AbstractSpell {
         infiniteVoid.setPos(entity.position().add(0, entity.getEyeHeight() - infiniteVoid.getBoundingBox().getYsize() * 0.5f, 0));
         infiniteVoid.setDeltaMovement(new Vec3(0,0,0));
         entity.level().addFreshEntity(infiniteVoid);
+        CameraShakeManager.addCameraShake(new CameraShakeData(40, entity.position(), 20));
         Timer timer = new Timer();
         List<Entity> targets = level.getEntities(entity,new AABB(entity.getX() - range, entity.getY() - range, entity.getZ() - range, entity.getX() + range, entity.getY() + range, entity.getZ() + range));
         targets.add(entity);

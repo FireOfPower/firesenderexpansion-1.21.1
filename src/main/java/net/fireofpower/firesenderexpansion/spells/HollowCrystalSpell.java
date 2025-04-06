@@ -8,7 +8,9 @@ import io.redspace.ironsspellbooks.api.util.AnimationHolder;
 import io.redspace.ironsspellbooks.api.util.Utils;
 import io.redspace.ironsspellbooks.capabilities.magic.RecastInstance;
 import io.redspace.ironsspellbooks.capabilities.magic.RecastResult;
+import io.redspace.ironsspellbooks.capabilities.magic.TargetEntityCastData;
 import io.redspace.ironsspellbooks.registries.SoundRegistry;
+import io.redspace.ironsspellbooks.spells.blood.AcupunctureSpell;
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
 import net.fireofpower.firesenderexpansion.entities.HollowCrystal.HollowCrystal;
 import net.fireofpower.firesenderexpansion.registries.PotionEffectRegistry;
@@ -94,10 +96,11 @@ public class HollowCrystalSpell extends AbstractSpell {
     }
 
     public float getDamage(LivingEntity entity){
+        float damagePerCharge = 10;
         if(entity.getEffect(PotionEffectRegistry.HOLLOW_CRYSTAL_POTION_EFFECT) != null) {
-            return entity.getEffect(PotionEffectRegistry.HOLLOW_CRYSTAL_POTION_EFFECT).getAmplifier() * 20 * getSpellPower(1 /* the spell power doesn't change per level */,entity)/50;
+            return entity.getEffect(PotionEffectRegistry.HOLLOW_CRYSTAL_POTION_EFFECT).getAmplifier() * damagePerCharge * getSpellPower(1 /* the spell power doesn't change per level */,entity)/50;
         }else{
-            return 20;
+            return damagePerCharge;
         }
     }
 
