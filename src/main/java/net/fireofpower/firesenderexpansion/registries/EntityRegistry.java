@@ -36,7 +36,7 @@ public class EntityRegistry {
 
     public static final DeferredHolder<EntityType<?>, EntityType<HollowCrystal>> HOLLOW_CRYSTAL =
             ENTITIES.register("hollow_crystal", () -> EntityType.Builder.<HollowCrystal>of(HollowCrystal::new, MobCategory.MISC)
-                    .sized(3f, 3f)
+                    .sized(5f, 5f)
                     .clientTrackingRange(64)
                     .build((ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "hollow_crystal")).toString()));
 

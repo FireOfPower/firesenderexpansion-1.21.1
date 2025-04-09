@@ -77,7 +77,7 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
         if(soundCounter == 20){
             this.level().playLocalSound(this,SoundRegistry.BLACK_HOLE_LOOP.get(),SoundSource.PLAYERS,3f,1f);
         }
-        CameraShakeManager.addCameraShake(new CameraShakeData(20, this.position(), 20));
+        CameraShakeManager.addCameraShake(new CameraShakeData(40, this.position(), 30));
         //ok this is just actual code I gave up (credit to Snack for the airblast code)
         this.level().getEntitiesOfClass(Projectile.class,
                         this.getBoundingBox()
@@ -109,7 +109,7 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
                 this.level().addParticle(ParticleTypes.END_ROD, particleRangeX(10), particleRangeY(10), particleRangeZ(10), 0, 0, 0);
             }
         }else{
-            this.level().addParticle(ParticleHelper.PORTAL_FRAME, particleRangeX(2), particleRangeY(2), particleRangeZ(2), 0, 0, 0);
+            this.level().addParticle(ParticleHelper.PORTAL_FRAME, particleRangeX(5), particleRangeY(5), particleRangeZ(5), 0, 0, 0);
         }
         super.tick();
     }
@@ -120,7 +120,7 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
     }
     public double particleRangeY(float distance){
         double range = Math.random() * distance;
-        return this.getY() + range - distance/2;
+        return this.getY() + 2 + range - distance/2;
     }
     public double particleRangeZ(float distance){
         double range = Math.random() * distance;
