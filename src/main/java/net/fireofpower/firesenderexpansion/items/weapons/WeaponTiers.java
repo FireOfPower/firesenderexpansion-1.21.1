@@ -1,6 +1,7 @@
 package net.fireofpower.firesenderexpansion.items.weapons;
 
 import io.redspace.ironsspellbooks.api.registry.AttributeRegistry;
+import io.redspace.ironsspellbooks.item.UpgradeOrbItem;
 import io.redspace.ironsspellbooks.item.weapons.AttributeContainer;
 import io.redspace.ironsspellbooks.item.weapons.IronsWeaponTier;
 import io.redspace.ironsspellbooks.registries.ItemRegistry;
@@ -15,17 +16,12 @@ import net.minecraft.world.level.block.Block;
 import java.util.function.Supplier;
 
 public class WeaponTiers implements Tier, IronsWeaponTier {
-    // Ymir
-//    public static DTEWeaponTiers YMIR = new DTEWeaponTiers(2670, 8.5F, -3.1F, 15, BlockTags.INCORRECT_FOR_NETHERITE_TOOL, () -> Ingredient.of(ItemRegistry.MITHRIL_INGOT.get()),
-//            new AttributeContainer(AttributeRegistry.ELDRITCH_SPELL_POWER, 0.15, AttributeModifier.Operation.ADD_MULTIPLIED_BASE),
-//            new AttributeContainer(AttributeRegistry.COOLDOWN_REDUCTION, 0.10, AttributeModifier.Operation.ADD_MULTIPLIED_BASE)
-//    );
 
-    public static WeaponTiers VOID_STAFF = new WeaponTiers(2031,6F,-3.1F,15, BlockTags.INCORRECT_FOR_NETHERITE_TOOL,() -> Ingredient.of(ItemRegistry.MITHRIL_INGOT.get()),
-            new AttributeContainer(AttributeRegistry.COOLDOWN_REDUCTION, 0.15, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL),
-            new AttributeContainer(AttributeRegistry.SPELL_POWER, 0.1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL),
-            new AttributeContainer(AttributeRegistry.ENDER_SPELL_POWER, 0.1, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL),
-            new AttributeContainer(AttributeRegistry.MANA_REGEN, 0.3, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+    public static WeaponTiers VOID_STAFF = new WeaponTiers(2031,6F,-2.6F,15, BlockTags.INCORRECT_FOR_NETHERITE_TOOL,() -> Ingredient.of(ItemRegistry.MITHRIL_INGOT.get()),
+            new AttributeContainer(AttributeRegistry.COOLDOWN_REDUCTION, 0.15, AttributeModifier.Operation.ADD_MULTIPLIED_BASE),
+            new AttributeContainer(AttributeRegistry.SPELL_POWER, 0.1, AttributeModifier.Operation.ADD_MULTIPLIED_BASE),
+            new AttributeContainer(AttributeRegistry.ENDER_SPELL_POWER, 0.1, AttributeModifier.Operation.ADD_MULTIPLIED_BASE),
+            new AttributeContainer(AttributeRegistry.MANA_REGEN, 0.3, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
 
     //private final int level;
     private final int uses;

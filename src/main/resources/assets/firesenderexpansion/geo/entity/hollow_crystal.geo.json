@@ -7,13 +7,13 @@
 				"texture_width": 32,
 				"texture_height": 32,
 				"visible_bounds_width": 5,
-				"visible_bounds_height": 4,
-				"visible_bounds_offset": [0, 1, 0]
+				"visible_bounds_height": 10,
+				"visible_bounds_offset": [0, 5, 0]
 			},
 			"bones": [
 				{
 					"name": "Everything",
-					"pivot": [1, 7, -1]
+					"pivot": [1, 8, -1]
 				},
 				{
 					"name": "CenterHolder",

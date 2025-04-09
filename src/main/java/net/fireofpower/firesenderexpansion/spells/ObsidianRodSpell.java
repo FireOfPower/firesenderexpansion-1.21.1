@@ -47,11 +47,11 @@ public class ObsidianRodSpell extends AbstractSpell {
 
     public ObsidianRodSpell()
     {
-        this.manaCostPerLevel = 25;
+        this.manaCostPerLevel = 1;
         this.baseSpellPower = 30;
         this.spellPowerPerLevel = 8;
         this.castTime = 60;
-        this.baseManaCost = 55;
+        this.baseManaCost = 5;
     }
 
     @Override
