@@ -20,6 +20,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -72,38 +73,31 @@ public class InfiniteVoidSpell extends AbstractSpell {
         entity.level().addFreshEntity(infiniteVoid);
         CameraShakeManager.addCameraShake(new CameraShakeData(40, entity.position(), 20));
         Timer timer = new Timer();
-        List<Entity> targets = level.getEntities(entity,new AABB(entity.getX() - range, entity.getY() - range, entity.getZ() - range, entity.getX() + range, entity.getY() + range, entity.getZ() + range));
-        targets.add(entity);
-        Vec3[] savedPositions = new Vec3[targets.size()];
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                for(int i = 0; i < targets.size(); i++){
-                    savedPositions[i] = targets.get(i).position();
-                    if(targets.get(i) instanceof LivingEntity target){
-                        targets.get(i).teleportTo(targets.get(i).getX(), targets.get(i).getY() + 10000, targets.get(i).getZ());
-                        target.addEffect(new MobEffectInstance(PotionEffectRegistry.ANCHORED_POTION_EFFECT, (duration-4) * 20, 0, false, false, true));
-                        target.addEffect(new MobEffectInstance(MobEffects.LEVITATION, (duration-4) * 20, 0, false, false, true));
-                    }
-                }
-                entity.addEffect(new MobEffectInstance(PotionEffectRegistry.INFINITE_VOID_POTION_EFFECT, (duration-4) * 20, 0, false, false, true));
-
-            }
-        },2*1000);
+        entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 40, 10, false, false, false));
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
                 infiniteVoid.discard();
             }
         },4*1000);
+        List<Entity> targets = entity.level().getEntities(entity,new AABB(entity.getX() - range, entity.getY() - range, entity.getZ() - range, entity.getX() + range, entity.getY() + range, entity.getZ() + range));
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
+                entity.addEffect(new MobEffectInstance(PotionEffectRegistry.ASCENDED_CASTER_POTION_EFFECT, (duration-4) * 20, 0, false, false, true));
+                entity.addEffect(new MobEffectInstance(PotionEffectRegistry.ANCHORED_POTION_EFFECT, (duration-4) * 20, 0, false, false, true));
+                entity.addEffect(new MobEffectInstance(MobEffects.LEVITATION, (duration-4) * 20, 0, false, false, true));
+                entity.addEffect(new MobEffectInstance(PotionEffectRegistry.INFINITE_VOID_POTION_EFFECT, (duration-4) * 20, 0, false, false, true));
                 for(int i = 0; i < targets.size(); i++){
-                    targets.get(i).teleportTo(savedPositions[i].x,savedPositions[i].y,savedPositions[i].z);
+                    if(targets.get(i) instanceof LivingEntity target){
+                        target.addEffect(new MobEffectInstance(PotionEffectRegistry.ANCHORED_POTION_EFFECT, (duration-4) * 20, 0, false, false, true));
+                        target.addEffect(new MobEffectInstance(MobEffects.LEVITATION, (duration-4) * 20, 0, false, false, true));
+                        target.addEffect(new MobEffectInstance(PotionEffectRegistry.INFINITE_VOID_POTION_EFFECT, (duration-4) * 20, 0, false, false, true));
+                    }
                 }
+
             }
-        },(duration-2)*1000);
+        },2*1000);
         super.onCast(level, spellLevel, entity, castSource, playerMagicData);
     }
 
