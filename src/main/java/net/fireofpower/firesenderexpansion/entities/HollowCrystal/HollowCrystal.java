@@ -100,6 +100,7 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
 
     @Override
     public void tick() {
+        CameraShakeManager.addCameraShake(new CameraShakeData(20, this.position(), 20));
         if(!allowIdleAnim) {
             for(int i = 0; i < 10; i++) {
                 this.level().addParticle(ParticleTypes.END_ROD, particleRangeX(10), particleRangeY(10), particleRangeZ(10), 0, 0, 0);
