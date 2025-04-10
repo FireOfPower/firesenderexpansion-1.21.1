@@ -77,7 +77,7 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
         if(soundCounter == 20){
             this.level().playLocalSound(this,SoundRegistry.BLACK_HOLE_LOOP.get(),SoundSource.PLAYERS,3f,1f);
         }
-        CameraShakeManager.addCameraShake(new CameraShakeData(40, this.position(), 30));
+        CameraShakeManager.addCameraShake(new CameraShakeData(20, this.position(), 20));
         //ok this is just actual code I gave up (credit to Snack for the airblast code)
         this.level().getEntitiesOfClass(Projectile.class,
                         this.getBoundingBox()
