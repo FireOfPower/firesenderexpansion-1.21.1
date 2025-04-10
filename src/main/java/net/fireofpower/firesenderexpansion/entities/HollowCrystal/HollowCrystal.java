@@ -68,10 +68,6 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
 
     @Override
     public void trailParticles() {
-//        Vec3 pos = this.getBoundingBox().getCenter().add(this.getDeltaMovement());
-//        Vec3 random = Utils.getRandomVec3((double)1.0F).add(pos);
-//        pos = pos.add(this.getDeltaMovement());
-        //this.level().addParticle(new ShockwaveParticleOptions(new Vector3f(255,0,255),5F,true), pos.x, pos.y, pos.z, (double)0.0F, (double)0.0F, (double)0.0F);
         //ok i'm using it for sounds sue me
         soundCounter++;
         if(soundCounter == 20){
