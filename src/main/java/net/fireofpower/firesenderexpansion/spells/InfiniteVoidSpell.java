@@ -57,11 +57,11 @@ public class InfiniteVoidSpell extends AbstractSpell {
 
     public InfiniteVoidSpell()
     {
-        this.manaCostPerLevel = 25;
+        this.manaCostPerLevel = 0;
         this.baseSpellPower = 30;
         this.spellPowerPerLevel = 8;
         this.castTime = 60;
-        this.baseManaCost = 55;
+        this.baseManaCost = 500;
     }
     
     @Override

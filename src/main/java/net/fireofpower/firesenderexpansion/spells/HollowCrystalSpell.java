@@ -47,7 +47,7 @@ public class HollowCrystalSpell extends AbstractSpell {
             .setMinRarity(SpellRarity.LEGENDARY)
             .setSchoolResource(SchoolRegistry.ENDER_RESOURCE)
             .setMaxLevel(5)
-            .setCooldownSeconds(40)
+            .setCooldownSeconds(60)
             .build();
 
     public HollowCrystalSpell()

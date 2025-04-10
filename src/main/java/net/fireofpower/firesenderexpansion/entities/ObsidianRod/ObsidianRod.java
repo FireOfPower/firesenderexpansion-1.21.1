@@ -49,9 +49,9 @@ public class ObsidianRod extends AbstractMagicProjectile implements GeoEntity {
 
     @Override
     public void trailParticles() {
-        Vec3 pos = this.getBoundingBox().getCenter().add(this.getDeltaMovement());
-        Vec3 random = Utils.getRandomVec3((double)1.0F).add(pos);
-        pos = pos.add(this.getDeltaMovement());
+        //Vec3 pos = this.getBoundingBox().getCenter().add(this.getDeltaMovement());
+        //Vec3 random = Utils.getRandomVec3((double)1.0F).add(pos);
+        //pos = pos.add(this.getDeltaMovement());
         //this.level().addParticle(new ZapParticleOption(random), pos.x, pos.y, pos.z, (double)0.0F, (double)0.0F, (double)0.0F);
     }
 

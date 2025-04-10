@@ -41,7 +41,7 @@ public class PartialTeleportSpell extends AbstractSpell {
             .setMinRarity(SpellRarity.RARE)
             .setSchoolResource(SchoolRegistry.ENDER_RESOURCE)
             .setMaxLevel(3)
-            .setCooldownSeconds(16)
+            .setCooldownSeconds(15)
             .build();
 
 

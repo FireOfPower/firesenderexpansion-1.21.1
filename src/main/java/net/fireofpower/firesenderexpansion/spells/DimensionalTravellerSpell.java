@@ -33,7 +33,7 @@ public class DimensionalTravellerSpell extends AbstractSpell {
     @Override
     public List<MutableComponent> getUniqueInfo(int spellLevel, LivingEntity caster) {
         return List.of(
-                Component.translatable("ui.irons_spellbooks.effect_length", Utils.timeFromTicks(getSpellPower(spellLevel, caster) * 20, 1))
+                Component.translatable("ui.irons_spellbooks.effect_length", Utils.timeFromTicks(getDuration(spellLevel,caster), 1))
         );
     }
 
@@ -49,13 +49,25 @@ public class DimensionalTravellerSpell extends AbstractSpell {
     @Override
     public void onCast(Level level, int spellLevel, LivingEntity entity, CastSource castSource, MagicData playerMagicData) {
         if(entity.level().dimension() == Level.OVERWORLD){
-            entity.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, (int) getSpellPower(spellLevel, entity) * 20, 0, false, false, true));
+            entity.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, getDuration(spellLevel,entity), 0, false, false, true));
         } else if (entity.level().dimension() == Level.NETHER){
-            entity.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, (int) getSpellPower(spellLevel, entity) * 20, 0, false, false, true));
+            entity.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, getDuration(spellLevel,entity), 0, false, false, true));
         } else if (entity.level().dimension() == Level.END){
-            entity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, (int) getSpellPower(spellLevel, entity) * 20, 0, false, false, true));
+            entity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, getDuration(spellLevel,entity), 0, false, false, true));
         }
         super.onCast(level, spellLevel, entity, castSource, playerMagicData);
+    }
+
+    public int getDuration(int spellLevel, LivingEntity entity){
+        if(entity.level().dimension() == Level.OVERWORLD){
+            return (int) getSpellPower(spellLevel, entity) * 20;
+        } else if (entity.level().dimension() == Level.NETHER){
+            return (int) getSpellPower(spellLevel, entity) * 5;
+        } else if (entity.level().dimension() == Level.END){
+            return (int) getSpellPower(spellLevel, entity) * 20;
+        } else{
+            return 0;
+        }
     }
 
     @Override
