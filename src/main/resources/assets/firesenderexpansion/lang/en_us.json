@@ -20,14 +20,14 @@
   "spell.firesenderexpansion.hollow_crystal": "Hollow Crystal",
   "spell.firesenderexpansion.hollow_crystal.guide": "Manifest an impossibility of Ender magic and send it outwards, moving through blocks and devastating anything in its path.",
 
-  "spell.firesenderexpansion.infinite_void": "Infinite Void",
+  "spell.firesenderexpansion.infinite_void": "Manifest Domain: Void",
   "spell.firesenderexpansion.infinite_void.guide": "Manifest a small vacuum in the world, drawing everyone nearby into an existence where all is void. The space will collapse shortly after existing, but while active you will also gain significant mana regeneration.",
 
   "ui.firesenderexpansion.charge_count": "%d Charges",
   "ui.firesenderexpansion.hollow_crystal_damage": "Maxmimum of %d Damage",
 
   "effect.firesenderexpansion.aspect_of_the_shulker_potion_effect": "Aspect of the Shulker",
-  "effect.firesenderexpansion.infinite_void_potion_effect": "Infinite Void",
+  "effect.firesenderexpansion.infinite_void_potion_effect": "Abyssal Being",
   "effect.firesenderexpansion.anchored_potion_effect": "Anchored",
   "effect.firesenderexpansion.hollow_crystal_potion_effect": "Crystal Charge",
   "effect.firesenderexpansion.ascended_caster_potion_effect": "Ascended"

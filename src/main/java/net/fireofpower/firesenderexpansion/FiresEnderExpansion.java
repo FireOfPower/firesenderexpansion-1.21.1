@@ -1,15 +1,14 @@
 package net.fireofpower.firesenderexpansion;
 
+import io.redspace.ironsspellbooks.particle.UnstableEnderParticle;
 import io.redspace.ironsspellbooks.registries.CreativeTabRegistry;
 import net.fireofpower.firesenderexpansion.entities.HollowCrystal.HollowCrystalRenderer;
 import net.fireofpower.firesenderexpansion.entities.InfiniteVoid.InfiniteVoidRenderer;
 import net.fireofpower.firesenderexpansion.entities.ObsidianRod.ObsidianRodRenderer;
-import net.fireofpower.firesenderexpansion.registries.EntityRegistry;
-import net.fireofpower.firesenderexpansion.registries.ItemRegistry;
-import net.fireofpower.firesenderexpansion.registries.PotionEffectRegistry;
-import net.fireofpower.firesenderexpansion.registries.SpellRegistries;
+import net.fireofpower.firesenderexpansion.registries.*;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import org.slf4j.Logger;
 
@@ -44,6 +43,7 @@ public class FiresEnderExpansion
         PotionEffectRegistry.register(modEventBus);
         EntityRegistry.register(modEventBus);
         ItemRegistry.register(modEventBus);
+
         // Register our mod's ModConfigSpec so that FML can create and load the config file for us
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
