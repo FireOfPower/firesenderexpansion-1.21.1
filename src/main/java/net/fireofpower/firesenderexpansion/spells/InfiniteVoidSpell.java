@@ -113,7 +113,7 @@ public class InfiniteVoidSpell extends AbstractSpell {
 
     @Override
     public AnimationHolder getCastStartAnimation() {
-        return SpellAnimations.ANIMATION_LONG_CAST;
+        return FEESpellAnimations.ANIMATION_INFINITE_VOID_CAST;
     }
 
     @Override

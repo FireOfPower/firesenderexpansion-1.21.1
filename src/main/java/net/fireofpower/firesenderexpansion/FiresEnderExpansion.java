@@ -6,10 +6,13 @@ import net.fireofpower.firesenderexpansion.entities.HollowCrystal.HollowCrystalR
 import net.fireofpower.firesenderexpansion.entities.InfiniteVoid.InfiniteVoidRenderer;
 import net.fireofpower.firesenderexpansion.entities.ObsidianRod.ObsidianRodRenderer;
 import net.fireofpower.firesenderexpansion.registries.*;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.item.Items;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.neoforged.neoforge.event.ModifyDefaultComponentsEvent;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;

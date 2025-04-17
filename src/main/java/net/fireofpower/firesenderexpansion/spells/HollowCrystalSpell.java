@@ -1,5 +1,7 @@
 package net.fireofpower.firesenderexpansion.spells;
 
+import dev.kosmx.playerAnim.api.layered.AnimationStack;
+import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationAccess;
 import io.redspace.ironsspellbooks.api.config.DefaultConfig;
 import io.redspace.ironsspellbooks.api.magic.MagicData;
 import io.redspace.ironsspellbooks.api.registry.SchoolRegistry;
@@ -116,7 +118,7 @@ public class HollowCrystalSpell extends AbstractSpell {
 
     @Override
     public AnimationHolder getCastStartAnimation() {
-        return SpellAnimations.PREPARE_CROSS_ARMS;
+        return FEESpellAnimations.ANIMATION_HOLLOW_CRYSTAL_CHARGE;
     }
 
     @Override
