@@ -122,6 +122,11 @@ public class HollowCrystalSpell extends AbstractSpell {
     }
 
     @Override
+    public AnimationHolder getCastFinishAnimation() {
+        return FEESpellAnimations.ANIMATION_HOLLOW_CRYSTAL_CAST;
+    }
+
+    @Override
     public Optional<SoundEvent> getCastFinishSound() {
         return Optional.of(SoundEvents.END_PORTAL_FRAME_FILL);
     }
