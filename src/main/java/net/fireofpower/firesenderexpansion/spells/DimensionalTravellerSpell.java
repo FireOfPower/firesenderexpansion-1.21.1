@@ -59,6 +59,9 @@ public class DimensionalTravellerSpell extends AbstractSpell {
     }
 
     public int getDuration(int spellLevel, LivingEntity entity){
+        if(entity == null){
+            return (int) getSpellPower(spellLevel, entity) * 20;
+        }
         if(entity.level().dimension() == Level.OVERWORLD){
             return (int) getSpellPower(spellLevel, entity) * 20;
         } else if (entity.level().dimension() == Level.NETHER){

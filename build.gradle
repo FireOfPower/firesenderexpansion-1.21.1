@@ -168,8 +168,8 @@ dependencies {
 
     // TETRA ******************************************************************************************************
     //compileOnly "se.mickelus.mutil:mutil:${mutil_version}"
-    compileOnly "curse.maven:tetra-${tetra_version}"
-    compileOnly "se.mickelus.mutil:mutil:${mutil_version}"
+//    compileOnly "curse.maven:tetra-${tetra_version}"
+//    compileOnly "se.mickelus.mutil:mutil:${mutil_version}"
 
     // If you want to run with tetra in dev comment the above line and uncomment the following 2 lines
     //localRuntime "curse.maven:tetra-${tetra_version}"
