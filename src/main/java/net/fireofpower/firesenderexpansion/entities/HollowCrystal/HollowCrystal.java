@@ -18,6 +18,7 @@ import io.redspace.ironsspellbooks.registries.SoundRegistry;
 import io.redspace.ironsspellbooks.util.ParticleHelper;
 import net.acetheeldritchking.discerning_the_eldritch.entity.spells.esoteric_edge.EsotericEdge;
 import net.acetheeldritchking.discerning_the_eldritch.registries.DTEEntityRegistry;
+import net.fireofpower.firesenderexpansion.compat.DiscerningTheEldritch.DTEHandler;
 import net.fireofpower.firesenderexpansion.registries.EntityRegistry;
 import net.fireofpower.firesenderexpansion.registries.PotionEffectRegistry;
 import net.fireofpower.firesenderexpansion.registries.SpellRegistries;
@@ -37,6 +38,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.fml.ModList;
 import org.joml.Vector3f;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
@@ -82,7 +84,7 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
                 .filter(proj -> proj.distanceTo(this) < 5 /*&&
                         !Objects.equals(proj.getOwner(), this.getOwner())*/)
                 .forEach(e -> {
-                    if(e instanceof EsotericEdge){
+                    if(DTEHandler.isEsotericEdge(e)){
                         e.discard();
                         allowIdleAnim = false;
                         //setting deltaMovement here didn't work

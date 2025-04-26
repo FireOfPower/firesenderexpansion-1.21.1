@@ -6,6 +6,7 @@ import net.fireofpower.firesenderexpansion.entities.HollowCrystal.HollowCrystalR
 import net.fireofpower.firesenderexpansion.entities.InfiniteVoid.InfiniteVoidRenderer;
 import net.fireofpower.firesenderexpansion.entities.ObsidianRod.ObsidianRodRenderer;
 import net.fireofpower.firesenderexpansion.registries.*;
+import net.fireofpower.firesenderexpansion.setup.ModSetup;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Items;
@@ -40,6 +41,7 @@ public class FiresEnderExpansion
     public FiresEnderExpansion(IEventBus modEventBus, ModContainer modContainer)
     {
         modEventBus.addListener(this::commonSetup);
+        modEventBus.addListener(ModSetup::init);
         CREATIVE_MODE_TABS.register(modEventBus);
 
         SpellRegistries.register(modEventBus);
