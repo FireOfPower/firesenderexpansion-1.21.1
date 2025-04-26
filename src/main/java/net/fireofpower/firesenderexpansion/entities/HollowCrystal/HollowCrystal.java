@@ -3,7 +3,6 @@ package net.fireofpower.firesenderexpansion.entities.HollowCrystal;
 import io.redspace.ironsspellbooks.api.magic.MagicData;
 import io.redspace.ironsspellbooks.api.util.CameraShakeData;
 import io.redspace.ironsspellbooks.api.util.CameraShakeManager;
-import io.redspace.ironsspellbooks.api.util.Utils;
 import io.redspace.ironsspellbooks.capabilities.magic.MagicManager;
 import io.redspace.ironsspellbooks.damage.DamageSources;
 import io.redspace.ironsspellbooks.entity.mobs.AntiMagicSusceptible;
@@ -22,6 +21,7 @@ import net.fireofpower.firesenderexpansion.compat.DiscerningTheEldritch.DTEHandl
 import net.fireofpower.firesenderexpansion.registries.EntityRegistry;
 import net.fireofpower.firesenderexpansion.registries.PotionEffectRegistry;
 import net.fireofpower.firesenderexpansion.registries.SpellRegistries;
+import net.fireofpower.firesenderexpansion.util.Utils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.core.BlockPos;
@@ -84,7 +84,7 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
                 .filter(proj -> proj.distanceTo(this) < 5 /*&&
                         !Objects.equals(proj.getOwner(), this.getOwner())*/)
                 .forEach(e -> {
-                    if(DTEHandler.isEsotericEdge(e)){
+                    if(Utils.shouldBreakHollowCrystal(e)){
                         e.discard();
                         allowIdleAnim = false;
                         //setting deltaMovement here didn't work
