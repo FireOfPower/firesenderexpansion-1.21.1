@@ -1710,7 +1710,12 @@
 			}
 		}
 	],
-	"display": {},
+	"display": {
+		"gui": {
+			"rotation": [0, 0, -45],
+			"scale": [0.51, 0.51, 0.51]
+		}
+	},
 	"groups": [
 		{
 			"name": "Everything",

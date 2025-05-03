@@ -30,15 +30,22 @@ import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.entity.projectile.ProjectileDeflection;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.phys.*;
 import net.neoforged.fml.ModList;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.ProjectileImpactEvent;
 import org.joml.Vector3f;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
@@ -47,21 +54,23 @@ import software.bernie.geckolib.constant.DefaultAnimations;
 import software.bernie.geckolib.util.Color;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Timer;
-import java.util.TimerTask;
+import javax.annotation.Nullable;
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity, AntiMagicSusceptible {
     private int soundCounter = 19;
     private boolean allowIdleAnim = true;
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+    private List<Entity> victims;
 
 
     public HollowCrystal(Level level, LivingEntity shooter) {
         this((EntityType) EntityRegistry.HOLLOW_CRYSTAL.get(), level);
         this.setOwner(shooter);
         this.setNoGravity(true);
+        victims = new ArrayList<>();
     }
 
     public HollowCrystal(EntityType<HollowCrystal> hollowCrystalEntityType, Level level) {
@@ -115,15 +124,30 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
         }else{
             this.level().addParticle(ParticleHelper.PORTAL_FRAME, particleRangeX(5), particleRangeY(5), particleRangeZ(5), 0, 0, 0);
         }
+
+        if (!this.level().isClientSide) {
+            HitResult hitresult = ProjectileUtil.getHitResultOnMoveVector(this, this::canHitEntity);
+            if (hitresult.getType() == HitResult.Type.BLOCK) {
+                onHitBlock((BlockHitResult) hitresult);
+            }
+            for (Entity entity : this.level().getEntities(this, this.getBoundingBox()).stream().filter(target -> canHitEntity(target) && !victims.contains(target)).collect(Collectors.toSet())) {
+                damageEntity(entity);
+                //IronsSpellbooks.LOGGER.info(entity.getName().getString());
+            }
+        }
         super.tick();
     }
 
+    private void damageEntity(Entity entity) {
+        if (!victims.contains(entity)) {
+            DamageSources.applyDamage(entity, damage, SpellRegistries.HOLLOW_CRYSTAL.get().getDamageSource(this, getOwner()));
+            victims.add(entity);
+        }
+    }
+
     @Override
-    protected void onHitEntity(EntityHitResult pResult) {
-        System.out.println("Hit entity " + pResult.getEntity());
-        var target = pResult.getEntity();
-        DamageSources.applyDamage(target, damage,
-                SpellRegistries.HOLLOW_CRYSTAL.get().getDamageSource(this, getOwner()));
+    protected void onHitBlock(BlockHitResult result) {
+
     }
 
     public double particleRangeX(float distance){
@@ -164,6 +188,31 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
         controllerRegistrar.add(animationController);
+    }
+
+    @Override
+    protected void onHit(HitResult hitresult) {
+        HitResult.Type hitresult$type = hitresult.getType();
+        System.out.println(hitresult$type + " hit detected");
+        if (hitresult$type == HitResult.Type.ENTITY) {
+            System.out.println(this.getBoundingBox());
+            EntityHitResult entityhitresult = (EntityHitResult) hitresult;
+            Entity entity = entityhitresult.getEntity();
+            if (entity.getType().is(EntityTypeTags.REDIRECTABLE_PROJECTILE) && entity instanceof Projectile) {
+                Projectile projectile = (Projectile) entity;
+                projectile.deflect(ProjectileDeflection.AIM_DEFLECT, this.getOwner(), this.getOwner(), true);
+            }
+
+            this.onHitEntity(entityhitresult);
+            this.level().gameEvent(GameEvent.PROJECTILE_LAND, hitresult.getLocation(), GameEvent.Context.of(this, (BlockState) null));
+        }
+        else if (hitresult$type == HitResult.Type.BLOCK) {
+            System.out.println(this.getBoundingBox().expandTowards(this.getDeltaMovement()).inflate((double)1.0F));
+            BlockHitResult blockhitresult = (BlockHitResult)hitresult;
+            this.onHitBlock(blockhitresult);
+            BlockPos blockpos = blockhitresult.getBlockPos();
+            this.level().gameEvent(GameEvent.PROJECTILE_LAND, blockpos, GameEvent.Context.of(this, this.level().getBlockState(blockpos)));
+        }
     }
 
     @Override
