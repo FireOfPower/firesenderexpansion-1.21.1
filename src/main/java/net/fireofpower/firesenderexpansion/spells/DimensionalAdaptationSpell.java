@@ -6,6 +6,7 @@ import io.redspace.ironsspellbooks.api.registry.SchoolRegistry;
 import io.redspace.ironsspellbooks.api.spells.*;
 import io.redspace.ironsspellbooks.api.util.Utils;
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
+import net.fireofpower.firesenderexpansion.registries.ItemRegistry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -14,14 +15,16 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 
 import java.util.List;
 import java.util.Optional;
 
 @AutoSpellConfig
-public class DimensionalTravellerSpell extends AbstractSpell {
-    private final ResourceLocation spellId = ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "dimensional_traveller");
+public class DimensionalAdaptationSpell extends AbstractSpell {
+    private final ResourceLocation spellId = ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "dimensional_adaptation");
 
     private final DefaultConfig defaultConfig = new DefaultConfig()
             .setMaxLevel(5)
@@ -37,7 +40,7 @@ public class DimensionalTravellerSpell extends AbstractSpell {
         );
     }
 
-    public DimensionalTravellerSpell()
+    public DimensionalAdaptationSpell()
     {
         this.manaCostPerLevel = 25;
         this.baseSpellPower = 30;
@@ -91,5 +94,11 @@ public class DimensionalTravellerSpell extends AbstractSpell {
     @Override
     public CastType getCastType() {
         return CastType.INSTANT;
+    }
+
+    @Override
+    public boolean canBeCraftedBy(Player player) {
+        Item guide = ItemRegistry.ENDERMAN_TRAVEL_GUIDE.get();
+        return player.getMainHandItem().is(guide);
     }
 }
