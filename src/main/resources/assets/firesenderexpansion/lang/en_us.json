@@ -5,6 +5,9 @@
   "item.firesenderexpansion.void_staff": "The Beginning and the End",
   "item.firesenderexpansion.void_staff.description": "The Void stares back",
 
+  "item.firesenderexpansion.enderman_travel_guide": "Enderman Travel Guide",
+  "item.firesenderexpansion.enderman_travel_guide.desc": "You might be able to understand an ender spell with this",
+
   "spell.firesenderexpansion.partial_teleport": "Partial Teleport",
   "spell.firesenderexpansion.partial_teleport.guide": "Selectively teleport a part of a person's body. Deals more damage the less mana they have.",
 
