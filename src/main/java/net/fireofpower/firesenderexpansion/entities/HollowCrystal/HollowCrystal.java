@@ -114,9 +114,6 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
         if(tickCount % 20 == 0) {
             CameraShakeManager.addCameraShake(new CameraShakeData(20, this.position(), 20));
         }
-        if(this.getDeltaMovement().x < 32 && this.getDeltaMovement().y < 32 && this.getDeltaMovement().z < 32) {
-            this.setDeltaMovement(this.getDeltaMovement().multiply(1.1, 1.1, 1.1));
-        }
         if(!allowIdleAnim) {
             for(int i = 0; i < 10; i++) {
                 this.level().addParticle(ParticleTypes.END_ROD, particleRangeX(0), particleRangeY(0), particleRangeZ(0), Math.random() -0.5, Math.random() -0.5, Math.random() - 0.5);
@@ -132,6 +129,7 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
             }
             for (Entity entity : this.level().getEntities(this, this.getBoundingBox()).stream().filter(target -> canHitEntity(target) && !victims.contains(target)).collect(Collectors.toSet())) {
                 damageEntity(entity);
+                System.out.println("Did " + damage + " damage to " + entity.getType());
                 //IronsSpellbooks.LOGGER.info(entity.getName().getString());
             }
         }
@@ -193,9 +191,7 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
     @Override
     protected void onHit(HitResult hitresult) {
         HitResult.Type hitresult$type = hitresult.getType();
-        System.out.println(hitresult$type + " hit detected");
         if (hitresult$type == HitResult.Type.ENTITY) {
-            System.out.println(this.getBoundingBox());
             EntityHitResult entityhitresult = (EntityHitResult) hitresult;
             Entity entity = entityhitresult.getEntity();
             if (entity.getType().is(EntityTypeTags.REDIRECTABLE_PROJECTILE) && entity instanceof Projectile) {
@@ -207,7 +203,6 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
             this.level().gameEvent(GameEvent.PROJECTILE_LAND, hitresult.getLocation(), GameEvent.Context.of(this, (BlockState) null));
         }
         else if (hitresult$type == HitResult.Type.BLOCK) {
-            System.out.println(this.getBoundingBox().expandTowards(this.getDeltaMovement()).inflate((double)1.0F));
             BlockHitResult blockhitresult = (BlockHitResult)hitresult;
             this.onHitBlock(blockhitresult);
             BlockPos blockpos = blockhitresult.getBlockPos();

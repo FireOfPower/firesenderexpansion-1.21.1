@@ -50,7 +50,7 @@ public class HollowCrystalSpell extends AbstractSpell {
     @Override
     public List<MutableComponent> getUniqueInfo(int spellLevel, LivingEntity caster) {
         return List.of(
-                Component.translatable("ui.firesenderexpansion.hollow_crystal_damage", Utils.stringTruncation(spellLevel * 20 * getSpellPower(1 /* the spell power doesn't change per level */,caster)/50,1)),
+                Component.translatable("ui.firesenderexpansion.hollow_crystal_damage", Utils.stringTruncation(spellLevel * 10 * getSpellPower(1 /* the spell power doesn't change per level */,caster)/50,1)),
                 Component.translatable("ui.firesenderexpansion.charge_count", getRecastCount(spellLevel,caster))
         );
     }
@@ -103,7 +103,7 @@ public class HollowCrystalSpell extends AbstractSpell {
             HollowCrystal hollowCrystal = new HollowCrystal(serverPlayer.level(), serverPlayer);
             hollowCrystal.setPos(serverPlayer.position().add(0, serverPlayer.getEyeHeight() + hollowCrystal.getBoundingBox().getYsize() * .25f - 3, 0).add(serverPlayer.getForward().multiply(3,3,3)));
             hollowCrystal.shoot(serverPlayer.getLookAngle());
-            hollowCrystal.setDeltaMovement(hollowCrystal.getDeltaMovement().multiply(0.05,0.05,0.05));
+            hollowCrystal.setDeltaMovement(hollowCrystal.getDeltaMovement().multiply(0.5,0.5,0.5));
             hollowCrystal.setDamage(getDamage(serverPlayer));
             serverPlayer.removeEffect(PotionEffectRegistry.HOLLOW_CRYSTAL_POTION_EFFECT);
             serverPlayer.level().addFreshEntity(hollowCrystal);

@@ -44,7 +44,6 @@ public class InfiniteVoidPotionEffect extends MagicMobEffect {
         super.onEffectAdded(pLivingEntity, pAmplifier);
         if(pLivingEntity.hasEffect(PotionEffectRegistry.ASCENDED_CASTER_POTION_EFFECT)) {
             savedPosition = pLivingEntity.position();
-            System.out.println("Saved position set to " + savedPosition.x + " " + savedPosition.y + " " + savedPosition.z);
         }
         pLivingEntity.teleportTo(pLivingEntity.getX(), pLivingEntity.getY() + 10000, pLivingEntity.getZ());
     }
@@ -52,7 +51,10 @@ public class InfiniteVoidPotionEffect extends MagicMobEffect {
     @Override
     public void onEffectRemoved(LivingEntity pLivingEntity, int pAmplifier) {
         super.onEffectRemoved(pLivingEntity, pAmplifier);
-        System.out.println("Teleported " + pLivingEntity.getType() + " to " + savedPosition.x + " " + savedPosition.y + " " +savedPosition.z);
+        if(savedPosition == null){
+            savedPosition = new Vec3(0, 100,0);
+            System.out.println("Manifest Domain: Void found an issue");
+        }
         pLivingEntity.teleportTo(savedPosition.x,savedPosition.y,savedPosition.z);
     }
 }
