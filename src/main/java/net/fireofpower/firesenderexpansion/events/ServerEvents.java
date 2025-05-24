@@ -30,7 +30,7 @@ public class ServerEvents {
         boolean hasAnchoredEffect = entity.hasEffect(PotionEffectRegistry.ANCHORED_POTION_EFFECT);
         if (entity instanceof ServerPlayer player && !player.level().isClientSide())
         {
-            if (hasAnchoredEffect && (Objects.equals(event.getSpellId(), SpellRegistry.TELEPORT_SPELL.get().getSpellId()) || Objects.equals(event.getSpellId(), SpellRegistry.BLOOD_STEP_SPELL.get().getSpellId()) || Objects.equals(event.getSpellId(), SpellRegistry.FROST_STEP_SPELL.get().getSpellId())))
+            if (hasAnchoredEffect && (Objects.equals(event.getSpellId(), SpellRegistry.TELEPORT_SPELL.get().getSpellId()) || Objects.equals(event.getSpellId(), SpellRegistry.BLOOD_STEP_SPELL.get().getSpellId()) || Objects.equals(event.getSpellId(), SpellRegistry.FROST_STEP_SPELL.get().getSpellId()) || Objects.equals(event.getSpellId(), SpellRegistry.PORTAL_SPELL.get().getSpellId())))
             {
                 event.setCanceled(true);
                 // Effect Duration

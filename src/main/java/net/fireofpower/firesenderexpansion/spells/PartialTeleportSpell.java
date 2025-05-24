@@ -41,7 +41,7 @@ public class PartialTeleportSpell extends AbstractSpell {
             .setMinRarity(SpellRarity.RARE)
             .setSchoolResource(SchoolRegistry.ENDER_RESOURCE)
             .setMaxLevel(3)
-            .setCooldownSeconds(30)
+            .setCooldownSeconds(35)
             .build();
 
 
@@ -106,7 +106,7 @@ public class PartialTeleportSpell extends AbstractSpell {
             MagicData magicData = MagicData.getPlayerMagicData(player);
             double maxMana = target.getAttributeValue(AttributeRegistry.MAX_MANA);
             if(maxMana != 0){
-                return (float) ((getSpellPower(spellLevel,caster) * 0.77 * (2 - magicData.getMana() / maxMana )));
+                return (float) ((getSpellPower(spellLevel,caster) * 0.77 * (1.5f - (magicData.getMana() / maxMana) / 2 )));
             }
         }
         return ((float)(getSpellPower(spellLevel, caster) * 0.77));

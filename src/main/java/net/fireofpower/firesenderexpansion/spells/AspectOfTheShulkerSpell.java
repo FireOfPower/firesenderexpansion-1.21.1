@@ -43,15 +43,15 @@ public class AspectOfTheShulkerSpell extends AbstractSpell {
     public AspectOfTheShulkerSpell()
     {
         this.manaCostPerLevel = 25;
-        this.baseSpellPower = 30;
-        this.spellPowerPerLevel = 8;
+        this.baseSpellPower = 10;
+        this.spellPowerPerLevel = 4;
         this.castTime = 0;
         this.baseManaCost = 55;
     }
 
     @Override
     public void onCast(Level level, int spellLevel, LivingEntity entity, CastSource castSource, MagicData playerMagicData) {
-        entity.addEffect(new MobEffectInstance(PotionEffectRegistry.ASPECT_OF_THE_SHULKER_POTION_EFFECT, (int) getSpellPower(spellLevel, entity) * 20, 0, false, false, true));
+        entity.addEffect(new MobEffectInstance(PotionEffectRegistry.ASPECT_OF_THE_SHULKER_POTION_EFFECT, (int) getSpellPower(spellLevel, entity) * 7, 0, false, false, true));
 
         super.onCast(level, spellLevel, entity, castSource, playerMagicData);
     }

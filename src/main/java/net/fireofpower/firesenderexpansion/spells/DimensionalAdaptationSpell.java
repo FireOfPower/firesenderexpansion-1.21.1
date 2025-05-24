@@ -63,14 +63,14 @@ public class DimensionalAdaptationSpell extends AbstractSpell {
 
     public int getDuration(int spellLevel, LivingEntity entity){
         if(entity == null){
-            return (int) getSpellPower(spellLevel, entity) * 20;
+            return (int) getSpellPower(spellLevel, entity) * 7;
         }
         if(entity.level().dimension() == Level.OVERWORLD){
-            return (int) getSpellPower(spellLevel, entity) * 20;
+            return (int) getSpellPower(spellLevel, entity) * 7;
         } else if (entity.level().dimension() == Level.NETHER){
             return (int) getSpellPower(spellLevel, entity) * 5;
         } else if (entity.level().dimension() == Level.END){
-            return (int) getSpellPower(spellLevel, entity) * 20;
+            return (int) getSpellPower(spellLevel, entity) * 7;
         } else{
             return 0;
         }

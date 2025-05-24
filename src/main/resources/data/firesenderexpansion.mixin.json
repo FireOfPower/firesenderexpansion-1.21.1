@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "package": "net.fireofpower.firesenderexpansion.mixins",
+  "refmap": "irons_spellbooks.refmap.json",
+  "compatibilityLevel": "JAVA_17",
+  "plugin": "net.fireofpower.firesenderexpansion.mixins.MixinPlugin",
+  "mixins": [
+
+  ],
+  "client": [
+    "client.MouseMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "minVersion": "0.8"
+}
