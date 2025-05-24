@@ -74,7 +74,7 @@ public class ObsidianRodSpell extends AbstractSpell {
     public void shootObsidianRod(Level world, int spellLevel, LivingEntity entity) {
         Vec3 origin = entity.getEyePosition().add(entity.getForward().normalize().scale((double)0.2F));
         ObsidianRod rod = new ObsidianRod(world, entity, getEffectLength(spellLevel,entity));
-        rod.setPos(origin.subtract((double)0.0F, (double)rod.getBbHeight(), (double)0.0F));
+        rod.setPos(origin.subtract((double)0.0F, (double)rod.getBbHeight() - 0.5f, (double)0.0F));
         rod.shoot(entity.getLookAngle(), 0.05F);
         rod.setDamage(this.getDamage(spellLevel, entity));
         world.playSound((Player)null, origin.x, origin.y, origin.z, SoundEvents.TRIDENT_THROW, SoundSource.PLAYERS, 2.0F, 1.0F);
