@@ -97,22 +97,23 @@ public class HollowCrystalSpell extends AbstractSpell {
     @Override
     public void onRecastFinished(ServerPlayer serverPlayer, RecastInstance recastInstance, RecastResult recastResult, ICastDataSerializable castDataSerializable) {
         super.onRecastFinished(serverPlayer, recastInstance, recastResult, castDataSerializable);
-
-        if(serverPlayer.hasEffect(PotionEffectRegistry.HOLLOW_CRYSTAL_POTION_EFFECT)){
-            //System.out.println("Launch a Hollow Crystal with " + serverPlayer.getEffect(PotionEffectRegistry.HOLLOW_CRYSTAL_POTION_EFFECT).getAmplifier() + " Power");
-            HollowCrystal hollowCrystal = new HollowCrystal(serverPlayer.level(), serverPlayer);
-            hollowCrystal.setPos(serverPlayer.position().add(0, serverPlayer.getEyeHeight() + hollowCrystal.getBoundingBox().getYsize() * .25f - 3, 0).add(serverPlayer.getForward().multiply(3,3,3)));
-            hollowCrystal.shoot(serverPlayer.getLookAngle());
-            hollowCrystal.setDeltaMovement(hollowCrystal.getDeltaMovement().multiply(0.5,0.5,0.5));
-            hollowCrystal.setDamage(getDamage(serverPlayer));
-            serverPlayer.removeEffect(PotionEffectRegistry.HOLLOW_CRYSTAL_POTION_EFFECT);
-            serverPlayer.level().addFreshEntity(hollowCrystal);
-            serverPlayer.level().playLocalSound(serverPlayer,SoundRegistry.SONIC_BOOM.get(),SoundSource.PLAYERS,3f,1f);
+        if(recastResult.isSuccess()) {
+            if (serverPlayer.hasEffect(PotionEffectRegistry.HOLLOW_CRYSTAL_POTION_EFFECT)) {
+                //System.out.println("Launch a Hollow Crystal with " + serverPlayer.getEffect(PotionEffectRegistry.HOLLOW_CRYSTAL_POTION_EFFECT).getAmplifier() + " Power");
+                HollowCrystal hollowCrystal = new HollowCrystal(serverPlayer.level(), serverPlayer);
+                hollowCrystal.setPos(serverPlayer.position().add(0, serverPlayer.getEyeHeight() + hollowCrystal.getBoundingBox().getYsize() * .25f - 3, 0).add(serverPlayer.getForward().multiply(3, 3, 3)));
+                hollowCrystal.shoot(serverPlayer.getLookAngle());
+                hollowCrystal.setDeltaMovement(hollowCrystal.getDeltaMovement().multiply(0.5, 0.5, 0.5));
+                hollowCrystal.setDamage(getDamage(serverPlayer));
+                serverPlayer.removeEffect(PotionEffectRegistry.HOLLOW_CRYSTAL_POTION_EFFECT);
+                serverPlayer.level().addFreshEntity(hollowCrystal);
+                serverPlayer.level().playLocalSound(serverPlayer, SoundRegistry.SONIC_BOOM.get(), SoundSource.PLAYERS, 3f, 1f);
+            }
         }
     }
 
     public float getDamage(LivingEntity entity){
-        float damagePerCharge = 10;
+        float damagePerCharge = 15;
         if(entity.getEffect(PotionEffectRegistry.HOLLOW_CRYSTAL_POTION_EFFECT) != null) {
             return entity.getEffect(PotionEffectRegistry.HOLLOW_CRYSTAL_POTION_EFFECT).getAmplifier() * damagePerCharge * getSpellPower(1 /* the spell power doesn't change per level */,entity)/50;
         }else{
