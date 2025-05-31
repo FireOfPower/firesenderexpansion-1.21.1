@@ -1,12 +1,12 @@
 package net.fireofpower.firesenderexpansion.registries;
 
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
-import net.fireofpower.firesenderexpansion.entities.HollowCrystal.HollowCrystal;
-import net.fireofpower.firesenderexpansion.entities.InfiniteVoid.InfiniteVoid;
-import net.fireofpower.firesenderexpansion.entities.MagicShulkerBullet;
-import net.fireofpower.firesenderexpansion.entities.ObsidianRod.ObsidianRod;
-import net.fireofpower.firesenderexpansion.entities.ObsidianRod.ObsidianRodModel;
-import net.fireofpower.firesenderexpansion.entities.TeleportRend;
+import net.fireofpower.firesenderexpansion.entities.mobs.Porphyromancer;
+import net.fireofpower.firesenderexpansion.entities.spells.HollowCrystal.HollowCrystal;
+import net.fireofpower.firesenderexpansion.entities.spells.InfiniteVoid.InfiniteVoid;
+import net.fireofpower.firesenderexpansion.entities.spells.MagicShulkerBullet;
+import net.fireofpower.firesenderexpansion.entities.spells.ObsidianRod.ObsidianRod;
+import net.fireofpower.firesenderexpansion.entities.spells.TeleportRend;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
@@ -51,4 +51,12 @@ public class EntityRegistry {
                     .sized(1f, 1f)
                     .clientTrackingRange(64)
                     .build((ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "infinite_void")).toString()));
+
+
+
+    public static final DeferredHolder<EntityType<?>, EntityType<Porphyromancer>> PORPHYROMANCER =
+            ENTITIES.register("porphyromancer", () -> EntityType.Builder.of(Porphyromancer::new, MobCategory.MONSTER)
+                    .sized(.6f, 1.8f)
+                    .clientTrackingRange(64)
+                    .build(ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "porphyromancer").toString()));
 }

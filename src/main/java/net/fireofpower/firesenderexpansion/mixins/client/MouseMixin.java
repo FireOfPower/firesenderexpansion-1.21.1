@@ -25,13 +25,13 @@ public class MouseMixin {
         {
             // Fix camera movement to where the player is looking
             original.call(player, 0.0, 0.0);
-            System.out.println("FREEZE");
+            //System.out.println("FREEZE");
         }
         else
         {
             // Normal camera movement here
             original.call(player, yRot, xRot);
-            System.out.println("all good");
+            //System.out.println("all good");
         }
     }
 }

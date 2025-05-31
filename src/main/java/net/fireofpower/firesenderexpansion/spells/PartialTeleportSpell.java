@@ -9,27 +9,15 @@ import io.redspace.ironsspellbooks.api.util.AnimationHolder;
 import io.redspace.ironsspellbooks.api.util.Utils;
 import io.redspace.ironsspellbooks.capabilities.magic.TargetEntityCastData;
 import io.redspace.ironsspellbooks.damage.DamageSources;
-import io.redspace.ironsspellbooks.effect.EchoingStrikesEffect;
-import io.redspace.ironsspellbooks.entity.spells.EchoingStrikeEntity;
-import io.redspace.ironsspellbooks.entity.spells.blood_needle.BloodNeedle;
-import io.redspace.ironsspellbooks.spells.blood.AcupunctureSpell;
-import io.redspace.ironsspellbooks.spells.ender.EchoingStrikesSpell;
-import io.redspace.ironsspellbooks.spells.ender.MagicArrowSpell;
-import io.redspace.ironsspellbooks.spells.lightning.LightningBoltSpell;
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
-import net.fireofpower.firesenderexpansion.entities.TeleportRend;
-import net.minecraft.core.Rotations;
+import net.fireofpower.firesenderexpansion.entities.spells.TeleportRend;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Rotation;
-import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 

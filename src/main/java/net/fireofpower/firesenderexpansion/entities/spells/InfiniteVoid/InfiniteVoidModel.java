@@ -1,7 +1,6 @@
-package net.fireofpower.firesenderexpansion.entities.InfiniteVoid;
+package net.fireofpower.firesenderexpansion.entities.spells.InfiniteVoid;
 
 
-import net.fireofpower.firesenderexpansion.entities.InfiniteVoid.InfiniteVoid;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.DefaultedEntityGeoModel;
 

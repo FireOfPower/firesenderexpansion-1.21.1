@@ -1,4 +1,4 @@
-package net.fireofpower.firesenderexpansion.entities.ObsidianRod;
+package net.fireofpower.firesenderexpansion.entities.spells.ObsidianRod;
 
 
 import net.minecraft.resources.ResourceLocation;

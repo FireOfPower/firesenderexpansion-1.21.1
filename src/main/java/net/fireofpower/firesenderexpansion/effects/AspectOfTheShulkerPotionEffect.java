@@ -1,29 +1,17 @@
 package net.fireofpower.firesenderexpansion.effects;
 
-import io.redspace.ironsspellbooks.damage.DamageSources;
 import io.redspace.ironsspellbooks.damage.SpellDamageSource;
 import io.redspace.ironsspellbooks.effect.MagicMobEffect;
-import io.redspace.ironsspellbooks.entity.spells.EchoingStrikeEntity;
-import io.redspace.ironsspellbooks.entity.spells.magic_arrow.MagicArrowProjectile;
-import io.redspace.ironsspellbooks.entity.spells.magic_missile.MagicMissileProjectile;
-import net.fireofpower.firesenderexpansion.entities.MagicShulkerBullet;
-import net.fireofpower.firesenderexpansion.registries.EntityRegistry;
+import net.fireofpower.firesenderexpansion.entities.spells.MagicShulkerBullet;
 import net.fireofpower.firesenderexpansion.registries.PotionEffectRegistry;
-import net.fireofpower.firesenderexpansion.registries.SpellRegistries;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.AttributeMap;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.projectile.ShulkerBullet;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
-import org.jetbrains.annotations.NotNull;
 
 @EventBusSubscriber
 public class AspectOfTheShulkerPotionEffect extends MagicMobEffect {

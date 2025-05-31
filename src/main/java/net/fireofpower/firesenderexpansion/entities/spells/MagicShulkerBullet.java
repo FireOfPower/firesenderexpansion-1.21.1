@@ -1,4 +1,4 @@
-package net.fireofpower.firesenderexpansion.entities;
+package net.fireofpower.firesenderexpansion.entities.spells;
 
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.Entity;

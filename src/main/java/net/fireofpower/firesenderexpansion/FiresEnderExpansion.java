@@ -1,19 +1,14 @@
 package net.fireofpower.firesenderexpansion;
 
-import io.redspace.ironsspellbooks.particle.UnstableEnderParticle;
-import io.redspace.ironsspellbooks.registries.CreativeTabRegistry;
-import net.fireofpower.firesenderexpansion.entities.HollowCrystal.HollowCrystalRenderer;
-import net.fireofpower.firesenderexpansion.entities.InfiniteVoid.InfiniteVoidRenderer;
-import net.fireofpower.firesenderexpansion.entities.ObsidianRod.ObsidianRodRenderer;
+import net.fireofpower.firesenderexpansion.entities.mobs.PorphyromancerRenderer;
+import net.fireofpower.firesenderexpansion.entities.spells.HollowCrystal.HollowCrystalRenderer;
+import net.fireofpower.firesenderexpansion.entities.spells.InfiniteVoid.InfiniteVoidRenderer;
+import net.fireofpower.firesenderexpansion.entities.spells.ObsidianRod.ObsidianRodRenderer;
 import net.fireofpower.firesenderexpansion.registries.*;
 import net.fireofpower.firesenderexpansion.setup.ModSetup;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraft.world.item.Items;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
-import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
-import net.neoforged.neoforge.event.ModifyDefaultComponentsEvent;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -71,6 +66,7 @@ public class FiresEnderExpansion
             event.registerEntityRenderer(EntityRegistry.HOLLOW_CRYSTAL.get(), HollowCrystalRenderer::new);
             event.registerEntityRenderer(EntityRegistry.OBSIDIAN_ROD.get(), ObsidianRodRenderer::new);
             event.registerEntityRenderer(EntityRegistry.INFINITE_VOID.get(), InfiniteVoidRenderer::new);
+            event.registerEntityRenderer(EntityRegistry.PORPHYROMANCER.get(), PorphyromancerRenderer::new);
         }
 
         @SubscribeEvent

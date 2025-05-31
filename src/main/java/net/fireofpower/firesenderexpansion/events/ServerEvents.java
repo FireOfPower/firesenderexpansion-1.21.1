@@ -5,6 +5,7 @@ import io.redspace.ironsspellbooks.api.item.UpgradeData;
 import io.redspace.ironsspellbooks.api.registry.AttributeRegistry;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
 import io.redspace.ironsspellbooks.compat.Curios;
+import io.redspace.ironsspellbooks.item.curios.CurioBaseItem;
 import io.redspace.ironsspellbooks.item.weapons.AttributeContainer;
 import io.redspace.ironsspellbooks.registries.ComponentRegistry;
 import io.redspace.ironsspellbooks.registries.ItemRegistry;
@@ -92,7 +93,9 @@ public class ServerEvents {
         @SubscribeEvent
         public static void modifyAttributes(ItemAttributeModifierEvent event) {
             if(event.getItemStack().getItem().equals(ItemRegistry.DRAGONSKIN_SPELL_BOOK.get())){
-                event.addModifier(AttributeRegistry.ENDER_SPELL_POWER,new AttributeModifier(ResourceLocation.fromNamespaceAndPath(MODID,"dragonskin_modifier"), 0.2, AttributeModifier.Operation.ADD_MULTIPLIED_BASE), EquipmentSlotGroup.bySlot());
+                if(event.getItemStack().getItem() instanceof CurioBaseItem curio){
+                    curio.withSpellbookAttributes(new AttributeContainer(AttributeRegistry.ENDER_SPELL_POWER, 0.25f, AttributeModifier.Operation.ADD_VALUE));
+                }
             }
         }
     }
