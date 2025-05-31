@@ -50,6 +50,15 @@ public class ServerEvents {
         }
     }
 
+
+    @SubscribeEvent
+    public static void modifyComponents(ModifyDefaultComponentsEvent event) {
+        // Sets the component on melon seeds
+        event.modify(Items.MELON_SEEDS, builder ->
+                builder.set(DataComponents.MAX_STACK_SIZE, 16)
+        );
+    }
+
     public static String convertTicksToTime(int ticks) {
         // Convert ticks to seconds
         int totalSeconds = ticks / 20;
