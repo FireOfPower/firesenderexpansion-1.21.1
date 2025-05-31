@@ -1,7 +1,14 @@
 package net.fireofpower.firesenderexpansion.events;
 
 import io.redspace.ironsspellbooks.api.events.SpellPreCastEvent;
+import io.redspace.ironsspellbooks.api.item.UpgradeData;
+import io.redspace.ironsspellbooks.api.registry.AttributeRegistry;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
+import io.redspace.ironsspellbooks.compat.Curios;
+import io.redspace.ironsspellbooks.item.weapons.AttributeContainer;
+import io.redspace.ironsspellbooks.registries.ComponentRegistry;
+import io.redspace.ironsspellbooks.registries.ItemRegistry;
+import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
 import net.fireofpower.firesenderexpansion.registries.PotionEffectRegistry;
 import net.fireofpower.firesenderexpansion.registries.SpellRegistries;
 import net.minecraft.ChatFormatting;
@@ -9,17 +16,27 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.ItemAttributeModifierEvent;
 import net.neoforged.neoforge.event.ModifyDefaultComponentsEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
+import net.neoforged.neoforge.registries.datamaps.DataMapType;
 
+import java.util.List;
 import java.util.Objects;
+
+import static net.fireofpower.firesenderexpansion.FiresEnderExpansion.MODID;
 
 @EventBusSubscriber
 public class ServerEvents {
@@ -50,15 +67,6 @@ public class ServerEvents {
         }
     }
 
-
-    @SubscribeEvent
-    public static void modifyComponents(ModifyDefaultComponentsEvent event) {
-        // Sets the component on melon seeds
-        event.modify(Items.MELON_SEEDS, builder ->
-                builder.set(DataComponents.MAX_STACK_SIZE, 16)
-        );
-    }
-
     public static String convertTicksToTime(int ticks) {
         // Convert ticks to seconds
         int totalSeconds = ticks / 20;
@@ -69,5 +77,23 @@ public class ServerEvents {
 
         // Format the result as mm:ss
         return String.format("%02d:%02d" , minutes , seconds);
+    }
+
+    @EventBusSubscriber(modid = MODID, bus = EventBusSubscriber.Bus.GAME)
+    public class StartupEvents{
+//        @SubscribeEvent
+//        public static void modifyComponents(ModifyDefaultComponentsEvent event) {
+//            // Sets the component on melon seeds
+//            event.modify(ItemRegistry.DRAGONSKIN_SPELL_BOOK.get(), builder ->
+//                    builder.set(DataComponents.ATTRIBUTE_MODIFIERS, new ItemAttributeModifiers(, true))
+//            );
+//        }
+
+        @SubscribeEvent
+        public static void modifyAttributes(ItemAttributeModifierEvent event) {
+            if(event.getItemStack().getItem().equals(ItemRegistry.DRAGONSKIN_SPELL_BOOK.get())){
+                event.addModifier(AttributeRegistry.ENDER_SPELL_POWER,new AttributeModifier(ResourceLocation.fromNamespaceAndPath(MODID,"dragonskin_modifier"), 0.2, AttributeModifier.Operation.ADD_MULTIPLIED_BASE), EquipmentSlotGroup.bySlot());
+            }
+        }
     }
 }
