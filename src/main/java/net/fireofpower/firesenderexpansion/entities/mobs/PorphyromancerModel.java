@@ -6,10 +6,11 @@ import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.DefaultedEntityGeoModel;
 
-public class PorphyromancerModel extends DefaultedEntityGeoModel<Porphyromancer> {
+public class PorphyromancerModel extends AbstractSpellCastingMobModel {
     public static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "textures/entity/porphyromancer.png");
 
-    public PorphyromancerModel(ResourceLocation assetSubpath) {
-        super(assetSubpath);
+    @Override
+    public ResourceLocation getTextureResource(AbstractSpellCastingMob object) {
+        return TEXTURE;
     }
 }

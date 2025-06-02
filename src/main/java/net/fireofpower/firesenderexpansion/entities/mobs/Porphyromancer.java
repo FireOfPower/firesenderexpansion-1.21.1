@@ -52,7 +52,7 @@ public class Porphyromancer extends NeutralWizard implements GeoEntity {
                         List.of()
                 )
                 .setDrinksPotions()
-                .setSingleUseSpell(SpellRegistry.BLACK_HOLE_SPELL.get(), 80, 200, 4, 6)
+                .setSingleUseSpell(SpellRegistry.BLACK_HOLE_SPELL.get(), 80, 200, 1, 1)
         );
         this.goalSelector.addGoal(3, new PatrolNearLocationGoal(this, 30, .75f));
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));

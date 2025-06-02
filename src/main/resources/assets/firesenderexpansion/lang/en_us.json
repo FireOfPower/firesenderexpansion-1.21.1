@@ -5,6 +5,8 @@
   "item.firesenderexpansion.void_staff": "The Beginning and the End",
   "item.firesenderexpansion.void_staff.description": "The Void stares back",
 
+  "item.firesenderexpansion.porphyromancer_spawn_egg": "Porphyromancer Spawn Egg",
+
   "item.firesenderexpansion.enderman_travel_guide": "Enderman Travel Guide",
   "item.firesenderexpansion.enderman_travel_guide.desc": "You might be able to understand an ender spell with this",
 
@@ -33,5 +35,8 @@
   "effect.firesenderexpansion.infinite_void_potion_effect": "Abyssal Being",
   "effect.firesenderexpansion.anchored_potion_effect": "Anchored",
   "effect.firesenderexpansion.hollow_crystal_potion_effect": "Crystal Charge",
-  "effect.firesenderexpansion.ascended_caster_potion_effect": "Ascended"
+  "effect.firesenderexpansion.ascended_caster_potion_effect": "Ascended",
+
+
+  "entity.firesenderexpansion.porphyromancer": "Porphyromancer"
 }

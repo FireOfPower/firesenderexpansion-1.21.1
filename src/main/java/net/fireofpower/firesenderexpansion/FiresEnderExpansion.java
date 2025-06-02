@@ -74,6 +74,10 @@ public class FiresEnderExpansion
             // Is this the tab we want to add to?
             if (event.getTabKey() == CreativeModeTabs.COMBAT) {
                 event.accept(ItemRegistry.VOID_STAFF.get());
+            }else if (event.getTabKey() == CreativeModeTabs.SPAWN_EGGS) {
+                event.accept(ItemRegistry.PORPHYROMANCER_SPAWN_EGG.get());
+            }else if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
+                event.accept(ItemRegistry.ENDERMAN_TRAVEL_GUIDE.get());
             }
         }
     }

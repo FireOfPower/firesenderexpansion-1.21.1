@@ -11,10 +11,13 @@ import net.minecraft.util.Mth;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
+import software.bernie.geckolib.renderer.layer.AutoGlowingGeoLayer;
 
 public class HollowCrystalRenderer extends GeoEntityRenderer<HollowCrystal> {
     public HollowCrystalRenderer(EntityRendererProvider.Context context) {
         super(context, new HollowCrystalModel(ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "hollow_crystal")));
+        addRenderLayer(new AutoGlowingGeoLayer<>(this));
+
         this.shadowRadius = 0.5f;
     }
 
