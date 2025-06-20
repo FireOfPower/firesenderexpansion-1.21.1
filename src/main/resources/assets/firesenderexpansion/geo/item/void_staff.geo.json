@@ -93,14 +93,6 @@
 							}
 						}
 					]
-				},
-				{
-					"name": "bone3",
-					"parent": "Everything",
-					"pivot": [-1, -30, 1.5],
-					"cubes": [
-						{"origin": [-1.5, -30, 1], "size": [1, 30, 1], "uv": [2, 1]}
-					]
 				}
 			]
 		}

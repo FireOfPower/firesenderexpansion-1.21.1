@@ -63,7 +63,7 @@ public class VoidStaffItem extends StaffItem implements IPresetSpellContainer, G
     //animation stuff
 
     // Animations and stuff
-    private static final RawAnimation IDLE_ANIMATION = RawAnimation.begin().thenLoop("idle");
+    private static final RawAnimation IDLE_ANIMATION = RawAnimation.begin().thenLoop("animation.model.idle");
     private final AnimationController<VoidStaffItem> animationController = new AnimationController<>(this, "controller", 0, this::predicate);
 
     // Make your animations in this predicate
