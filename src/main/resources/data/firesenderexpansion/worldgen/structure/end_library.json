@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:jigsaw",
+  "start_pool": "firesenderexpansion:end_library",
+  "size": 2,
+  "max_distance_from_center": 20,
+  "step": "surface_structures",
+  "use_expansion_hack": false,
+  "start_height": {
+    "absolute": 0
+  },
+  "project_start_to_heightmap": "WORLD_SURFACE_WG",
+  "biomes": "#firesenderexpansion:has_structure/end_library",
+  "terrain_adaptation": "beard_thin",
+  "spawn_overrides": {
+  }
+}

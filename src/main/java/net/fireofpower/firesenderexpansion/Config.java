@@ -20,13 +20,13 @@ public class Config
     private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
 
     // a list of strings that are treated as resource locations for items
-    private static final ModConfigSpec.ConfigValue<List<? extends String>> ITEM_STRINGS = BUILDER
-            .comment("A list of items to log on common setup.")
-            .defineListAllowEmpty("items", List.of("minecraft:iron_ingot"), Config::validateItemName);
+    private static final ModConfigSpec.BooleanValue DISCLAIMER_MSG = BUILDER
+            .comment("This config is currently empty. If you want to modify stats relating to this mod's spells, check the ISS server config.")
+            .define("understand", true);
 
     static final ModConfigSpec SPEC = BUILDER.build();
 
-    public static Set<Item> items;
+    public static boolean placeholder;
 
     private static boolean validateItemName(final Object obj)
     {
@@ -36,10 +36,6 @@ public class Config
     @SubscribeEvent
     static void onLoad(final ModConfigEvent event)
     {
-
-        // convert the list of strings into a set of items
-        items = ITEM_STRINGS.get().stream()
-                .map(itemName -> BuiltInRegistries.ITEM.get(ResourceLocation.parse(itemName)))
-                .collect(Collectors.toSet());
+        placeholder = DISCLAIMER_MSG.get();
     }
 }

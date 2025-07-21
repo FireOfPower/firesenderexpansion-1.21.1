@@ -1,0 +1,15 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 64957201,
+    "separation": 11,
+    "spacing": 20,
+    "spread_type": "triangular"
+  },
+  "structures": [
+    {
+      "structure": "firesenderexpansion:end_library",
+      "weight": 1
+    }
+  ]
+}

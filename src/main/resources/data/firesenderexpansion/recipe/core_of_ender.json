@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "I": {
+      "item": "minecraft:ender_eye"
+    },
+    "N": {
+      "item": "minecraft:shulker_shell"
+    },
+    "E": {
+      "item": "irons_spellbooks:ender_rune"
+    }
+  },
+  "pattern": [
+    " N ",
+    "EIE",
+    " N " ],
+  "result": {
+    "count": 1,
+    "id": "firesenderexpansion:core_of_ender"
+  }
+}

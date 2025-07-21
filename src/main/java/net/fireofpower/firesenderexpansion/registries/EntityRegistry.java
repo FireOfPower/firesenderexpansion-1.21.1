@@ -2,11 +2,15 @@ package net.fireofpower.firesenderexpansion.registries;
 
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
 import net.fireofpower.firesenderexpansion.entities.mobs.Porphyromancer;
+import net.fireofpower.firesenderexpansion.entities.spells.GateOfEnder.GatePortal;
 import net.fireofpower.firesenderexpansion.entities.spells.HollowCrystal.HollowCrystal;
 import net.fireofpower.firesenderexpansion.entities.spells.InfiniteVoid.InfiniteVoid;
 import net.fireofpower.firesenderexpansion.entities.spells.MagicShulkerBullet;
 import net.fireofpower.firesenderexpansion.entities.spells.ObsidianRod.ObsidianRod;
 import net.fireofpower.firesenderexpansion.entities.spells.TeleportRend;
+import net.fireofpower.firesenderexpansion.entities.spells.UnstableSwords.claymore.UnstableSummonedClaymoreEntity;
+import net.fireofpower.firesenderexpansion.entities.spells.UnstableSwords.rapier.UnstableSummonedRapierEntity;
+import net.fireofpower.firesenderexpansion.entities.spells.UnstableSwords.sword.UnstableSummonedSwordEntity;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
@@ -59,4 +63,28 @@ public class EntityRegistry {
                     .sized(.6f, 1.8f)
                     .clientTrackingRange(64)
                     .build(ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "porphyromancer").toString()));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<UnstableSummonedSwordEntity>> UNSTABLE_SUMMONED_SWORD =
+            ENTITIES.register("unstable_summoned_sword", (e) -> EntityType.Builder.<UnstableSummonedSwordEntity>of(UnstableSummonedSwordEntity::new, MobCategory.MISC)
+                    .sized(.6f, .6f)
+                    .clientTrackingRange(64)
+                    .build(ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "unstable_summoned_sword").toString()));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<UnstableSummonedRapierEntity>> UNSTABLE_SUMMONED_RAPIER =
+            ENTITIES.register("unstable_summoned_rapier", (e) -> EntityType.Builder.<UnstableSummonedRapierEntity>of(UnstableSummonedRapierEntity::new, MobCategory.MISC)
+                    .sized(.6f, .6f)
+                    .clientTrackingRange(64)
+                    .build(ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "unstable_summoned_rapier").toString()));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<UnstableSummonedClaymoreEntity>> UNSTABLE_SUMMONED_CLAYMORE =
+            ENTITIES.register("unstable_summoned_claymore", (e) -> EntityType.Builder.<UnstableSummonedClaymoreEntity>of(UnstableSummonedClaymoreEntity::new, MobCategory.MISC)
+                    .sized(.6f, .6f)
+                    .clientTrackingRange(64)
+                    .build(ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "unstable_summoned_claymore").toString()));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<GatePortal>> GATE_PORTAL =
+            ENTITIES.register("gate_portal", (e) -> EntityType.Builder.<GatePortal>of(GatePortal::new, MobCategory.MISC)
+                    .sized(.6f, .6f)
+                    .clientTrackingRange(64)
+                    .build(ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "gate_portal").toString()));
 }

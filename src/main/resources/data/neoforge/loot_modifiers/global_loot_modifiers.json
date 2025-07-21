@@ -1,6 +1,7 @@
 {
   "replace": false,
   "entries": [
-    "firesenderexpansion:chest_modifiers/stronghold_library_modifier"
+    "firesenderexpansion:chest_modifiers/stronghold_library_modifier",
+    "firesenderexpansion:chest_modifiers/end_city_modifier"
   ]
 }

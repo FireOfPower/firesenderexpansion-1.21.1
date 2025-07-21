@@ -1,14 +1,25 @@
 package net.fireofpower.firesenderexpansion;
 
+import io.redspace.ironsspellbooks.item.SpellBook;
+import io.redspace.ironsspellbooks.render.SpellBookCurioRenderer;
 import net.fireofpower.firesenderexpansion.entities.mobs.PorphyromancerRenderer;
+import net.fireofpower.firesenderexpansion.entities.spells.GateOfEnder.GatePortalRenderer;
 import net.fireofpower.firesenderexpansion.entities.spells.HollowCrystal.HollowCrystalRenderer;
 import net.fireofpower.firesenderexpansion.entities.spells.InfiniteVoid.InfiniteVoidRenderer;
 import net.fireofpower.firesenderexpansion.entities.spells.ObsidianRod.ObsidianRodRenderer;
+import net.fireofpower.firesenderexpansion.entities.spells.UnstableSwords.claymore.UnstableSummonedClaymoreModel;
+import net.fireofpower.firesenderexpansion.entities.spells.UnstableSwords.rapier.UnstableSummonedRapierModel;
+import net.fireofpower.firesenderexpansion.entities.spells.UnstableSwords.sword.UnstableSummonedSwordModel;
+import net.fireofpower.firesenderexpansion.entities.spells.UnstableSwords.UnstableSummonedSwordRenderer;
+import net.fireofpower.firesenderexpansion.items.armor.FEEArmorMaterials;
 import net.fireofpower.firesenderexpansion.registries.*;
 import net.fireofpower.firesenderexpansion.setup.ModSetup;
-import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -25,6 +36,9 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import top.theillusivec4.curios.api.client.CuriosRendererRegistry;
+
+import java.util.function.Supplier;
 
 @Mod(FiresEnderExpansion.MODID)
 public class FiresEnderExpansion
@@ -43,10 +57,30 @@ public class FiresEnderExpansion
         PotionEffectRegistry.register(modEventBus);
         EntityRegistry.register(modEventBus);
         ItemRegistry.register(modEventBus);
+        FEEArmorMaterials.register(modEventBus);
 
         // Register our mod's ModConfigSpec so that FML can create and load the config file for us
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
+
+    public static final Supplier<CreativeModeTab> FEE_TAB = CREATIVE_MODE_TABS.register("example", () -> CreativeModeTab.builder()
+            .title(Component.translatable("itemGroup." + MODID + ".creative_tab"))
+            .icon(() -> new ItemStack(ItemRegistry.STABILIZED_CORE_OF_ENDER.get()))
+            .displayItems((params, output) -> {
+                output.accept(ItemRegistry.VOID_STAFF.get());
+                output.accept(ItemRegistry.ENDCHIRIDION.get());
+                output.accept(ItemRegistry.PORPHYROMANCER_SPAWN_EGG.get());
+                output.accept(ItemRegistry.CORE_OF_ENDER.get());
+                output.accept(ItemRegistry.STABILIZED_CORE_OF_ENDER.get());
+                output.accept(ItemRegistry.INFUSED_OBSIDIAN_FRAGMENTS.get());
+                output.accept(ItemRegistry.END_LORD_HELMET.get());
+                output.accept(ItemRegistry.END_LORD_CHESTPLATE.get());
+                output.accept(ItemRegistry.END_LORD_LEGGINGS.get());
+                output.accept(ItemRegistry.END_LORD_BOOTS.get());
+                output.accept(ItemRegistry.ENDER_TREASURY_KEY.get());
+            })
+            .build()
+    );
 
     private void commonSetup(final FMLCommonSetupEvent event)
     {
@@ -58,7 +92,9 @@ public class FiresEnderExpansion
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event)
         {
-
+            event.enqueueWork(() -> {
+                ItemRegistry.getItems().stream().filter(item -> item.get() instanceof SpellBook).forEach((item) -> CuriosRendererRegistry.register(item.get(), SpellBookCurioRenderer::new));
+            });
         }
 
         @SubscribeEvent
@@ -67,18 +103,27 @@ public class FiresEnderExpansion
             event.registerEntityRenderer(EntityRegistry.OBSIDIAN_ROD.get(), ObsidianRodRenderer::new);
             event.registerEntityRenderer(EntityRegistry.INFINITE_VOID.get(), InfiniteVoidRenderer::new);
             event.registerEntityRenderer(EntityRegistry.PORPHYROMANCER.get(), PorphyromancerRenderer::new);
+            event.registerEntityRenderer(EntityRegistry.GATE_PORTAL.get(), GatePortalRenderer::new);
+            event.registerEntityRenderer(EntityRegistry.UNSTABLE_SUMMONED_SWORD.get(), (e) -> new UnstableSummonedSwordRenderer(e, UnstableSummonedSwordModel::new));
+            event.registerEntityRenderer(EntityRegistry.UNSTABLE_SUMMONED_RAPIER.get(), (e) -> new UnstableSummonedSwordRenderer(e, UnstableSummonedRapierModel::new));
+            event.registerEntityRenderer(EntityRegistry.UNSTABLE_SUMMONED_CLAYMORE.get(), (e) -> new UnstableSummonedSwordRenderer(e, UnstableSummonedClaymoreModel::new));
         }
 
         @SubscribeEvent
         public static void buildContents(BuildCreativeModeTabContentsEvent event) {
             // Is this the tab we want to add to?
-            if (event.getTabKey() == CreativeModeTabs.COMBAT) {
-                event.accept(ItemRegistry.VOID_STAFF.get());
-            }else if (event.getTabKey() == CreativeModeTabs.SPAWN_EGGS) {
-                event.accept(ItemRegistry.PORPHYROMANCER_SPAWN_EGG.get());
-            }else if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
-                event.accept(ItemRegistry.ENDERMAN_TRAVEL_GUIDE.get());
-            }
+//            if (event.getTabKey() == CreativeModeTabs.COMBAT) {
+//                event.accept(ItemRegistry.VOID_STAFF.get());
+//            }else if (event.getTabKey() == CreativeModeTabs.SPAWN_EGGS) {
+//                event.accept(ItemRegistry.PORPHYROMANCER_SPAWN_EGG.get());
+//            }else if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
+//                event.accept(ItemRegistry.ENDERMAN_TRAVEL_GUIDE.get());
+//            }
         }
+
+    }
+    public static ResourceLocation id(@NotNull String path)
+    {
+        return ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, path);
     }
 }

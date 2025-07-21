@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "I": {
+      "item": "firesenderexpansion:infused_obsidian_fragments"
+    },
+    "C": {
+      "item": "firesenderexpansion:stabilized_core_of_ender"
+    },
+    "M": {
+      "item": "irons_spellbooks:mithril_ingot"
+    },
+    "A": {
+      "item": "irons_spellbooks:magic_cloth"
+    }
+  },
+  "pattern": [
+    "I I",
+    "MCM",
+    "AIA" ],
+  "result": {
+    "count": 1,
+    "id": "firesenderexpansion:end_lord_chestplate"
+  }
+}

@@ -16,11 +16,13 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ProjectileDeflection;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
@@ -62,7 +64,6 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
         if(soundCounter == 20){
             this.level().playLocalSound(this,SoundRegistry.BLACK_HOLE_LOOP.get(),SoundSource.PLAYERS,3f,1f);
         }
-        //CameraShakeManager.addCameraShake(new CameraShakeData(20, this.position(), 20));
         //ok this is just actual code I gave up (credit to Snack for the airblast code)
         this.level().getEntitiesOfClass(Projectile.class,
                         this.getBoundingBox()
@@ -89,8 +90,10 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
 
     @Override
     public void tick() {
-        if(tickCount % 20 == 0) {
-            CameraShakeManager.addCameraShake(new CameraShakeData(20, this.position(), 20));
+        if(!level().isClientSide()) {
+            if (tickCount % 5 == 0) {
+                //CameraShakeManager.addCameraShake(new CameraShakeData(5, this.position(), 20));
+            }
         }
         if(!allowIdleAnim) {
             for(int i = 0; i < 10; i++) {
@@ -104,11 +107,11 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
             HitResult hitresult = ProjectileUtil.getHitResultOnMoveVector(this, this::canHitEntity);
             if (hitresult.getType() == HitResult.Type.BLOCK) {
                 onHitBlock((BlockHitResult) hitresult);
+                impactParticles(this.position().x,this.position().y,this.position().z);
+                this.level().playSound((Player)null, this.position().x, this.position().y, this.position().z, SoundRegistry.EARTHQUAKE_IMPACT, SoundSource.PLAYERS, 2.0F, 1.0F);
             }
             for (Entity entity : this.level().getEntities(this, this.getBoundingBox()).stream().filter(target -> canHitEntity(target) && !victims.contains(target)).collect(Collectors.toSet())) {
                 damageEntity(entity);
-                System.out.println("Did " + damage + " damage to " + entity.getType());
-                //IronsSpellbooks.LOGGER.info(entity.getName().getString());
             }
         }
         super.tick();

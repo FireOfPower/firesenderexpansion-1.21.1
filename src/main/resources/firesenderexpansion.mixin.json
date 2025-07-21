@@ -5,7 +5,8 @@
   "compatibilityLevel": "JAVA_17",
   "plugin": "net.fireofpower.firesenderexpansion.mixins.MixinPlugin",
   "mixins": [
-
+    "AnchoredEvasionStopperMixin",
+    "AnchoredPortalStopperMixin"
   ],
   "client": [
     "client.MouseMixin"

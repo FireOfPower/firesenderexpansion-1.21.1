@@ -12,6 +12,7 @@ import java.util.function.Supplier;
 public class SpellRegistries {
     public static final DeferredRegister<AbstractSpell> SPELLS = DeferredRegister.create(SpellRegistry.SPELL_REGISTRY_KEY, FiresEnderExpansion.MODID);
 
+
     public static void register(IEventBus eventBus) {
         SPELLS.register(eventBus);
     }
@@ -26,4 +27,6 @@ public class SpellRegistries {
     public static final Supplier<AbstractSpell> DIMENSIONAL_ADAPTATION = registerSpell(new DimensionalAdaptationSpell());
     public static final Supplier<AbstractSpell> OBSIDIAN_ROD = registerSpell(new ObsidianRodSpell());
     public static final Supplier<AbstractSpell> INFINITE_VOID = registerSpell(new InfiniteVoidSpell());
+    public static final Supplier<AbstractSpell> DRAGONS_FURY = registerSpell(new DragonsFurySpell());
+    public static final Supplier<AbstractSpell> GATE_OF_ENDER = registerSpell(new GateOfEnderSpell());
 }

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "firesenderexpansion:item/end_lord_chestplate"
+  }
+}

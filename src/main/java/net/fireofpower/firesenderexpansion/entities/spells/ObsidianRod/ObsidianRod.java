@@ -6,14 +6,24 @@ import io.redspace.ironsspellbooks.damage.DamageSources;
 import io.redspace.ironsspellbooks.entity.spells.AbstractMagicProjectile;
 import io.redspace.ironsspellbooks.util.ParticleHelper;
 import net.fireofpower.firesenderexpansion.registries.EntityRegistry;
+import net.fireofpower.firesenderexpansion.registries.ItemRegistry;
 import net.fireofpower.firesenderexpansion.registries.PotionEffectRegistry;
 import net.fireofpower.firesenderexpansion.registries.SpellRegistries;
 import net.minecraft.core.Holder;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.BlockTypes;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -44,14 +54,6 @@ public class ObsidianRod extends AbstractMagicProjectile implements GeoEntity {
         super(obsidianRodEntityType,level);
     }
 
-    @Override
-    public void trailParticles() {
-        //Vec3 pos = this.getBoundingBox().getCenter().add(this.getDeltaMovement());
-        //Vec3 random = Utils.getRandomVec3((double)1.0F).add(pos);
-        //pos = pos.add(this.getDeltaMovement());
-        //this.level().addParticle(new ZapParticleOption(random), pos.x, pos.y, pos.z, (double)0.0F, (double)0.0F, (double)0.0F);
-    }
-
     public void shoot(Vec3 rotation, float inaccuracy) {
         double speed = rotation.length();
         Vec3 offset = Utils.getRandomVec3((double)1.0F).normalize().scale((double)inaccuracy);
@@ -60,6 +62,15 @@ public class ObsidianRod extends AbstractMagicProjectile implements GeoEntity {
     }
 
     protected void onHitBlock(BlockHitResult blockHitResult) {
+        BlockState hitBlock = level().getBlockState(blockHitResult.getBlockPos());
+        Block block = hitBlock.getBlock();
+        if(block.equals(Blocks.ANCIENT_DEBRIS)){
+            ItemStack result = new ItemStack(ItemRegistry.INFUSED_OBSIDIAN_FRAGMENTS, 1);
+            ItemEntity entity = new ItemEntity(level(), this.position().x(), this.position().y(), this.position().z(), result);
+            level().addFreshEntity(entity);
+            level().destroyBlock(blockHitResult.getBlockPos(), false);
+            level().playLocalSound(this.position().x(), this.position().y(), this.position().z(), Blocks.OBSIDIAN.asItem().getBreakingSound(), SoundSource.BLOCKS, 15f, 1f, true);
+        }
         super.onHitBlock(blockHitResult);
         this.discard();
     }
@@ -75,6 +86,11 @@ public class ObsidianRod extends AbstractMagicProjectile implements GeoEntity {
         discard();
     }
 
+
+    @Override
+    public void trailParticles() {
+
+    }
 
     @Override
     public void impactParticles(double v, double v1, double v2) {

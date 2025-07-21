@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "I": {
+      "item": "firesenderexpansion:infused_obsidian_fragments"
+    },
+    "C": {
+      "item": "firesenderexpansion:stabilized_core_of_ender"
+    },
+    "M": {
+      "item": "irons_spellbooks:mithril_ingot"
+    }
+  },
+  "pattern": [
+    "I I",
+    "ICI",
+    "IMI" ],
+  "result": {
+    "count": 1,
+    "id": "firesenderexpansion:end_lord_helmet"
+  }
+}

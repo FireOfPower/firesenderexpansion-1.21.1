@@ -17,11 +17,11 @@ import java.util.function.Supplier;
 
 public class WeaponTiers implements Tier, IronsWeaponTier {
 
-    public static WeaponTiers VOID_STAFF = new WeaponTiers(2031,6F,-2.6F,15, BlockTags.INCORRECT_FOR_NETHERITE_TOOL,() -> Ingredient.of(ItemRegistry.MITHRIL_INGOT.get()),
+    public static WeaponTiers VOID_STAFF = new WeaponTiers(2031,1F,-2.6F,15, BlockTags.INCORRECT_FOR_NETHERITE_TOOL,() -> Ingredient.of(ItemRegistry.MITHRIL_INGOT.get()),
             new AttributeContainer(AttributeRegistry.COOLDOWN_REDUCTION, 0.15, AttributeModifier.Operation.ADD_MULTIPLIED_BASE),
             new AttributeContainer(AttributeRegistry.SPELL_POWER, 0.1, AttributeModifier.Operation.ADD_MULTIPLIED_BASE),
             new AttributeContainer(AttributeRegistry.ENDER_SPELL_POWER, 0.1, AttributeModifier.Operation.ADD_MULTIPLIED_BASE),
-            new AttributeContainer(AttributeRegistry.MANA_REGEN, 0.3, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+            new AttributeContainer(AttributeRegistry.CAST_TIME_REDUCTION, 0.15, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
 
     //private final int level;
     private final int uses;

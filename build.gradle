@@ -152,7 +152,7 @@ configurations {
 dependencies {
     // ISS ***************************************************************************************************
     //implementation "io.redspace:irons_spellbooks:1.21-3.9.1"
-    implementation "curse.maven:irons-spells-n-spellbooks-855414:6282642"
+    implementation "curse.maven:irons-spells-n-spellbooks-855414:6769020"
 
     // GECKOLIB ***************************************************************************************************
     implementation "software.bernie.geckolib:geckolib-neoforge-${minecraft_version}:${geckolib_version}"
@@ -184,7 +184,7 @@ dependencies {
     //localRuntime "curse.maven:just-enough-effect-descriptions-jeed-532286:4599099")
 
     // CURIOS *****************************************************************************************************
-    implementation "curse.maven:curios-309927:6274154"
+    implementation "curse.maven:curios-309927:6529130"
 
     // BETTER COMBAT **********************************************************************************************
     //localRuntime "curse.maven:better-combat-by-daedelus-${better_combat_version}"
@@ -210,6 +210,8 @@ dependencies {
 
     //DISCERNING THE ELDRITCH
     implementation "curse.maven:discerning-the-eldritch-1143065:6090834"
+
+//    implementation "curse.maven:huge-structure-blocks-474114:5628956"
 
     //AZURELIB
     implementation "curse.maven:azurelib-817423:6303718"

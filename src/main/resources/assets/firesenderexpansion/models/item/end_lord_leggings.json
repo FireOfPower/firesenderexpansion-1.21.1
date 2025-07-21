@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "firesenderexpansion:item/enderman_travel_guide"
+    "layer0": "firesenderexpansion:item/end_lord_leggings"
   }
 }

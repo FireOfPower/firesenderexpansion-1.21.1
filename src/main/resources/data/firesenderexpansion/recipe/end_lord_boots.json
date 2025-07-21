@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "I": {
+      "item": "firesenderexpansion:infused_obsidian_fragments"
+    },
+    "C": {
+      "item": "firesenderexpansion:stabilized_core_of_ender"
+    },
+    "A": {
+      "item": "irons_spellbooks:magic_cloth"
+    }
+  },
+  "pattern": [
+    "IAI",
+    "ICI" ],
+  "result": {
+    "count": 1,
+    "id": "firesenderexpansion:end_lord_boots"
+  }
+}

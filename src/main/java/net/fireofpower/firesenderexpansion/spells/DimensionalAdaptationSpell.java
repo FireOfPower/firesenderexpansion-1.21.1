@@ -87,6 +87,11 @@ public class DimensionalAdaptationSpell extends AbstractSpell {
     }
 
     @Override
+    public Component getLockedMessage() {
+        return Component.translatable("msg.firesenderexpansion.dimensional_adaptation");
+    }
+
+    @Override
     public DefaultConfig getDefaultConfig() {
         return defaultConfig;
     }
@@ -98,7 +103,8 @@ public class DimensionalAdaptationSpell extends AbstractSpell {
 
     @Override
     public boolean canBeCraftedBy(Player player) {
-        Item guide = ItemRegistry.ENDERMAN_TRAVEL_GUIDE.get();
-        return player.getMainHandItem().is(guide);
+        Item guide = ItemRegistry.ENDCHIRIDION.get();
+        //return player.getMainHandItem().is(guide);
+        return player.getInventory().contains(guide.getDefaultInstance()) || net.fireofpower.firesenderexpansion.util.Utils.hasCurio(player,guide);
     }
 }

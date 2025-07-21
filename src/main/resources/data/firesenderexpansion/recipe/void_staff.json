@@ -2,22 +2,20 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "M": {
-      "item": "irons_spellbooks:mithril_ingot"},
-    "D": {
-      "item": "irons_spellbooks:dragonskin"
+    "I": {
+      "item": "firesenderexpansion:infused_obsidian_fragments"
     },
     "N": {
       "item": "minecraft:nether_star"
     },
     "E": {
-      "item": "irons_spellbooks:upgrade_orb"
+      "item": "firesenderexpansion:stabilized_core_of_ender"
     }
   },
   "pattern": [
-    "DED",
-    "DND",
-    "DMD" ],
+    "E",
+    "I",
+    "N" ],
   "result": {
     "count": 1,
     "id": "firesenderexpansion:void_staff"

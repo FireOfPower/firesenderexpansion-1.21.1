@@ -7,15 +7,16 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class EndermanTravelGuide extends Item {
-    private static final Component description = Component.translatable("item.firesenderexpansion.enderman_travel_guide.desc").withStyle(ChatFormatting.DARK_PURPLE);
-    public EndermanTravelGuide() {
-        super(ItemPropertiesHelper.equipment().rarity(Rarity.RARE).stacksTo(1));
+public class InfusedObsidianFragments extends Item {
+
+    private static final Component description = Component.translatable("item.firesenderexpansion.infused_obsidian_fragments.desc").withStyle(ChatFormatting.BLUE);
+
+
+    public InfusedObsidianFragments() {
+        super(ItemPropertiesHelper.equipment().rarity(Rarity.COMMON).stacksTo(64));
     }
 
     @Override

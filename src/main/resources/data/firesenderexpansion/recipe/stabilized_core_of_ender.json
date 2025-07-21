@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "I": {
+      "item": "firesenderexpansion:core_of_ender"
+    },
+    "E": {
+      "item": "irons_spellbooks:dragonskin"
+    }
+  },
+  "pattern": [
+    " I ",
+    "EEE"
+  ],
+  "result": {
+    "count": 1,
+    "id": "firesenderexpansion:stabilized_core_of_ender"
+  }
+}
