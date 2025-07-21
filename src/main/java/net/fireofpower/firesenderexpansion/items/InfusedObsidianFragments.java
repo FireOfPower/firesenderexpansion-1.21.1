@@ -16,7 +16,7 @@ public class InfusedObsidianFragments extends Item {
 
 
     public InfusedObsidianFragments() {
-        super(ItemPropertiesHelper.equipment().rarity(Rarity.COMMON).stacksTo(64));
+        super(ItemPropertiesHelper.equipment().rarity(Rarity.COMMON).fireResistant().stacksTo(64));
     }
 
     @Override

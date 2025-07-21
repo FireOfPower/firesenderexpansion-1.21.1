@@ -32,6 +32,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -99,11 +100,6 @@ public class HollowCrystalSpell extends AbstractSpell {
         }
     }
 
-    @OnlyIn(Dist.CLIENT)
-    public void playerSideAnim(ServerPlayer serverPlayer){
-        ClientSpellCastHelper.animatePlayerStart(Minecraft.getInstance().player.level().getPlayerByUUID(serverPlayer.getUUID()), FEESpellAnimations.ANIMATION_HOLLOW_CRYSTAL_CAST.getForPlayer().get());
-    }
-
     @Override
     public void onRecastFinished(ServerPlayer serverPlayer, RecastInstance recastInstance, RecastResult recastResult, ICastDataSerializable castDataSerializable) {
         super.onRecastFinished(serverPlayer, recastInstance, recastResult, castDataSerializable);
@@ -112,6 +108,7 @@ public class HollowCrystalSpell extends AbstractSpell {
                 //animation
                 PacketDistributor.sendToPlayersTrackingEntityAndSelf(serverPlayer, new SyncFinalCastPacket(serverPlayer.getUUID(), SpellRegistries.HOLLOW_CRYSTAL.toString(), false));
 
+                Vec3 prevLookDir = serverPlayer.getLookAngle();
                 //actual casting it
                 Timer timer = new Timer();
                 timer.schedule(new TimerTask() {
@@ -120,7 +117,7 @@ public class HollowCrystalSpell extends AbstractSpell {
                         HollowCrystal hollowCrystal = new HollowCrystal(serverPlayer.level(), serverPlayer);
                         hollowCrystal.setPos(serverPlayer.position().add(0, serverPlayer.getEyeHeight() + hollowCrystal.getBoundingBox().getYsize() * .25f - 3, 0).add(serverPlayer.getForward().multiply(3, 3, 3)));
                         hollowCrystal.setDamage(getDamage(serverPlayer));
-                        hollowCrystal.shoot(serverPlayer.getLookAngle());
+                        hollowCrystal.shoot(prevLookDir);
                         hollowCrystal.setDeltaMovement(hollowCrystal.getDeltaMovement().multiply(0.5, 0.5, 0.5));
                         serverPlayer.removeEffect(PotionEffectRegistry.HOLLOW_CRYSTAL_POTION_EFFECT);
                         serverPlayer.level().addFreshEntity(hollowCrystal);
