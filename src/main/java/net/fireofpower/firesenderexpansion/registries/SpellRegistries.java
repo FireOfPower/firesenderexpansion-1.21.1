@@ -29,4 +29,5 @@ public class SpellRegistries {
     public static final Supplier<AbstractSpell> INFINITE_VOID = registerSpell(new InfiniteVoidSpell());
     public static final Supplier<AbstractSpell> DRAGONS_FURY = registerSpell(new DragonsFurySpell());
     public static final Supplier<AbstractSpell> GATE_OF_ENDER = registerSpell(new GateOfEnderSpell());
+    public static final Supplier<AbstractSpell> DISPLACEMENT_CAGE = registerSpell(new DisplacementCageSpell());
 }

@@ -7,6 +7,7 @@ import net.fireofpower.firesenderexpansion.entities.spells.HollowCrystal.HollowC
 import net.fireofpower.firesenderexpansion.entities.spells.InfiniteVoid.InfiniteVoid;
 import net.fireofpower.firesenderexpansion.entities.spells.MagicShulkerBullet;
 import net.fireofpower.firesenderexpansion.entities.spells.ObsidianRod.ObsidianRod;
+import net.fireofpower.firesenderexpansion.entities.spells.TeleportAoe;
 import net.fireofpower.firesenderexpansion.entities.spells.TeleportRend;
 import net.fireofpower.firesenderexpansion.entities.spells.UnstableSwords.claymore.UnstableSummonedClaymoreEntity;
 import net.fireofpower.firesenderexpansion.entities.spells.UnstableSwords.rapier.UnstableSummonedRapierEntity;
@@ -87,4 +88,10 @@ public class EntityRegistry {
                     .sized(.6f, .6f)
                     .clientTrackingRange(64)
                     .build(ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "gate_portal").toString()));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<TeleportAoe>> TELEPORT_AREA =
+            ENTITIES.register("teleport_area", () -> EntityType.Builder.<TeleportAoe>of(TeleportAoe::new, MobCategory.MISC)
+                    .sized(16f, .8f)
+                    .clientTrackingRange(64)
+                    .build(ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "teleport_area").toString()));
 }

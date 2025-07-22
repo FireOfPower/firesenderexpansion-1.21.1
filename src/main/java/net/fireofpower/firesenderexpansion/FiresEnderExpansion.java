@@ -2,6 +2,7 @@ package net.fireofpower.firesenderexpansion;
 
 import io.redspace.ironsspellbooks.item.SpellBook;
 import io.redspace.ironsspellbooks.render.SpellBookCurioRenderer;
+import io.redspace.ironsspellbooks.setup.ClientSetup;
 import net.fireofpower.firesenderexpansion.entities.mobs.PorphyromancerRenderer;
 import net.fireofpower.firesenderexpansion.entities.spells.GateOfEnder.GatePortalRenderer;
 import net.fireofpower.firesenderexpansion.entities.spells.HollowCrystal.HollowCrystalRenderer;
@@ -17,6 +18,7 @@ import net.fireofpower.firesenderexpansion.setup.ModSetup;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import org.jetbrains.annotations.NotNull;
@@ -104,6 +106,7 @@ public class FiresEnderExpansion
             event.registerEntityRenderer(EntityRegistry.INFINITE_VOID.get(), InfiniteVoidRenderer::new);
             event.registerEntityRenderer(EntityRegistry.PORPHYROMANCER.get(), PorphyromancerRenderer::new);
             event.registerEntityRenderer(EntityRegistry.GATE_PORTAL.get(), GatePortalRenderer::new);
+            event.registerEntityRenderer(EntityRegistry.TELEPORT_AREA.get(), NoopRenderer::new);
             event.registerEntityRenderer(EntityRegistry.UNSTABLE_SUMMONED_SWORD.get(), (e) -> new UnstableSummonedSwordRenderer(e, UnstableSummonedSwordModel::new));
             event.registerEntityRenderer(EntityRegistry.UNSTABLE_SUMMONED_RAPIER.get(), (e) -> new UnstableSummonedSwordRenderer(e, UnstableSummonedRapierModel::new));
             event.registerEntityRenderer(EntityRegistry.UNSTABLE_SUMMONED_CLAYMORE.get(), (e) -> new UnstableSummonedSwordRenderer(e, UnstableSummonedClaymoreModel::new));

@@ -70,7 +70,7 @@ public class ServerEvents {
                 if (player instanceof ServerPlayer serverPlayer)
                 {
                     // display a message to the player
-                    serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(Component.literal(ChatFormatting.BOLD + "Unable to cast teleportation spells for : " + formattedTime)
+                    serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(Component.literal(ChatFormatting.BOLD + "Unable to use teleportation for : " + formattedTime)
                             .withStyle(s -> s.withColor(TextColor.fromRgb(0xF35F5F)))));
                     serverPlayer.level().playSound(null , player.getX() , player.getY() , player.getZ() ,
                             SoundEvents.FIRE_EXTINGUISH , SoundSource.PLAYERS , 0.5f , 1f);
@@ -115,25 +115,23 @@ public class ServerEvents {
 
     @SubscribeEvent
     public static void onTeleportSpellCast(SpellTeleportEvent event){
-        LivingEntity entity = (LivingEntity) event.getEntity();
-        boolean hasAnchoredEffect = entity.hasEffect(PotionEffectRegistry.ANCHORED_POTION_EFFECT);
-        if (entity instanceof ServerPlayer player && !player.level().isClientSide())
-        {
-            if (hasAnchoredEffect)
-            {
-                event.setCanceled(true);
-                // Effect Duration
-                int time = player.getEffect(PotionEffectRegistry.ANCHORED_POTION_EFFECT).getDuration();
-                // convert duration to time format  using the method convertTicksToTime
-                String formattedTime = convertTicksToTime(time);
+        if(event.getEntity() instanceof LivingEntity entity) {
+            boolean hasAnchoredEffect = entity.hasEffect(PotionEffectRegistry.ANCHORED_POTION_EFFECT);
+            if (entity instanceof ServerPlayer player && !player.level().isClientSide()) {
+                if (hasAnchoredEffect) {
+                    event.setCanceled(true);
+                    // Effect Duration
+                    int time = player.getEffect(PotionEffectRegistry.ANCHORED_POTION_EFFECT).getDuration();
+                    // convert duration to time format  using the method convertTicksToTime
+                    String formattedTime = convertTicksToTime(time);
 
-                if (player instanceof ServerPlayer serverPlayer)
-                {
-                    // display a message to the player
-                    serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(Component.literal(ChatFormatting.BOLD + "Unable to cast teleportation spells for : " + formattedTime)
-                            .withStyle(s -> s.withColor(TextColor.fromRgb(0xF35F5F)))));
-                    serverPlayer.level().playSound(null , player.getX() , player.getY() , player.getZ() ,
-                            SoundEvents.FIRE_EXTINGUISH , SoundSource.PLAYERS , 0.5f , 1f);
+                    if (player instanceof ServerPlayer serverPlayer) {
+                        // display a message to the player
+                        serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(Component.literal(ChatFormatting.BOLD + "Unable to cast teleportation spells for : " + formattedTime)
+                                .withStyle(s -> s.withColor(TextColor.fromRgb(0xF35F5F)))));
+                        serverPlayer.level().playSound(null, player.getX(), player.getY(), player.getZ(),
+                                SoundEvents.FIRE_EXTINGUISH, SoundSource.PLAYERS, 0.5f, 1f);
+                    }
                 }
             }
         }

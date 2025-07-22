@@ -35,6 +35,9 @@
   "spell.firesenderexpansion.aspect_of_the_shulker": "Aspect of the Shulker",
   "spell.firesenderexpansion.aspect_of_the_shulker.guide": "Manifest a homing shulker bullet when you hit an entity with a magic attack.",
 
+  "spell.firesenderexpansion.displacement_cage": "Displacement Cage",
+  "spell.firesenderexpansion.displacement_cage.guide": "Create a circle made of portals, teleporting any living thing that tries to leave it back inside",
+
   "spell.firesenderexpansion.dimensional_adaptation": "Dimensional Adaptation",
   "spell.firesenderexpansion.dimensional_adaptation.guide": "Use ancient Ender knowledge to survive against each dimension's perils.",
   "msg.firesenderexpansion.dimensional_adaptation": "This could be deciphered if you had an Endchiridion",
