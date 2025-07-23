@@ -80,6 +80,7 @@ public class FiresEnderExpansion
                 output.accept(ItemRegistry.END_LORD_LEGGINGS.get());
                 output.accept(ItemRegistry.END_LORD_BOOTS.get());
                 output.accept(ItemRegistry.ENDER_TREASURY_KEY.get());
+                output.accept(ItemRegistry.ANCHORING_RING.get());
             })
             .build()
     );

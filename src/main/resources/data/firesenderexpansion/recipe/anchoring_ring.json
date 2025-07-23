@@ -4,10 +4,13 @@
   "key": {
     "I": {
       "item": "firesenderexpansion:infused_obsidian_fragments"
+    },
+    "E": {
+      "item": "minecraft:ender_pearl"
     }
   },
   "pattern": [
-    " I ",
+    "EI ",
     "I I",
     " I " ],
   "result": {
