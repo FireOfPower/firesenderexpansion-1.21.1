@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "firesenderexpansion:core_of_ender"
+    "firesenderexpansion:core_of_ender",
+    "firesenderexpansion:anchoring_ring"
   ]
 }

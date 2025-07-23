@@ -70,7 +70,7 @@ public class ServerEvents {
                 if (player instanceof ServerPlayer serverPlayer)
                 {
                     // display a message to the player
-                    serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(Component.literal(ChatFormatting.BOLD + "Unable to use teleportation for : " + formattedTime)
+                    serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(Component.literal(ChatFormatting.BOLD + "Unable to use teleportation")
                             .withStyle(s -> s.withColor(TextColor.fromRgb(0xF35F5F)))));
                     serverPlayer.level().playSound(null , player.getX() , player.getY() , player.getZ() ,
                             SoundEvents.FIRE_EXTINGUISH , SoundSource.PLAYERS , 0.5f , 1f);
@@ -127,7 +127,7 @@ public class ServerEvents {
 
                     if (player instanceof ServerPlayer serverPlayer) {
                         // display a message to the player
-                        serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(Component.literal(ChatFormatting.BOLD + "Unable to cast teleportation spells for : " + formattedTime)
+                        serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(Component.literal(ChatFormatting.BOLD + "Unable to cast teleportation")
                                 .withStyle(s -> s.withColor(TextColor.fromRgb(0xF35F5F)))));
                         serverPlayer.level().playSound(null, player.getX(), player.getY(), player.getZ(),
                                 SoundEvents.FIRE_EXTINGUISH, SoundSource.PLAYERS, 0.5f, 1f);

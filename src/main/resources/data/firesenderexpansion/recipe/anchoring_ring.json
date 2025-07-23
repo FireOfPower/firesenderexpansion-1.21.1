@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "I": {
+      "item": "firesenderexpansion:infused_obsidian_fragments"
+    }
+  },
+  "pattern": [
+    " I ",
+    "I I",
+    " I " ],
+  "result": {
+    "count": 1,
+    "id": "firesenderexpansion:anchoring_ring"
+  }
+}

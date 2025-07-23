@@ -9,4 +9,5 @@ import net.minecraft.world.entity.EntityType;
 public class ModTags {
     public static final TagKey<EntityType<?>> BREAKS_HOLLOW_CRYSTAL = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "breaks_hollow_crystal"));
     public static final TagKey<EntityType<?>> INFINITE_VOID_IMMUNE = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "void_teleport_immune"));
+    public static final TagKey<EntityType<?>> DISPLACEMENT_CAGE_IMMUNE = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "displacement_cage_immune"));
 }

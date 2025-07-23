@@ -8,6 +8,7 @@ import io.redspace.ironsspellbooks.util.ItemPropertiesHelper;
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
 import net.fireofpower.firesenderexpansion.items.InfusedObsidianFragments;
 import net.fireofpower.firesenderexpansion.items.armor.end_lord.EndLordArmorItem;
+import net.fireofpower.firesenderexpansion.items.curios.AnchoringRingCurio;
 import net.fireofpower.firesenderexpansion.items.curios.CoreOfEnderCurio;
 import net.fireofpower.firesenderexpansion.items.StabilizedCoreOfEnder;
 import net.fireofpower.firesenderexpansion.items.curios.EnderTreasuryKeyCurio;
@@ -64,6 +65,7 @@ public class ItemRegistry {
 
     //Curios
     public static final Supplier<CurioBaseItem> CORE_OF_ENDER = ITEMS.register("core_of_ender", CoreOfEnderCurio::new);
+    public static final Supplier<CurioBaseItem> ANCHORING_RING = ITEMS.register("anchoring_ring", AnchoringRingCurio::new);
     public static final Supplier<CurioBaseItem> ENDER_TREASURY_KEY = ITEMS.register("ender_treasury_key", EnderTreasuryKeyCurio::new);
 
     public static final DeferredHolder<Item, Item> ENDCHIRIDION = ITEMS.register("endchiridion", () ->
