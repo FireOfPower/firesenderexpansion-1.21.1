@@ -99,6 +99,14 @@ public class InfiniteVoid extends AbstractMagicProjectile implements GeoEntity, 
     public void onAntiMagic(MagicData playerMagicData) {
 
     }
+
+    @Override
+    public void tick() {
+        if(tickCount > 40){
+            discard();
+        }
+        super.tick();
+    }
 }
 
 
