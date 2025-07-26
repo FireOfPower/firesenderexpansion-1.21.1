@@ -1,6 +1,7 @@
 package net.fireofpower.firesenderexpansion;
 
 import io.redspace.ironsspellbooks.item.SpellBook;
+import io.redspace.ironsspellbooks.render.PocketDimensionEffects;
 import io.redspace.ironsspellbooks.render.SpellBookCurioRenderer;
 import io.redspace.ironsspellbooks.setup.ClientSetup;
 import net.fireofpower.firesenderexpansion.entities.mobs.PorphyromancerRenderer;
@@ -20,6 +21,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterDimensionSpecialEffectsEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -98,6 +100,11 @@ public class FiresEnderExpansion
             event.enqueueWork(() -> {
                 ItemRegistry.getItems().stream().filter(item -> item.get() instanceof SpellBook).forEach((item) -> CuriosRendererRegistry.register(item.get(), SpellBookCurioRenderer::new));
             });
+        }
+
+        @SubscribeEvent
+        public static void registerDimensionEffects(RegisterDimensionSpecialEffectsEvent event) {
+            event.register(FiresEnderExpansion.id("pocket_dimension"), new PocketDimensionEffects());
         }
 
         @SubscribeEvent

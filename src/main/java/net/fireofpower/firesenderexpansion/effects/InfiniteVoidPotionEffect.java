@@ -7,6 +7,7 @@ import io.redspace.ironsspellbooks.capabilities.magic.PocketDimensionManager;
 import io.redspace.ironsspellbooks.effect.MagicMobEffect;
 import io.redspace.ironsspellbooks.entity.mobs.AntiMagicSusceptible;
 import io.redspace.ironsspellbooks.spells.eldritch.PocketDimensionSpell;
+import net.fireofpower.firesenderexpansion.capabilities.magic.VoidDimensionManager;
 import net.fireofpower.firesenderexpansion.registries.PotionEffectRegistry;
 import net.fireofpower.firesenderexpansion.util.ModTags;
 import net.fireofpower.firesenderexpansion.util.Utils;
@@ -54,7 +55,7 @@ public class InfiniteVoidPotionEffect extends MagicMobEffect implements AntiMagi
         if(!pLivingEntity.getType().is(ModTags.INFINITE_VOID_IMMUNE)) {
             //puts savedPosition at 0,0 and keeps relative distance
             Vec3 newPos = pLivingEntity.position().subtract(savedPosition).add(0,1000,0);
-            pLivingEntity.changeDimension(new DimensionTransition(Objects.requireNonNull(pLivingEntity.getServer()).getLevel(PocketDimensionManager.POCKET_DIMENSION),newPos,Vec3.ZERO,pLivingEntity.getXRot(),pLivingEntity.getYRot(),DimensionTransition.DO_NOTHING));
+            pLivingEntity.changeDimension(new DimensionTransition(Objects.requireNonNull(pLivingEntity.getServer()).getLevel(VoidDimensionManager.VOID_DIMENSION),newPos,Vec3.ZERO,pLivingEntity.getXRot(),pLivingEntity.getYRot(),DimensionTransition.DO_NOTHING));
         }
     }
 
@@ -68,7 +69,7 @@ public class InfiniteVoidPotionEffect extends MagicMobEffect implements AntiMagi
         }
         if(!pLivingEntity.getType().is(ModTags.INFINITE_VOID_IMMUNE)) {
             if(pLivingEntity.getHealth() != 0) {
-                ServerChunkCache cache = pLivingEntity.getServer().getLevel(PocketDimensionManager.POCKET_DIMENSION).getChunkSource();
+                ServerChunkCache cache = pLivingEntity.getServer().getLevel(VoidDimensionManager.VOID_DIMENSION).getChunkSource();
                 cache.addRegionTicket(TicketType.POST_TELEPORT, Utils.getChunkPos(pLivingEntity.getOnPos()), 3, 239, true);
                 ChunkPos pos = Utils.getChunkPos(pLivingEntity.getOnPos());
                 pLivingEntity.changeDimension(new DimensionTransition((ServerLevel) savedDimension, savedPosition, Vec3.ZERO, pLivingEntity.getXRot(), pLivingEntity.getYRot(), DimensionTransition.DO_NOTHING));

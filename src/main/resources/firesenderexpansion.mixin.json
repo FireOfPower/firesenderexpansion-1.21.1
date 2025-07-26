@@ -6,8 +6,7 @@
   "plugin": "net.fireofpower.firesenderexpansion.mixins.MixinPlugin",
   "mixins": [
     "AnchoredEvasionStopperMixin",
-    "AnchoredPortalStopperMixin",
-    "PocketDimensionAntiSnapMixin"
+    "AnchoredPortalStopperMixin"
   ],
   "client": [
     "client.MouseMixin"

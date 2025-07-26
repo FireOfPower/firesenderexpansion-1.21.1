@@ -2,55 +2,45 @@ package net.fireofpower.firesenderexpansion.events;
 
 import io.redspace.ironsspellbooks.api.events.SpellPreCastEvent;
 import io.redspace.ironsspellbooks.api.events.SpellTeleportEvent;
-import io.redspace.ironsspellbooks.api.item.UpgradeData;
 import io.redspace.ironsspellbooks.api.registry.AttributeRegistry;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
-import io.redspace.ironsspellbooks.compat.Curios;
-import io.redspace.ironsspellbooks.effect.EvasionEffect;
+import io.redspace.ironsspellbooks.capabilities.magic.PocketDimensionManager;
 import io.redspace.ironsspellbooks.item.curios.CurioBaseItem;
 import io.redspace.ironsspellbooks.item.weapons.AttributeContainer;
-import io.redspace.ironsspellbooks.registries.ComponentRegistry;
 import io.redspace.ironsspellbooks.registries.ItemRegistry;
-import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
 import net.fireofpower.firesenderexpansion.effects.InfiniteVoidPotionEffect;
 import net.fireofpower.firesenderexpansion.registries.PotionEffectRegistry;
 import net.fireofpower.firesenderexpansion.registries.SpellRegistries;
 import net.fireofpower.firesenderexpansion.util.Utils;
 import net.minecraft.ChatFormatting;
-import net.minecraft.commands.arguments.EntityAnchorArgument;
-import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.TicketType;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.portal.DimensionTransition;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.ItemAttributeModifierEvent;
-import net.neoforged.neoforge.event.ModifyDefaultComponentsEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
-import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
-import net.neoforged.neoforge.registries.datamaps.DataMapType;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static io.redspace.ironsspellbooks.spells.ender.TeleportSpell.particleCloud;
 import static net.fireofpower.firesenderexpansion.FiresEnderExpansion.MODID;
@@ -115,17 +105,38 @@ public class ServerEvents {
                     }
                 }
             }
+            if(entity.hasEffect(PotionEffectRegistry.INFINITE_VOID_POTION_EFFECT) && Objects.equals(event.getSpellId(), SpellRegistry.ROOT_SPELL.get().getSpellId())){
+                event.setCanceled(true);
+                // display a message to the player
+                if(entity instanceof ServerPlayer serverPlayer) {
+                    serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(Component.literal(ChatFormatting.BOLD + "That cannot be casted right now")
+                            .withStyle(s -> s.withColor(TextColor.fromRgb(0xF35F5F)))));
+                    serverPlayer.level().playSound(null, player.getX(), player.getY(), player.getZ(),
+                            SoundEvents.FIRE_EXTINGUISH, SoundSource.PLAYERS, 0.5f, 1f);
+                }
+            }
         }
     }
 
     @SubscribeEvent
-    public static void onLivingDrop(LivingDropsEvent event){
+    public static void onLivingDropsEvent(LivingDropsEvent event){
         Collection<ItemEntity> items = event.getDrops();
         if(event.getEntity().hasEffect(PotionEffectRegistry.INFINITE_VOID_POTION_EFFECT)){
             if(event.getEntity().getEffect(PotionEffectRegistry.INFINITE_VOID_POTION_EFFECT).getEffect().value() instanceof InfiniteVoidPotionEffect voidPotionEffect){
                 if(items != null){
                     items.forEach(e -> {
-                        e.setPos(event.getSource().getEntity().position());
+                        if(e != null){
+                            ServerChunkCache cache = e.getServer().getLevel(voidPotionEffect.getSavedDimension().dimension()).getChunkSource();
+                            cache.addRegionTicket(TicketType.POST_TELEPORT, Utils.getChunkPos(new BlockPos((int)voidPotionEffect.getSavedPosition().x,(int)voidPotionEffect.getSavedPosition().y,(int)voidPotionEffect.getSavedPosition().z)), 3, 238, true);
+                            e.changeDimension(new DimensionTransition((ServerLevel) voidPotionEffect.getSavedDimension(), voidPotionEffect.getSavedPosition(), Vec3.ZERO, 0, 0, DimensionTransition.DO_NOTHING));
+                            Timer timer = new Timer();
+                            timer.schedule(new TimerTask() {
+                                @Override
+                                public void run() {
+                                    cache.removeRegionTicket(TicketType.POST_TELEPORT, Utils.getChunkPos(new BlockPos((int)voidPotionEffect.getSavedPosition().x,(int)voidPotionEffect.getSavedPosition().y,(int)voidPotionEffect.getSavedPosition().z)), 3, 238, true);
+                                }
+                            },200);
+                        }
                     });
                 }
             }
