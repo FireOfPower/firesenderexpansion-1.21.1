@@ -87,14 +87,14 @@ public class InfiniteVoidPotionEffect extends MagicMobEffect implements AntiMagi
         if(!pLivingEntity.getType().is(ModTags.INFINITE_VOID_IMMUNE)) {
             if(pLivingEntity.getHealth() != 0) {
                 ServerChunkCache cache = pLivingEntity.getServer().getLevel(VoidDimensionManager.VOID_DIMENSION).getChunkSource();
-                cache.addRegionTicket(TicketType.POST_TELEPORT, Utils.getChunkPos(pLivingEntity.getOnPos()), 3, 239, true);
+                cache.addRegionTicket(TicketType.POST_TELEPORT, Utils.getChunkPos(pLivingEntity.getOnPos()), 9, 239, true);
                 ChunkPos pos = Utils.getChunkPos(pLivingEntity.getOnPos());
                 pLivingEntity.changeDimension(new DimensionTransition((ServerLevel) savedDimension, savedPosition, Vec3.ZERO, pLivingEntity.getXRot(), pLivingEntity.getYRot(), DimensionTransition.DO_NOTHING));
                 Timer timer = new Timer();
                 timer.schedule(new TimerTask() {
                     @Override
                     public void run() {
-                        cache.removeRegionTicket(TicketType.POST_TELEPORT,pos,3,239,true);
+                        cache.removeRegionTicket(TicketType.POST_TELEPORT,pos,9,239,true);
                     }
                 },200);
             }

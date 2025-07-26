@@ -128,13 +128,13 @@ public class ServerEvents {
                     items.forEach(e -> {
                         if(e != null){
                             ServerChunkCache cache = e.getServer().getLevel(voidPotionEffect.getSavedDimension().dimension()).getChunkSource();
-                            cache.addRegionTicket(TicketType.POST_TELEPORT, Utils.getChunkPos(new BlockPos((int)voidPotionEffect.getSavedPosition().x,(int)voidPotionEffect.getSavedPosition().y,(int)voidPotionEffect.getSavedPosition().z)), 3, 238, true);
+                            cache.addRegionTicket(TicketType.POST_TELEPORT, Utils.getChunkPos(new BlockPos((int)voidPotionEffect.getSavedPosition().x,(int)voidPotionEffect.getSavedPosition().y,(int)voidPotionEffect.getSavedPosition().z)), 9, 238, true);
                             e.changeDimension(new DimensionTransition((ServerLevel) voidPotionEffect.getSavedDimension(), voidPotionEffect.getSavedPosition(), Vec3.ZERO, 0, 0, DimensionTransition.DO_NOTHING));
                             Timer timer = new Timer();
                             timer.schedule(new TimerTask() {
                                 @Override
                                 public void run() {
-                                    cache.removeRegionTicket(TicketType.POST_TELEPORT, Utils.getChunkPos(new BlockPos((int)voidPotionEffect.getSavedPosition().x,(int)voidPotionEffect.getSavedPosition().y,(int)voidPotionEffect.getSavedPosition().z)), 3, 238, true);
+                                    cache.removeRegionTicket(TicketType.POST_TELEPORT, Utils.getChunkPos(new BlockPos((int)voidPotionEffect.getSavedPosition().x,(int)voidPotionEffect.getSavedPosition().y,(int)voidPotionEffect.getSavedPosition().z)), 9, 238, true);
                                 }
                             },200);
                         }
