@@ -9,17 +9,30 @@ import io.redspace.ironsspellbooks.entity.mobs.AntiMagicSusceptible;
 import io.redspace.ironsspellbooks.spells.eldritch.PocketDimensionSpell;
 import net.fireofpower.firesenderexpansion.registries.PotionEffectRegistry;
 import net.fireofpower.firesenderexpansion.util.ModTags;
+import net.fireofpower.firesenderexpansion.util.Utils;
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ChunkHolder;
+import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.TicketType;
 import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.portal.DimensionTransition;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.common.world.chunk.ForcedChunkManager;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+
+import static net.fireofpower.firesenderexpansion.util.Utils.getChunkPos;
 
 public class InfiniteVoidPotionEffect extends MagicMobEffect implements AntiMagicSusceptible {
     private Vec3 savedPosition;
@@ -51,10 +64,31 @@ public class InfiniteVoidPotionEffect extends MagicMobEffect implements AntiMagi
         if(savedPosition == null || savedDimension == null){
             savedPosition = new Vec3(0, 100,0);
             System.out.println("Manifest Domain: Void found an issue");
+            return;
         }
         if(!pLivingEntity.getType().is(ModTags.INFINITE_VOID_IMMUNE)) {
-            pLivingEntity.changeDimension(new DimensionTransition((ServerLevel) savedDimension,savedPosition,Vec3.ZERO,pLivingEntity.getXRot(),pLivingEntity.getYRot(),DimensionTransition.DO_NOTHING));
+            if(pLivingEntity.getHealth() != 0) {
+                ServerChunkCache cache = pLivingEntity.getServer().getLevel(PocketDimensionManager.POCKET_DIMENSION).getChunkSource();
+                cache.addRegionTicket(TicketType.POST_TELEPORT, Utils.getChunkPos(pLivingEntity.getOnPos()), 3, 239, true);
+                ChunkPos pos = Utils.getChunkPos(pLivingEntity.getOnPos());
+                pLivingEntity.changeDimension(new DimensionTransition((ServerLevel) savedDimension, savedPosition, Vec3.ZERO, pLivingEntity.getXRot(), pLivingEntity.getYRot(), DimensionTransition.DO_NOTHING));
+                Timer timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        cache.removeRegionTicket(TicketType.POST_TELEPORT,pos,3,239,true);
+                    }
+                },200);
+            }
         }
+    }
+
+    public Vec3 getSavedPosition() {
+        return savedPosition;
+    }
+
+    public Level getSavedDimension() {
+        return savedDimension;
     }
 
     @Override

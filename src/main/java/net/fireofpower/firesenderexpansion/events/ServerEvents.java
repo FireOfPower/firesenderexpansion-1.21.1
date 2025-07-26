@@ -12,6 +12,7 @@ import io.redspace.ironsspellbooks.item.weapons.AttributeContainer;
 import io.redspace.ironsspellbooks.registries.ComponentRegistry;
 import io.redspace.ironsspellbooks.registries.ItemRegistry;
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
+import net.fireofpower.firesenderexpansion.effects.InfiniteVoidPotionEffect;
 import net.fireofpower.firesenderexpansion.registries.PotionEffectRegistry;
 import net.fireofpower.firesenderexpansion.registries.SpellRegistries;
 import net.fireofpower.firesenderexpansion.util.Utils;
@@ -31,19 +32,23 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.portal.DimensionTransition;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.ItemAttributeModifierEvent;
 import net.neoforged.neoforge.event.ModifyDefaultComponentsEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.registries.datamaps.DataMapType;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -108,6 +113,20 @@ public class ServerEvents {
                     if (maxRadius > (double)2.0F) {
                         --maxRadius;
                     }
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onLivingDrop(LivingDropsEvent event){
+        Collection<ItemEntity> items = event.getDrops();
+        if(event.getEntity().hasEffect(PotionEffectRegistry.INFINITE_VOID_POTION_EFFECT)){
+            if(event.getEntity().getEffect(PotionEffectRegistry.INFINITE_VOID_POTION_EFFECT).getEffect().value() instanceof InfiniteVoidPotionEffect voidPotionEffect){
+                if(items != null){
+                    items.forEach(e -> {
+                        e.setPos(event.getSource().getEntity().position());
+                    });
                 }
             }
         }

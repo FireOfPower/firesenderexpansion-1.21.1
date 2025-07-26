@@ -110,8 +110,10 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
                 impactParticles(this.position().x,this.position().y,this.position().z);
                 this.level().playSound((Player)null, this.position().x, this.position().y, this.position().z, SoundRegistry.EARTHQUAKE_IMPACT, SoundSource.PLAYERS, 2.0F, 1.0F);
             }
-            for (Entity entity : this.level().getEntities(this, this.getBoundingBox()).stream().filter(target -> canHitEntity(target) && !victims.contains(target)).collect(Collectors.toSet())) {
-                damageEntity(entity);
+            if(victims !=null) {
+                for (Entity entity : this.level().getEntities(this, this.getBoundingBox()).stream().filter(target -> canHitEntity(target) && !victims.contains(target)).collect(Collectors.toSet())) {
+                    damageEntity(entity);
+                }
             }
         }
         super.tick();

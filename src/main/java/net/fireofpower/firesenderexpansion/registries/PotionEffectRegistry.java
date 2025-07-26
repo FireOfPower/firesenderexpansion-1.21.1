@@ -23,7 +23,7 @@ public class PotionEffectRegistry {
     public static final DeferredHolder<MobEffect, MobEffect> ANCHORED_POTION_EFFECT = MOB_EFFECTS.register("anchored_potion_effect", () -> new AnchoredPotionEffect());
     public static final DeferredHolder<MobEffect, MobEffect> INFINITE_VOID_POTION_EFFECT = MOB_EFFECTS.register("infinite_void_potion_effect", () -> new InfiniteVoidPotionEffect());
     public static final DeferredHolder<MobEffect, MobEffect> ASCENDED_CASTER_POTION_EFFECT = MOB_EFFECTS.register("ascended_caster_potion_effect", () -> new AscendedCasterPotionEffect());
-
+    public static final DeferredHolder<MobEffect, MobEffect> VOID_BURN_POTION_EFFECT = MOB_EFFECTS.register("void_burn_potion_effect", () -> new VoidBurnPotionEffect());
 
     public static void register(IEventBus eventBus)
     {

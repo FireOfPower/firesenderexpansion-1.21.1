@@ -73,12 +73,12 @@ public class InfiniteVoidSpell extends AbstractSpell {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                entity.addEffect(new MobEffectInstance(PotionEffectRegistry.ASCENDED_CASTER_POTION_EFFECT, (duration-4) * 20, 0, false, false, true));
-                entity.addEffect(new MobEffectInstance(PotionEffectRegistry.ANCHORED_POTION_EFFECT, (duration-4) * 20, 0, false, false, true));
-                entity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, (duration-4) * 20, 110, false, false, true));
-                entity.addEffect(new MobEffectInstance(MobEffects.LEVITATION, (duration-4) * 20, 0, false, false, true));
-                entity.addEffect(new MobEffectInstance(PotionEffectRegistry.INFINITE_VOID_POTION_EFFECT, (duration-4) * 20, 0, false, false, true));
                 for(int i = 0; i < targets.size(); i++){
+                    entity.addEffect(new MobEffectInstance(PotionEffectRegistry.ASCENDED_CASTER_POTION_EFFECT, (duration-4) * 20, 0, false, false, true));
+                    entity.addEffect(new MobEffectInstance(PotionEffectRegistry.ANCHORED_POTION_EFFECT, (duration-4) * 20, 0, false, false, true));
+                    entity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, (duration-4) * 20, 110, false, false, true));
+                    entity.addEffect(new MobEffectInstance(MobEffects.LEVITATION, (duration-4) * 20, 0, false, false, true));
+                    entity.addEffect(new MobEffectInstance(PotionEffectRegistry.INFINITE_VOID_POTION_EFFECT, (duration-4) * 20, 0, false, false, true));
                     if(targets.get(i) instanceof LivingEntity target){
                         target.addEffect(new MobEffectInstance(PotionEffectRegistry.ANCHORED_POTION_EFFECT, (duration-4) * 20, 0, false, false, true));
                         target.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, (duration-4) * 20, 110, false, false, true));
