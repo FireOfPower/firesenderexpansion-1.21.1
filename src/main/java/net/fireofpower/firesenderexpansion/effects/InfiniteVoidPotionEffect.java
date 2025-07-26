@@ -13,6 +13,7 @@ import net.fireofpower.firesenderexpansion.util.ModTags;
 import net.fireofpower.firesenderexpansion.util.Utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.data.worldgen.DimensionTypes;
 import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
@@ -31,6 +32,7 @@ import net.minecraft.world.level.portal.DimensionTransition;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.world.chunk.ForcedChunkManager;
 
+import java.awt.*;
 import java.util.*;
 
 import static net.fireofpower.firesenderexpansion.util.Utils.getChunkPos;
@@ -64,7 +66,8 @@ public class InfiniteVoidPotionEffect extends MagicMobEffect implements AntiMagi
         super.onEffectRemoved(pLivingEntity, pAmplifier);
         if(savedPosition == null || savedDimension == null){
             savedPosition = new Vec3(0, 100,0);
-            System.out.println("Manifest Domain: Void found an issue");
+            savedDimension = pLivingEntity.level().getServer().getLevel(Level.OVERWORLD);
+            System.out.println("Manifest Domain: Void found an issue while saving previous location, returning affected entities to 0,100,0 in the overworld.");
             return;
         }
         if(!pLivingEntity.getType().is(ModTags.INFINITE_VOID_IMMUNE)) {
