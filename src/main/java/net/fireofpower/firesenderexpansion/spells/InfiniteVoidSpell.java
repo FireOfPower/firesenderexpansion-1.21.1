@@ -8,6 +8,8 @@ import io.redspace.ironsspellbooks.api.util.AnimationHolder;
 import io.redspace.ironsspellbooks.api.util.CameraShakeData;
 import io.redspace.ironsspellbooks.api.util.CameraShakeManager;
 import io.redspace.ironsspellbooks.api.util.Utils;
+import io.redspace.ironsspellbooks.registries.MobEffectRegistry;
+import io.redspace.ironsspellbooks.registries.PotionRegistry;
 import io.redspace.ironsspellbooks.registries.SoundRegistry;
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
 import net.fireofpower.firesenderexpansion.entities.spells.InfiniteVoid.InfiniteVoid;
@@ -76,13 +78,11 @@ public class InfiniteVoidSpell extends AbstractSpell {
                 for(int i = 0; i < targets.size(); i++){
                     entity.addEffect(new MobEffectInstance(PotionEffectRegistry.ASCENDED_CASTER_POTION_EFFECT, (duration-4) * 20, 0, false, false, true));
                     entity.addEffect(new MobEffectInstance(PotionEffectRegistry.ANCHORED_POTION_EFFECT, (duration-4) * 20, 0, false, false, true));
-                    entity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, (duration-4) * 20, 110, false, false, true));
-                    entity.addEffect(new MobEffectInstance(MobEffects.LEVITATION, (duration-4) * 20, 0, false, false, true));
+                    entity.addEffect(new MobEffectInstance(MobEffectRegistry.ANTIGRAVITY, (duration-4) * 20, 0, false, false, true));
                     entity.addEffect(new MobEffectInstance(PotionEffectRegistry.INFINITE_VOID_POTION_EFFECT, (duration-4) * 20, 0, false, false, true));
                     if(targets.get(i) instanceof LivingEntity target){
                         target.addEffect(new MobEffectInstance(PotionEffectRegistry.ANCHORED_POTION_EFFECT, (duration-4) * 20, 0, false, false, true));
-                        target.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, (duration-4) * 20, 110, false, false, true));
-                        target.addEffect(new MobEffectInstance(MobEffects.LEVITATION, (duration-4) * 20, 0, false, false, true));
+                        target.addEffect(new MobEffectInstance(MobEffectRegistry.ANTIGRAVITY, (duration-4) * 20, 0, false, false, true));
                         target.addEffect(new MobEffectInstance(PotionEffectRegistry.INFINITE_VOID_POTION_EFFECT, (duration-4) * 20, 0, false, false, true));
                     }
                 }

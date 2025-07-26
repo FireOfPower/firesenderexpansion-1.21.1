@@ -7,21 +7,28 @@ import io.redspace.ironsspellbooks.capabilities.magic.PocketDimensionManager;
 import io.redspace.ironsspellbooks.effect.MagicMobEffect;
 import io.redspace.ironsspellbooks.entity.mobs.AntiMagicSusceptible;
 import io.redspace.ironsspellbooks.spells.eldritch.PocketDimensionSpell;
+import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
 import net.fireofpower.firesenderexpansion.capabilities.magic.VoidDimensionManager;
 import net.fireofpower.firesenderexpansion.registries.PotionEffectRegistry;
 import net.fireofpower.firesenderexpansion.util.ModTags;
 import net.fireofpower.firesenderexpansion.util.Utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.data.worldgen.DimensionTypes;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.TicketType;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
@@ -44,7 +51,7 @@ public class InfiniteVoidPotionEffect extends MagicMobEffect implements AntiMagi
     private final int range = 20;
 
     public InfiniteVoidPotionEffect() {
-        super(MobEffectCategory.BENEFICIAL, 5984177);
+        super(MobEffectCategory.NEUTRAL, 5984177);
     }
 
     @Override
@@ -55,10 +62,17 @@ public class InfiniteVoidPotionEffect extends MagicMobEffect implements AntiMagi
             savedDimension = pLivingEntity.level();
         }
         if(!pLivingEntity.getType().is(ModTags.INFINITE_VOID_IMMUNE)) {
-            //puts savedPosition at 0,0 and keeps relative distance
-            Vec3 newPos = pLivingEntity.position().subtract(savedPosition).add(0,1000,0);
+            Vec3 newPos = pLivingEntity.position().subtract(savedPosition).add(0,100,0);
             pLivingEntity.changeDimension(new DimensionTransition(Objects.requireNonNull(pLivingEntity.getServer()).getLevel(VoidDimensionManager.VOID_DIMENSION),newPos,Vec3.ZERO,pLivingEntity.getXRot(),pLivingEntity.getYRot(),DimensionTransition.DO_NOTHING));
         }
+    }
+
+    @Override
+    public boolean applyEffectTick(LivingEntity pLivingEntity, int pAmplifier) {
+
+        pLivingEntity.setDeltaMovement(pLivingEntity.getDeltaMovement().x,0,pLivingEntity.getDeltaMovement().z);
+
+        return super.applyEffectTick(pLivingEntity, pAmplifier);
     }
 
     @Override

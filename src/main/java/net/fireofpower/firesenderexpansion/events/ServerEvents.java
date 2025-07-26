@@ -105,14 +105,15 @@ public class ServerEvents {
                     }
                 }
             }
-            if(entity.hasEffect(PotionEffectRegistry.INFINITE_VOID_POTION_EFFECT) && Objects.equals(event.getSpellId(), SpellRegistry.ROOT_SPELL.get().getSpellId())){
-                event.setCanceled(true);
-                // display a message to the player
-                if(entity instanceof ServerPlayer serverPlayer) {
-                    serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(Component.literal(ChatFormatting.BOLD + "That cannot be casted right now")
-                            .withStyle(s -> s.withColor(TextColor.fromRgb(0xF35F5F)))));
-                    serverPlayer.level().playSound(null, player.getX(), player.getY(), player.getZ(),
-                            SoundEvents.FIRE_EXTINGUISH, SoundSource.PLAYERS, 0.5f, 1f);
+            if(entity.hasEffect(PotionEffectRegistry.INFINITE_VOID_POTION_EFFECT)){
+                if(Objects.equals(event.getSpellId(), SpellRegistry.ROOT_SPELL.get().getSpellId()) || Objects.equals(event.getSpellId(),SpellRegistries.INFINITE_VOID.get().getSpellId())) {
+                    event.setCanceled(true);
+                    if (entity instanceof ServerPlayer serverPlayer) {
+                        serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(Component.literal(ChatFormatting.BOLD + "That cannot be casted right now")
+                                .withStyle(s -> s.withColor(TextColor.fromRgb(0xF35F5F)))));
+                        serverPlayer.level().playSound(null, player.getX(), player.getY(), player.getZ(),
+                                SoundEvents.FIRE_EXTINGUISH, SoundSource.PLAYERS, 0.5f, 1f);
+                    }
                 }
             }
         }
