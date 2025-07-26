@@ -79,7 +79,7 @@ public class InfiniteVoidPotionEffect extends MagicMobEffect implements AntiMagi
     public void onEffectRemoved(LivingEntity pLivingEntity, int pAmplifier) {
         super.onEffectRemoved(pLivingEntity, pAmplifier);
         if(savedPosition == null || savedDimension == null){
-            savedPosition = new Vec3(0, 100,0);
+            savedPosition = new Vec3(0, 1000,0);
             savedDimension = pLivingEntity.level().getServer().getLevel(Level.OVERWORLD);
             System.out.println("Manifest Domain: Void found an issue while saving previous location, returning affected entities to 0,100,0 in the overworld.");
             return;
@@ -90,13 +90,7 @@ public class InfiniteVoidPotionEffect extends MagicMobEffect implements AntiMagi
                 cache.addRegionTicket(TicketType.POST_TELEPORT, Utils.getChunkPos(pLivingEntity.getOnPos()), 9, 239, true);
                 ChunkPos pos = Utils.getChunkPos(pLivingEntity.getOnPos());
                 pLivingEntity.changeDimension(new DimensionTransition((ServerLevel) savedDimension, savedPosition, Vec3.ZERO, pLivingEntity.getXRot(), pLivingEntity.getYRot(), DimensionTransition.DO_NOTHING));
-                Timer timer = new Timer();
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        cache.removeRegionTicket(TicketType.POST_TELEPORT,pos,9,239,true);
-                    }
-                },200);
+                Utils.clearRegionTicket(cache,TicketType.POST_TELEPORT,pos,9,239,true);
             }
         }
     }
