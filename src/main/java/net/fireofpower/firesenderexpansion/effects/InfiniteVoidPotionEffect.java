@@ -90,7 +90,7 @@ public class InfiniteVoidPotionEffect extends MagicMobEffect implements AntiMagi
                 cache.addRegionTicket(TicketType.POST_TELEPORT, Utils.getChunkPos(pLivingEntity.getOnPos()), 9, 239, true);
                 ChunkPos pos = Utils.getChunkPos(pLivingEntity.getOnPos());
                 pLivingEntity.changeDimension(new DimensionTransition((ServerLevel) savedDimension, savedPosition, Vec3.ZERO, pLivingEntity.getXRot(), pLivingEntity.getYRot(), DimensionTransition.DO_NOTHING));
-                Utils.clearRegionTicket(cache,TicketType.POST_TELEPORT,pos,9,239,true);
+                //Utils.clearRegionTicket(cache,TicketType.POST_TELEPORT,pos,9,239,true);
             }
         }
     }

@@ -130,7 +130,7 @@ public class ServerEvents {
                             ServerChunkCache cache = e.getServer().getLevel(voidPotionEffect.getSavedDimension().dimension()).getChunkSource();
                             cache.addRegionTicket(TicketType.POST_TELEPORT, Utils.getChunkPos(new BlockPos((int)voidPotionEffect.getSavedPosition().x,(int)voidPotionEffect.getSavedPosition().y,(int)voidPotionEffect.getSavedPosition().z)), 9, 238, true);
                             e.changeDimension(new DimensionTransition((ServerLevel) voidPotionEffect.getSavedDimension(), voidPotionEffect.getSavedPosition(), Vec3.ZERO, 0, 0, DimensionTransition.DO_NOTHING));
-                            Utils.clearRegionTicket(cache,TicketType.POST_TELEPORT,Utils.getChunkPos(new BlockPos((int)voidPotionEffect.getSavedPosition().x,(int)voidPotionEffect.getSavedPosition().y,(int)voidPotionEffect.getSavedPosition().z)),9,239,true);
+                            //Utils.clearRegionTicket(cache,TicketType.POST_TELEPORT,Utils.getChunkPos(new BlockPos((int)voidPotionEffect.getSavedPosition().x,(int)voidPotionEffect.getSavedPosition().y,(int)voidPotionEffect.getSavedPosition().z)),9,239,true);
                         }
                     });
                 }
