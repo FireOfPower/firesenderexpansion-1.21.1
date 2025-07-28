@@ -3,32 +3,19 @@
 	"animations": {
 		"animation.model.idle": {
 			"loop": true,
-			"animation_length": 13.125,
+			"animation_length": 12,
 			"bones": {
 				"bone": {
-					"rotation": {
-						"vector": ["query.anim_time * 25", "query.anim_time * 75", "query.anim_time * 25"]
-					}
+					"rotation": ["query.anim_time * 30", "query.anim_time * 90", "query.anim_time * 30"]
 				},
 				"bone2": {
-					"rotation": {
-						"vector": ["query.anim_time * -75", "query.anim_time * -75", "query.anim_time * -75"]
-					}
+					"rotation": ["query.anim_time * -75", "query.anim_time * -75", "query.anim_time * -75"]
 				},
 				"Orbits": {
-					"position": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"bone3": {
-					"rotation": {
-						"vector": [0, "query.anim_time * 200", 0]
-					}
+					"position": [0, 0, 0]
 				},
 				"bone4": {
-					"position": {
-						"vector": [0, "math.sin(query.anim_time * 90) + 0.5 ", 0]
-					}
+					"position": [0, "math.sin(query.anim_time * 90) + 0.5 ", 0]
 				}
 			}
 		}

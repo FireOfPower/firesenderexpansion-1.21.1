@@ -70,7 +70,6 @@ public class VoidStaffItem extends StaffItem implements IPresetSpellContainer, G
     private PlayState predicate(AnimationState<VoidStaffItem> event)
     {
         event.getController().setAnimation(IDLE_ANIMATION);
-
         return PlayState.CONTINUE;
     }
 

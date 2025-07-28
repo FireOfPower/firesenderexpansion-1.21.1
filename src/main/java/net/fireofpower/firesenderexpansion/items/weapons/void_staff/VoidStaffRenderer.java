@@ -6,6 +6,6 @@ import software.bernie.geckolib.renderer.layer.AutoGlowingGeoLayer;
 public class VoidStaffRenderer extends GeoItemRenderer<VoidStaffItem> {
     public VoidStaffRenderer() {
         super(new VoidStaffModel());
-        //addRenderLayer(new AutoGlowingGeoLayer<>(this));
+        addRenderLayer(new AutoGlowingGeoLayer<>(this));
     }
 }

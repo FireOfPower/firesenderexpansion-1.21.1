@@ -77,6 +77,6 @@
     }
   },
   "textures": {
-    "particle": "item/void_staff"
+    "particle": "item/void_staff_holder"
   }
 }

@@ -71,6 +71,7 @@ public class FiresEnderExpansion
             .title(Component.translatable("itemGroup." + MODID + ".creative_tab"))
             .icon(() -> new ItemStack(ItemRegistry.STABILIZED_CORE_OF_ENDER.get()))
             .displayItems((params, output) -> {
+                output.accept(ItemRegistry.VOID_STAFF_HOLDER.get());
                 output.accept(ItemRegistry.VOID_STAFF.get());
                 output.accept(ItemRegistry.ENDCHIRIDION.get());
                 output.accept(ItemRegistry.PORPHYROMANCER_SPAWN_EGG.get());

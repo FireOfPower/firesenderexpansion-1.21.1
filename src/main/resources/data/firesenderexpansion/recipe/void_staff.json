@@ -5,19 +5,19 @@
     "I": {
       "item": "firesenderexpansion:infused_obsidian_fragments"
     },
-    "N": {
-      "item": "minecraft:nether_star"
+    "A": {
+      "item": "irons_spellbooks:magic_cloth"
     },
     "E": {
       "item": "firesenderexpansion:stabilized_core_of_ender"
     }
   },
   "pattern": [
-    "E",
-    "I",
-    "N" ],
+    "I I",
+    "AEA",
+    " I " ],
   "result": {
     "count": 1,
-    "id": "firesenderexpansion:void_staff"
+    "id": "firesenderexpansion:void_staff_holder"
   }
 }

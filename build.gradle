@@ -211,7 +211,8 @@ dependencies {
     //DISCERNING THE ELDRITCH
     implementation "curse.maven:discerning-the-eldritch-1143065:6090834"
 
-//    implementation "curse.maven:huge-structure-blocks-474114:5628956"
+    //FOR SAVING END LIBRARY NBT FILE
+    //implementation "curse.maven:huge-structure-blocks-474114:5628956"
 
     //AZURELIB
     implementation "curse.maven:azurelib-817423:6303718"
