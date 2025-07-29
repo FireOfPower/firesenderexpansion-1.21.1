@@ -5,6 +5,7 @@ import io.redspace.ironsspellbooks.entity.spells.black_hole.BlackHole;
 import io.redspace.ironsspellbooks.registries.EntityRegistry;
 import io.redspace.ironsspellbooks.registries.SoundRegistry;
 import io.redspace.ironsspellbooks.util.ItemPropertiesHelper;
+import net.fireofpower.firesenderexpansion.Config;
 import net.fireofpower.firesenderexpansion.items.weapons.void_staff.VoidStaffItem;
 import net.fireofpower.firesenderexpansion.items.weapons.void_staff.VoidStaffRenderer;
 import net.fireofpower.firesenderexpansion.util.Utils;
@@ -55,7 +56,7 @@ public class VoidStaffHolder extends Item implements GeoItem {
                         player.getBoundingBox()
                                 .inflate(10))
                 .forEach(e -> {
-                    if(e.getOwner().equals(player) && player.getMainHandItem().is(net.fireofpower.firesenderexpansion.registries.ItemRegistry.VOID_STAFF_HOLDER)){
+                    if(e.getOwner().equals(player) && player.getMainHandItem().is(net.fireofpower.firesenderexpansion.registries.ItemRegistry.VOID_STAFF_HOLDER) && Config.allowFillingVoidStaffWithBlackHole){
                         e.discard();
                         level.playSound(player, player.position().x, player.position().y, player.position().z, SoundRegistry.BLACK_HOLE_CAST, SoundSource.PLAYERS, 1.0F, 1.0F);
                         EarthquakeAoe aoe = new EarthquakeAoe(level);

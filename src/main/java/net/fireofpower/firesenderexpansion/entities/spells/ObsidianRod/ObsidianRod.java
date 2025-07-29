@@ -5,6 +5,7 @@ import io.redspace.ironsspellbooks.capabilities.magic.MagicManager;
 import io.redspace.ironsspellbooks.damage.DamageSources;
 import io.redspace.ironsspellbooks.entity.spells.AbstractMagicProjectile;
 import io.redspace.ironsspellbooks.util.ParticleHelper;
+import net.fireofpower.firesenderexpansion.Config;
 import net.fireofpower.firesenderexpansion.registries.EntityRegistry;
 import net.fireofpower.firesenderexpansion.registries.ItemRegistry;
 import net.fireofpower.firesenderexpansion.registries.PotionEffectRegistry;
@@ -64,7 +65,7 @@ public class ObsidianRod extends AbstractMagicProjectile implements GeoEntity {
     protected void onHitBlock(BlockHitResult blockHitResult) {
         BlockState hitBlock = level().getBlockState(blockHitResult.getBlockPos());
         Block block = hitBlock.getBlock();
-        if(block.equals(Blocks.ANCIENT_DEBRIS)){
+        if(block.equals(Blocks.ANCIENT_DEBRIS) && Config.allowInfusedObsidianFragments){
             ItemStack result = new ItemStack(ItemRegistry.INFUSED_OBSIDIAN_FRAGMENTS, 1);
             ItemEntity entity = new ItemEntity(level(), this.position().x(), this.position().y(), this.position().z(), result);
             level().addFreshEntity(entity);

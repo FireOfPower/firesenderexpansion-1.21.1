@@ -21,12 +21,20 @@ public class Config
 
     // a list of strings that are treated as resource locations for items
     private static final ModConfigSpec.BooleanValue DISCLAIMER_MSG = BUILDER
-            .comment("This config is currently empty. If you want to modify stats relating to this mod's spells, check the ISS server config.")
+            .comment("If you want to modify stats relating to this mod's spells, check the ISS server config.")
             .define("understand", true);
+    private static final ModConfigSpec.BooleanValue ALLOW_INFUSED_OBSIDIAN_FRAGMENTS = BUILDER
+            .comment("Should Infused Obsidian Fragments be obtainable through their normal method? Default is true")
+            .define("fragments_optainable", true);
+    private static final ModConfigSpec.BooleanValue ALLOW_FILLING_VOID_STAFF_WITH_BLACK_HOLE = BUILDER
+            .comment("Should the Ornate Empty Staff be able to be filled with a black hole? Default is true")
+            .define("tbate_black_hole_obtainable",true);
 
     static final ModConfigSpec SPEC = BUILDER.build();
 
     public static boolean placeholder;
+    public static boolean allowInfusedObsidianFragments;
+    public static boolean allowFillingVoidStaffWithBlackHole;
 
     private static boolean validateItemName(final Object obj)
     {
@@ -37,5 +45,7 @@ public class Config
     static void onLoad(final ModConfigEvent event)
     {
         placeholder = DISCLAIMER_MSG.get();
+        allowInfusedObsidianFragments = ALLOW_INFUSED_OBSIDIAN_FRAGMENTS.get();
+        allowFillingVoidStaffWithBlackHole = ALLOW_FILLING_VOID_STAFF_WITH_BLACK_HOLE.get();
     }
 }
