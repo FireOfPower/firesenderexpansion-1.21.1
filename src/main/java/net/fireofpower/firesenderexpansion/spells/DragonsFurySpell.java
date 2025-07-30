@@ -17,6 +17,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -120,6 +121,9 @@ public class DragonsFurySpell extends AbstractSpell {
     public void handleKnockback(LivingEntity entity, LivingEntity targetEntity, int spellLevel){
         Vec3 angleVector = entity.position().subtract(targetEntity.position()).normalize();
         var vec = angleVector.multiply(2, 1, 2).normalize().scale(-1 * getForce(spellLevel,entity));
+        if(targetEntity instanceof ServerPlayer serverPlayer){
+            serverPlayer.hurtMarked = true;
+        }
         //System.out.println("Attempted to move " + targetEntity.getType()  + " vec is " + vec);
         targetEntity.setDeltaMovement(targetEntity.getDeltaMovement().add(vec));
         targetEntity.addEffect(new MobEffectInstance(MobEffectRegistry.AIRBORNE, 60, 1));
