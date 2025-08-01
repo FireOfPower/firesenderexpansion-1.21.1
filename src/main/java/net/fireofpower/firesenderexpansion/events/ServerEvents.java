@@ -42,6 +42,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.ItemAttributeModifierEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
+import net.neoforged.neoforge.event.entity.living.LivingExperienceDropEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
 import java.util.Collection;
@@ -113,7 +114,7 @@ public class ServerEvents {
                 }
             }
             if(entity.hasEffect(PotionEffectRegistry.INFINITE_VOID_POTION_EFFECT)){
-                if(Objects.equals(event.getSpellId(), SpellRegistry.ROOT_SPELL.get().getSpellId()) || Objects.equals(event.getSpellId(),SpellRegistries.INFINITE_VOID.get().getSpellId())) {
+                if(Objects.equals(event.getSpellId(), SpellRegistry.ROOT_SPELL.get().getSpellId()) || Objects.equals(event.getSpellId(),SpellRegistries.INFINITE_VOID.get().getSpellId()) || Objects.equals(event.getSpellId(),SpellRegistry.RECALL_SPELL.get().getSpellId())) {
                     event.setCanceled(true);
                     if (entity instanceof ServerPlayer serverPlayer) {
                         serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(Component.literal(ChatFormatting.BOLD + "That cannot be casted right now")
@@ -141,6 +142,17 @@ public class ServerEvents {
                         }
                     });
                 }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onLivingExperienceDropEvent(LivingExperienceDropEvent event){
+        int items = event.getDroppedExperience();
+        if(event.getEntity().hasEffect(PotionEffectRegistry.INFINITE_VOID_POTION_EFFECT)){
+            if(items != 0 && event.getAttackingPlayer() != null){
+                event.getAttackingPlayer().giveExperiencePoints(items);
+                event.setDroppedExperience(0);
             }
         }
     }

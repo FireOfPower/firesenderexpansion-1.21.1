@@ -151,8 +151,7 @@ configurations {
 
 dependencies {
     // ISS ***************************************************************************************************
-    //implementation "io.redspace:irons_spellbooks:1.21-3.9.1"
-    implementation "curse.maven:irons-spells-n-spellbooks-855414:6769020"
+    implementation "curse.maven:irons-spells-n-spellbooks-855414:6834357"
 
     // GECKOLIB ***************************************************************************************************
     implementation "software.bernie.geckolib:geckolib-neoforge-${minecraft_version}:${geckolib_version}"

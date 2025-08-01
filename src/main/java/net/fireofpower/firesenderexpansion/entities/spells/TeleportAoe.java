@@ -57,7 +57,8 @@ public class TeleportAoe extends AoeEntity implements AntiMagicSusceptible {
                 .filter(liv -> liv.distanceTo(this) > getRadius() - tpRadius && liv.distanceTo(this) < getRadius() + tpRadius &&
                         !Objects.equals(liv, this.getOwner()))
                 .forEach(e -> {
-                    if(e.getType().is(ModTags.DISPLACEMENT_CAGE_IMMUNE)) {
+                    if(!e.getType().is(ModTags.DISPLACEMENT_CAGE_IMMUNE)) {
+                        //do the teleporty stuff
                         Vec3 distFromCircleCenter = new Vec3((float) (e.position().x - this.position().x), 0, (float) (e.position().z - this.position().z));
                         NeoForge.EVENT_BUS.post(new SpellTeleportEvent(SpellRegistries.DISPLACEMENT_CAGE.get(), e, e.position().x, e.position().y, e.position().z));
                         Vec3 dest = e.position().subtract(new Vec3(distFromCircleCenter.x, 0, distFromCircleCenter.z).multiply(1.75, 1, 1.75));

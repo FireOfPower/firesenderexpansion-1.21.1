@@ -62,7 +62,7 @@ public class InfiniteVoidPotionEffect extends MagicMobEffect implements AntiMagi
             savedDimension = pLivingEntity.level();
         }
         if(!pLivingEntity.getType().is(ModTags.INFINITE_VOID_IMMUNE)) {
-            Vec3 newPos = pLivingEntity.position().subtract(savedPosition).add(0,100,0);
+            Vec3 newPos = pLivingEntity.position().subtract(savedPosition).add(0,500,0);
             pLivingEntity.changeDimension(new DimensionTransition(Objects.requireNonNull(pLivingEntity.getServer()).getLevel(VoidDimensionManager.VOID_DIMENSION),newPos,Vec3.ZERO,pLivingEntity.getXRot(),pLivingEntity.getYRot(),DimensionTransition.DO_NOTHING));
         }
     }

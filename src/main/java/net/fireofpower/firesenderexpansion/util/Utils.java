@@ -25,14 +25,4 @@ public class Utils {
     public static ChunkPos getChunkPos(BlockPos blockPos) {
         return new ChunkPos(blockPos.getX() >> 4, blockPos.getZ() >> 4);
     }
-
-    public static void clearRegionTicket(ServerChunkCache cache, TicketType ticketType, ChunkPos chunkPos, int weight, int id, boolean forceTicks){
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                cache.removeRegionTicket(ticketType,chunkPos,weight,id,forceTicks);
-            }
-        },200);
-    }
 }

@@ -5,13 +5,20 @@ import io.redspace.ironsspellbooks.api.magic.MagicData;
 import io.redspace.ironsspellbooks.api.registry.SchoolRegistry;
 import io.redspace.ironsspellbooks.api.spells.*;
 import io.redspace.ironsspellbooks.api.util.Utils;
+import io.redspace.ironsspellbooks.capabilities.magic.PocketDimensionManager;
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
+import net.fireofpower.firesenderexpansion.capabilities.magic.VoidDimensionManager;
 import net.fireofpower.firesenderexpansion.registries.ItemRegistry;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextColor;
+import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -57,6 +64,15 @@ public class DimensionalAdaptationSpell extends AbstractSpell {
             entity.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, getDuration(spellLevel,entity), 0, false, false, true));
         } else if (entity.level().dimension() == Level.END){
             entity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, getDuration(spellLevel,entity), 0, false, false, true));
+        }else if (entity.level().dimension() == PocketDimensionManager.POCKET_DIMENSION){
+            entity.addEffect(new MobEffectInstance(MobEffects.SATURATION, getDuration(spellLevel,entity), 0, false, false, true));
+        } else if (entity.level().dimension() == VoidDimensionManager.VOID_DIMENSION){
+            if(entity instanceof ServerPlayer serverPlayer){
+                serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(Component.literal(ChatFormatting.BOLD + "The spell cannot adapt you to this place")
+                        .withStyle(s -> s.withColor(TextColor.fromRgb(0xF35F5F)))));
+                serverPlayer.level().playSound(null, serverPlayer.position().x, serverPlayer.position().y, serverPlayer.position().z,
+                        SoundEvents.FIRE_EXTINGUISH, SoundSource.PLAYERS, 0.5f, 1f);
+            }
         }
         super.onCast(level, spellLevel, entity, castSource, playerMagicData);
     }
@@ -71,7 +87,11 @@ public class DimensionalAdaptationSpell extends AbstractSpell {
             return (int) getSpellPower(spellLevel, entity) * 5;
         } else if (entity.level().dimension() == Level.END){
             return (int) getSpellPower(spellLevel, entity) * 7;
-        } else{
+        } else if (entity.level().dimension() == PocketDimensionManager.POCKET_DIMENSION){
+            return 2;
+        } else if (entity.level().dimension() == VoidDimensionManager.VOID_DIMENSION){
+            return 0;
+        }else{
             return 0;
         }
     }
