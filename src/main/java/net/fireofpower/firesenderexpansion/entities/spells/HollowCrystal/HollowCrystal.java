@@ -101,12 +101,14 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
                     .forEach(e -> {
                         if(Utils.shouldBreakHollowCrystal(e)){
                             e.discard();
+                            System.out.println("Value updated");
                             this.setDeltaMovement(this.getDeltaMovement().normalize().scale(getSpeed() / 2));
-                            allowIdleAnim = 60;
+                            this.allowIdleAnim = 60;
+                            System.out.println("Updated Value: " + this.allowIdleAnim);
                         }
                     });
         }
-        if(allowIdleAnim == 0){
+        if(this.allowIdleAnim == 0){
             discardThis();
         }
         if(allowIdleAnim > 0) {
@@ -214,9 +216,11 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
     }
 
     private PlayState predicate(AnimationState<HollowCrystal> event){
-        if (allowIdleAnim < 0) {
+        System.out.println(this.allowIdleAnim);
+        if (this.allowIdleAnim < 0) {
             event.getController().setAnimation(DefaultAnimations.IDLE);
         }else{
+            System.out.println("Attempted to begin death animation");
             event.getController().setAnimation(DefaultAnimations.DIE);
         }
         return PlayState.CONTINUE;
