@@ -8,21 +8,18 @@ import io.redspace.ironsspellbooks.util.ParticleHelper;
 import net.fireofpower.firesenderexpansion.Config;
 import net.fireofpower.firesenderexpansion.registries.EntityRegistry;
 import net.fireofpower.firesenderexpansion.registries.ItemRegistry;
-import net.fireofpower.firesenderexpansion.registries.PotionEffectRegistry;
+import net.fireofpower.firesenderexpansion.registries.EffectRegistry;
 import net.fireofpower.firesenderexpansion.registries.SpellRegistries;
 import net.minecraft.core.Holder;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.BlockTypes;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
@@ -82,7 +79,7 @@ public class ObsidianRod extends AbstractMagicProjectile implements GeoEntity {
                 SpellRegistries.OBSIDIAN_ROD.get().getDamageSource(this, getOwner()));
         if (target instanceof LivingEntity livingTarget)
         {
-            livingTarget.addEffect(new MobEffectInstance(PotionEffectRegistry.ANCHORED_POTION_EFFECT, effectLength, 0));
+            livingTarget.addEffect(new MobEffectInstance(EffectRegistry.ANCHORED_EFFECT, effectLength, 0));
         }
         discard();
     }

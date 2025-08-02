@@ -3,7 +3,8 @@ package net.fireofpower.firesenderexpansion.effects;
 import io.redspace.ironsspellbooks.damage.SpellDamageSource;
 import io.redspace.ironsspellbooks.effect.MagicMobEffect;
 import net.fireofpower.firesenderexpansion.entities.spells.MagicShulkerBullet;
-import net.fireofpower.firesenderexpansion.registries.PotionEffectRegistry;
+import net.fireofpower.firesenderexpansion.registries.EffectRegistry;
+import net.fireofpower.firesenderexpansion.util.Utils;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectCategory;
@@ -14,17 +15,16 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 
 @EventBusSubscriber
-public class AspectOfTheShulkerPotionEffect extends MagicMobEffect {
+public class AspectOfTheShulkerEffect extends MagicMobEffect {
     private static int internalCooldown = 0;
 
-    public AspectOfTheShulkerPotionEffect() {
-        //TODO: Figure out a different color for this
-        super(MobEffectCategory.BENEFICIAL, 5984177);
+    public AspectOfTheShulkerEffect() {
+        super(MobEffectCategory.BENEFICIAL, Utils.rgbToInt(231,234,211));
     }
 
     @SubscribeEvent
     public static void handleAbility(LivingIncomingDamageEvent event) {
-        if (event.getSource().getEntity() instanceof ServerPlayer attackingPlayer && attackingPlayer.hasEffect(PotionEffectRegistry.ASPECT_OF_THE_SHULKER_POTION_EFFECT)) {
+        if (event.getSource().getEntity() instanceof ServerPlayer attackingPlayer && attackingPlayer.hasEffect(EffectRegistry.ASPECT_OF_THE_SHULKER_EFFECT)) {
             if(event.getSource() instanceof SpellDamageSource && internalCooldown == 0){
                 LivingEntity victimPlayer = event.getEntity();
                 Level world = attackingPlayer.level();
@@ -46,6 +46,6 @@ public class AspectOfTheShulkerPotionEffect extends MagicMobEffect {
 
     @Override
     public boolean shouldApplyEffectTickThisTick(int tickCount, int amplifier) {
-        return true; // replace this with whatever check you want
+        return true;
     }
 }

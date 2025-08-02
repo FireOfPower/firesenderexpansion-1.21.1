@@ -6,15 +6,12 @@ import io.redspace.ironsspellbooks.api.registry.SchoolRegistry;
 import io.redspace.ironsspellbooks.api.spells.*;
 import io.redspace.ironsspellbooks.api.util.Utils;
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
-import net.fireofpower.firesenderexpansion.registries.PotionEffectRegistry;
-import net.minecraft.core.Holder;
+import net.fireofpower.firesenderexpansion.registries.EffectRegistry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
@@ -51,7 +48,7 @@ public class AspectOfTheShulkerSpell extends AbstractSpell {
 
     @Override
     public void onCast(Level level, int spellLevel, LivingEntity entity, CastSource castSource, MagicData playerMagicData) {
-        entity.addEffect(new MobEffectInstance(PotionEffectRegistry.ASPECT_OF_THE_SHULKER_POTION_EFFECT, (int) getSpellPower(spellLevel, entity) * 7, 0, false, false, true));
+        entity.addEffect(new MobEffectInstance(EffectRegistry.ASPECT_OF_THE_SHULKER_EFFECT, (int) getSpellPower(spellLevel, entity) * 7, 0, false, false, true));
 
         super.onCast(level, spellLevel, entity, castSource, playerMagicData);
     }

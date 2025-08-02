@@ -4,14 +4,10 @@ import io.redspace.ironsspellbooks.api.registry.AttributeRegistry;
 import io.redspace.ironsspellbooks.entity.armor.GenericCustomArmorRenderer;
 import io.redspace.ironsspellbooks.item.weapons.AttributeContainer;
 import net.fireofpower.firesenderexpansion.items.armor.FEEArmorMaterials;
-import net.fireofpower.firesenderexpansion.items.armor.FEEGeckolibArmorItem;
 import net.fireofpower.firesenderexpansion.items.armor.ImbueableFEEGeckolibArmorItem;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.animation.PlayState;
-import software.bernie.geckolib.animation.RawAnimation;
 import software.bernie.geckolib.renderer.GeoArmorRenderer;
 
 public class EndLordArmorItem extends ImbueableFEEGeckolibArmorItem {

@@ -93,7 +93,6 @@ public class DragonsFurySpell extends AbstractSpell {
         Vec3 particleLocation = entity.level().clip(new ClipContext(smiteLocation, smiteLocation.add(0, -2, 0), ClipContext.Block.VISUAL, ClipContext.Fluid.NONE, CollisionContext.empty())).getLocation().add(0, 0.1, 0);
         MagicManager.spawnParticles(entity.level(), new BlastwaveParticleOptions(SchoolRegistry.ENDER.get().getTargetingColor(), radius * 2),
                 particleLocation.x, particleLocation.y, particleLocation.z, 1, 0, 0, 0, 0, true);
-        //MagicManager.spawnParticles(entity.level(), ParticleHelper.COMET_FOG, particleLocation.x, particleLocation.y, particleLocation.z, 50, 0, 0, 0, 1, false);
         var entities = entity.level().getEntities(entity, AABB.ofSize(smiteLocation, radius * 2, radius * 4, radius * 2));
         var damageSource = this.getDamageSource(entity);
 
@@ -154,11 +153,6 @@ public class DragonsFurySpell extends AbstractSpell {
         if (entity == null) {
             return 0;
         }
-        //var weaponItem = entity.getWeaponItem();
-//        if (!weaponItem.isEmpty() && weaponItem.has(DataComponents.ENCHANTMENTS)) {
-//            weaponDamage += Utils.processEnchantment(entity.level(), Enchantments.SMITE, EnchantmentEffectComponents.DAMAGE, weaponItem.get(DataComponents.ENCHANTMENTS));
-//        }
-        //System.out.println(Utils.getWeaponDamage(entity));
         return Utils.getWeaponDamage(entity);
     }
 

@@ -1,6 +1,5 @@
 package net.fireofpower.firesenderexpansion.entities.spells.UnstableSwords.claymore;
 
-//import net.fireofpower.firesenderexpansion.entities.spells.UnstableSwords.rapier.UnstableSummonedSwordEntity;
 import net.fireofpower.firesenderexpansion.entities.spells.UnstableSwords.UnstableWeaponEntity;
 import net.fireofpower.firesenderexpansion.registries.EntityRegistry;
 import net.minecraft.core.Holder;

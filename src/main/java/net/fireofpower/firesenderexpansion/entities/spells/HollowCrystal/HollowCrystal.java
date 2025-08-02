@@ -1,8 +1,6 @@
 package net.fireofpower.firesenderexpansion.entities.spells.HollowCrystal;
 
 import io.redspace.ironsspellbooks.api.magic.MagicData;
-import io.redspace.ironsspellbooks.api.util.CameraShakeData;
-import io.redspace.ironsspellbooks.api.util.CameraShakeManager;
 import io.redspace.ironsspellbooks.capabilities.magic.MagicManager;
 import io.redspace.ironsspellbooks.damage.DamageSources;
 import io.redspace.ironsspellbooks.entity.mobs.AntiMagicSusceptible;
@@ -15,6 +13,7 @@ import net.fireofpower.firesenderexpansion.util.Utils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -41,7 +40,7 @@ import java.util.stream.Collectors;
 
 public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity, AntiMagicSusceptible {
     private int soundCounter = 19;
-    private boolean allowIdleAnim = true;
+    private int allowIdleAnim = -1;
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private List<Entity> victims;
 
@@ -60,42 +59,58 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
     @Override
     public void trailParticles() {
         //ok i'm using it for sounds sue me
-        soundCounter++;
-        if(soundCounter == 20){
-            this.level().playLocalSound(this,SoundRegistry.BLACK_HOLE_LOOP.get(),SoundSource.PLAYERS,3f,1f);
-        }
-        //ok this is just actual code I gave up (credit to Snack for the airblast code)
-        this.level().getEntitiesOfClass(Projectile.class,
-                        this.getBoundingBox()
-                                .inflate(1))
-                .stream()
-                .filter(proj -> proj.distanceTo(this) < 5 /*&&
-                        !Objects.equals(proj.getOwner(), this.getOwner())*/)
-                .forEach(e -> {
-                    if(Utils.shouldBreakHollowCrystal(e)){
-                        e.discard();
-                        allowIdleAnim = false;
-                        //setting deltaMovement here didn't work
-                        Timer timer = new Timer();
-                        timer.schedule(new TimerTask() {
-                            @Override
-                            public void run() {
-                                discardThis();
-                                allowIdleAnim = true;
-                            }
-                        },3000);
-                    }
-                });
+//        soundCounter++;
+//        if(soundCounter == 20){
+//            this.level().playLocalSound(this,SoundRegistry.BLACK_HOLE_LOOP.get(),SoundSource.PLAYERS,3f,1f);
+//        }
+//        //ok this is just actual code I gave up (credit to Snack for the airblast code)
+//        this.level().getEntitiesOfClass(Projectile.class,
+//                        this.getBoundingBox()
+//                                .inflate(1))
+//                .stream()
+//                .filter(proj -> proj.distanceTo(this) < 5 /*&&
+//                        !Objects.equals(proj.getOwner(), this.getOwner())*/)
+//                .forEach(e -> {
+//                    if(Utils.shouldBreakHollowCrystal(e)){
+//                        e.discard();
+//                        allowIdleAnim = false;
+//                        //setting deltaMovement here didn't work
+//                        Timer timer = new Timer();
+//                        timer.schedule(new TimerTask() {
+//                            @Override
+//                            public void run() {
+//                                discardThis();
+//                                allowIdleAnim = true;
+//                            }
+//                        },3000);
+//                    }
+//                });
     }
 
     @Override
     public void tick() {
         if(!level().isClientSide()) {
-            if (tickCount % 5 == 0) {
-                //CameraShakeManager.addCameraShake(new CameraShakeData(5, this.position(), 20));
-            }
+            this.level().getEntitiesOfClass(ServerPlayer.class,this.getBoundingBox().inflate(3)).stream().forEach(e -> {
+                this.level().playSeededSound(null,this.getX(),this.getY(),this.getZ(),SoundRegistry.BLACK_HOLE_LOOP.get(),SoundSource.PLAYERS,3f,1f,1239831800);
+            });
+            this.level().getEntitiesOfClass(Projectile.class,
+                            this.getBoundingBox()
+                                    .inflate(1))
+                    .stream()
+                    .filter(proj -> proj.distanceTo(this) < 5)
+                    .forEach(e -> {
+                        if(Utils.shouldBreakHollowCrystal(e)){
+                            e.discard();
+                            this.setDeltaMovement(this.getDeltaMovement().normalize().scale(getSpeed() / 2));
+                            allowIdleAnim = 60;
+                        }
+                    });
         }
-        if(!allowIdleAnim) {
+        if(allowIdleAnim == 0){
+            discardThis();
+        }
+        if(allowIdleAnim > 0) {
+            allowIdleAnim--;
             for(int i = 0; i < 10; i++) {
                 this.level().addParticle(ParticleTypes.END_ROD, particleRangeX(0), particleRangeY(0), particleRangeZ(0), Math.random() -0.5, Math.random() -0.5, Math.random() - 0.5);
             }
@@ -199,7 +214,7 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
     }
 
     private PlayState predicate(AnimationState<HollowCrystal> event){
-        if (allowIdleAnim) {
+        if (allowIdleAnim < 0) {
             event.getController().setAnimation(DefaultAnimations.IDLE);
         }else{
             event.getController().setAnimation(DefaultAnimations.DIE);

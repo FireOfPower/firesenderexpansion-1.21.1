@@ -6,7 +6,6 @@ import io.redspace.ironsspellbooks.api.spells.ISpellContainer;
 import io.redspace.ironsspellbooks.item.weapons.StaffItem;
 import io.redspace.ironsspellbooks.registries.ComponentRegistry;
 import io.redspace.ironsspellbooks.util.ItemPropertiesHelper;
-import net.fireofpower.firesenderexpansion.entities.spells.HollowCrystal.HollowCrystal;
 import net.fireofpower.firesenderexpansion.items.weapons.WeaponTiers;
 import net.fireofpower.firesenderexpansion.registries.SpellRegistries;
 import net.minecraft.ChatFormatting;
@@ -29,13 +28,7 @@ public class VoidStaffItem extends StaffItem implements IPresetSpellContainer, G
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
     public VoidStaffItem() {
-        super(
-//                WeaponTiers.VOID_STAFF,
-                ItemPropertiesHelper.equipment().fireResistant().stacksTo(1).rarity(Rarity.EPIC).attributes(ExtendedSwordItem.createAttributes(WeaponTiers.VOID_STAFF))
-//                SpellDataRegistryHolder.of(
-//                        new SpellDataRegistryHolder(SpellRegistries.HOLLOW_CRYSTAL, 5),
-//                        new SpellDataRegistryHolder(SpellRegistries.INFINITE_VOID,1))
-        );
+        super(ItemPropertiesHelper.equipment().fireResistant().stacksTo(1).rarity(Rarity.EPIC).attributes(ExtendedSwordItem.createAttributes(WeaponTiers.VOID_STAFF)));
     }
 
     @Override

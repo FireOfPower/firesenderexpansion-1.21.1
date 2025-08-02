@@ -1,6 +1,5 @@
 package net.fireofpower.firesenderexpansion.items.weapons.void_staff;
 
-import io.redspace.ironsspellbooks.IronsSpellbooks;
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.DefaultedItemGeoModel;

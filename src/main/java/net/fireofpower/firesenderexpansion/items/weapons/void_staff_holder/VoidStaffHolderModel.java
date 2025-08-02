@@ -1,7 +1,6 @@
 package net.fireofpower.firesenderexpansion.items.weapons.void_staff_holder;
 
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
-import net.fireofpower.firesenderexpansion.items.weapons.void_staff.VoidStaffItem;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.DefaultedItemGeoModel;
 

@@ -2,7 +2,6 @@ package net.fireofpower.firesenderexpansion.entities.spells.GateOfEnder;
 
 import io.redspace.ironsspellbooks.entity.spells.AbstractMagicProjectile;
 import io.redspace.ironsspellbooks.registries.SoundRegistry;
-import net.fireofpower.firesenderexpansion.entities.spells.HollowCrystal.HollowCrystal;
 import net.fireofpower.firesenderexpansion.entities.spells.UnstableSwords.UnstableWeaponEntity;
 import net.fireofpower.firesenderexpansion.entities.spells.UnstableSwords.claymore.UnstableSummonedClaymoreEntity;
 import net.fireofpower.firesenderexpansion.entities.spells.UnstableSwords.rapier.UnstableSummonedRapierEntity;
@@ -10,15 +9,12 @@ import net.fireofpower.firesenderexpansion.entities.spells.UnstableSwords.sword.
 import net.fireofpower.firesenderexpansion.registries.EntityRegistry;
 import net.minecraft.core.Holder;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
@@ -30,8 +26,6 @@ import software.bernie.geckolib.constant.DefaultAnimations;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.Optional;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class GatePortal extends AbstractMagicProjectile implements GeoEntity {
     public float speed = 0;
@@ -97,10 +91,6 @@ public class GatePortal extends AbstractMagicProjectile implements GeoEntity {
     @Override
     public float getSpeed() {
         return speed;
-    }
-
-    public void setSpeed(float speed) {
-        this.speed = speed;
     }
 
     @Override

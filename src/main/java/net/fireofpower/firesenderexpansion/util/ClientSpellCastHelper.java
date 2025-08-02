@@ -1,8 +1,5 @@
 package net.fireofpower.firesenderexpansion.util;
 
-import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
-import io.redspace.ironsspellbooks.player.ClientMagicData;
-import net.fireofpower.firesenderexpansion.registries.SpellRegistries;
 import net.fireofpower.firesenderexpansion.spells.FEESpellAnimations;
 import net.minecraft.client.Minecraft;
 

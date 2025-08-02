@@ -14,14 +14,11 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.NeoForge;
 
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class TeleportAoe extends AoeEntity implements AntiMagicSusceptible {
     private float radius;
@@ -34,18 +31,6 @@ public class TeleportAoe extends AoeEntity implements AntiMagicSusceptible {
 
     public TeleportAoe(Level level) {
         this(EntityRegistry.TELEPORT_AREA.get(), level);
-    }
-
-    @Override
-    public void applyEffect(LivingEntity target) {
-//        if (getOwner() instanceof LivingEntity owner /*&& !target.equals(owner))*/) {
-//            Vec3 distFromCircleCenter = new Vec3((float)(target.position().x - this.position().x), 0, (float)(target.position().z - this.position().z));
-//            if(distFromCircleCenter.length() > getRadius() - tpRadius  && distFromCircleCenter.length() < getRadius() + tpRadius){
-//                //NeoForge.EVENT_BUS.post(new SpellTeleportEvent(SpellRegistries.DISPLACEMENT_CAGE.get(),target,target.position().x,target.position().y,target.position().z));
-//                Vec3 dest = target.position().subtract(new Vec3(distFromCircleCenter.x, 0, distFromCircleCenter.z).multiply(1.5,1,1.5));
-//                Utils.handleSpellTeleport(SpellRegistries.DISPLACEMENT_CAGE.get(),target,dest);
-//            }
-//        }
     }
 
     @Override
@@ -74,6 +59,11 @@ public class TeleportAoe extends AoeEntity implements AntiMagicSusceptible {
     @Override
     protected boolean canHitEntity(Entity pTarget) {
         return !pTarget.isSpectator() && pTarget.isAlive() && pTarget.isPickable();
+    }
+
+    @Override
+    public void applyEffect(LivingEntity livingEntity) {
+
     }
 
     @Override

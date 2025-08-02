@@ -22,6 +22,5 @@ public class CoreOfEnderCurio extends SimpleDescriptiveCurio {
     @Override
     public void appendHoverText(ItemStack pStack, TooltipContext context, List<Component> lines, TooltipFlag pIsAdvanced) {
         super.appendHoverText(pStack, context, lines, pIsAdvanced);
-        //lines.add(description);
     }
 }

@@ -1,7 +1,7 @@
 package net.fireofpower.firesenderexpansion.mixins;
 
 import io.redspace.ironsspellbooks.effect.EvasionEffect;
-import net.fireofpower.firesenderexpansion.registries.PotionEffectRegistry;
+import net.fireofpower.firesenderexpansion.registries.EffectRegistry;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
@@ -23,9 +23,9 @@ public class AnchoredEvasionStopperMixin {
 
     @Inject(method = "doEffect", at = @At("HEAD"), cancellable = true)
     private static void doEffect(LivingEntity livingEntity, DamageSource damageSource, CallbackInfoReturnable<Boolean> cir){
-        if(livingEntity.hasEffect(PotionEffectRegistry.ANCHORED_POTION_EFFECT)){
+        if(livingEntity.hasEffect(EffectRegistry.ANCHORED_EFFECT)){
             cir.setReturnValue(false);
-            int time = livingEntity.getEffect(PotionEffectRegistry.ANCHORED_POTION_EFFECT).getDuration();
+            int time = livingEntity.getEffect(EffectRegistry.ANCHORED_EFFECT).getDuration();
             // convert duration to time format  using the method convertTicksToTime
             String formattedTime = convertTicksToTime(time);
 

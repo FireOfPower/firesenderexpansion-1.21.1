@@ -2,26 +2,18 @@ package net.fireofpower.firesenderexpansion.items.weapons.void_staff_holder;
 
 import io.redspace.ironsspellbooks.entity.spells.EarthquakeAoe;
 import io.redspace.ironsspellbooks.entity.spells.black_hole.BlackHole;
-import io.redspace.ironsspellbooks.registries.EntityRegistry;
 import io.redspace.ironsspellbooks.registries.SoundRegistry;
 import io.redspace.ironsspellbooks.util.ItemPropertiesHelper;
 import net.fireofpower.firesenderexpansion.Config;
-import net.fireofpower.firesenderexpansion.items.weapons.void_staff.VoidStaffItem;
-import net.fireofpower.firesenderexpansion.items.weapons.void_staff.VoidStaffRenderer;
-import net.fireofpower.firesenderexpansion.util.Utils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.*;
-import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BeaconBeamBlock;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.client.GeoRenderProvider;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
@@ -32,8 +24,6 @@ import software.bernie.geckolib.animation.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.function.Consumer;
 
 public class VoidStaffHolder extends Item implements GeoItem {

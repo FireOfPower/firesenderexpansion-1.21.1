@@ -3,12 +3,13 @@ package net.fireofpower.firesenderexpansion.effects;
 import io.redspace.ironsspellbooks.api.magic.MagicData;
 import io.redspace.ironsspellbooks.capabilities.magic.SyncedSpellData;
 import io.redspace.ironsspellbooks.effect.MagicMobEffect;
+import net.fireofpower.firesenderexpansion.util.Utils;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 
-public class HollowCrystalPotionEffect extends MagicMobEffect {
-    public HollowCrystalPotionEffect(){
-        super(MobEffectCategory.BENEFICIAL, 5984177);
+public class HollowCrystalEffect extends MagicMobEffect {
+    public HollowCrystalEffect(){
+        super(MobEffectCategory.BENEFICIAL, Utils.rgbToInt(255,224,255));
     }
 
     @Override

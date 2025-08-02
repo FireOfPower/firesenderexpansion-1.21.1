@@ -1,6 +1,5 @@
 package net.fireofpower.firesenderexpansion.network;
 
-import io.redspace.ironsspellbooks.network.casting.CastPacket;
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
 import net.fireofpower.firesenderexpansion.util.ClientSpellCastHelper;
 import net.minecraft.network.FriendlyByteBuf;

@@ -31,12 +31,6 @@ public class TeleportRend extends EchoingStrikeEntity {
         this.waitTime = waitTime;
     }
 
-//    public TeleportRend(EntityType<Entity> entityEntityType, Level level) {
-//        super((EntityType<? extends Projectile>) entityEntityType, level);
-//        this.level = level;
-//        this.waitTime = 1;
-//    }
-
     public TeleportRend(EntityType<TeleportRend> teleportRendEntityType, Level level) {
         super(teleportRendEntityType,level);
         this.level = level;

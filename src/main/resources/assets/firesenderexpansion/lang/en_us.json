@@ -73,11 +73,11 @@
   "ui.firesenderexpansion.radius": "%d Radius",
   "ui.firesenderexpansion.numSwords": "%d Swords",
 
-  "effect.firesenderexpansion.aspect_of_the_shulker_potion_effect": "Aspect of the Shulker",
-  "effect.firesenderexpansion.infinite_void_potion_effect": "Abyssal Being",
-  "effect.firesenderexpansion.anchored_potion_effect": "Anchored",
-  "effect.firesenderexpansion.hollow_crystal_potion_effect": "Crystal Charge",
-  "effect.firesenderexpansion.ascended_caster_potion_effect": "Ascended",
+  "effect.firesenderexpansion.aspect_of_the_shulker_effect": "Aspect of the Shulker",
+  "effect.firesenderexpansion.infinite_void_effect": "Voided",
+  "effect.firesenderexpansion.anchored_effect": "Anchored",
+  "effect.firesenderexpansion.hollow_crystal_effect": "Crystal Charge",
+  "effect.firesenderexpansion.ascended_caster_effect": "Ascended",
 
 
   "entity.firesenderexpansion.porphyromancer": "Porphyromancer"

@@ -6,21 +6,12 @@ import io.redspace.ironsspellbooks.api.registry.SchoolRegistry;
 import io.redspace.ironsspellbooks.api.spells.*;
 import io.redspace.ironsspellbooks.api.util.AnimationHolder;
 import io.redspace.ironsspellbooks.api.util.Utils;
-import io.redspace.ironsspellbooks.registries.SoundRegistry;
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
 import net.fireofpower.firesenderexpansion.entities.spells.GateOfEnder.GatePortal;
-import net.fireofpower.firesenderexpansion.entities.spells.ObsidianRod.ObsidianRod;
-import net.fireofpower.firesenderexpansion.entities.spells.UnstableSwords.UnstableWeaponEntity;
-import net.fireofpower.firesenderexpansion.entities.spells.UnstableSwords.claymore.UnstableSummonedClaymoreEntity;
-import net.fireofpower.firesenderexpansion.entities.spells.UnstableSwords.rapier.UnstableSummonedRapierEntity;
-import net.fireofpower.firesenderexpansion.entities.spells.UnstableSwords.sword.UnstableSummonedSwordEntity;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -29,8 +20,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Timer;
-import java.util.TimerTask;
 
 @AutoSpellConfig
 public class GateOfEnderSpell extends AbstractSpell {
@@ -114,7 +103,6 @@ public class GateOfEnderSpell extends AbstractSpell {
         gate.setPos(origin);
         gate.shoot(entity.getLookAngle());
         gate.setDamage(this.getDamage(spellLevel,entity));
-        //world.playSound((Player)null, origin.x, origin.y, origin.z, SoundRegistry.DIVINE_SMITE_WINDUP, SoundSource.PLAYERS, 2.0F, 1.0F);
         world.addFreshEntity(gate);
         gate.shootSword();
     }

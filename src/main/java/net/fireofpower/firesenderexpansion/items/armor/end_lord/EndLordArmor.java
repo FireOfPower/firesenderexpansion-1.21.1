@@ -1,12 +1,7 @@
 package net.fireofpower.firesenderexpansion.items.armor.end_lord;
 
-import io.redspace.ironsspellbooks.IronsSpellbooks;
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
-import net.fireofpower.firesenderexpansion.items.armor.FEEGeckolibArmorItem;
 import net.minecraft.resources.ResourceLocation;
-import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.animation.PlayState;
-import software.bernie.geckolib.animation.RawAnimation;
 import software.bernie.geckolib.model.DefaultedEntityGeoModel;
 
 public class EndLordArmor extends DefaultedEntityGeoModel<EndLordArmorItem> {

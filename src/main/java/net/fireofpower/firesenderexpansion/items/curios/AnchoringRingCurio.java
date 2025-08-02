@@ -3,7 +3,7 @@ package net.fireofpower.firesenderexpansion.items.curios;
 import io.redspace.ironsspellbooks.compat.Curios;
 import io.redspace.ironsspellbooks.item.curios.SimpleDescriptiveCurio;
 import io.redspace.ironsspellbooks.util.ItemPropertiesHelper;
-import net.fireofpower.firesenderexpansion.registries.PotionEffectRegistry;
+import net.fireofpower.firesenderexpansion.registries.EffectRegistry;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -23,7 +23,7 @@ public class AnchoringRingCurio extends SimpleDescriptiveCurio {
         if (!(slotContext.entity() instanceof Player player)){
             return;
         }
-        player.addEffect(new MobEffectInstance(PotionEffectRegistry.ANCHORED_POTION_EFFECT, 20, 0, false, false, false));
+        player.addEffect(new MobEffectInstance(EffectRegistry.ANCHORED_EFFECT, 20, 0, false, false, false));
 
     }
 }

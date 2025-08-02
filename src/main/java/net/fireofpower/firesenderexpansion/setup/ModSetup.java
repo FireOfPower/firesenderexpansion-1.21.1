@@ -9,14 +9,6 @@ public class ModSetup {
     public static void setup() {
         IEventBus bus = NeoForge.EVENT_BUS;
 
-        //SPELLBOOKS
-        //bus.addGenericListener(ItemStack.class, SpellBookDataEvents::onAttachCapabilities);
-        //bus.addListener(SpellBookDataEvents::onRegisterCapabilities);
-
-        //SCROLLS
-        //bus.addListener(ScrollDataEvents::onRegisterCapabilities);
-        //bus.addGenericListener(ItemStack.class, ScrollDataEvents::onAttachCapabilitiesItemStack);
-
     }
 
     public static void init(FMLCommonSetupEvent event) {

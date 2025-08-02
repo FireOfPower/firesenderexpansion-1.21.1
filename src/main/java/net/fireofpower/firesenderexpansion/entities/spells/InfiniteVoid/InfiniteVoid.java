@@ -47,20 +47,6 @@ public class InfiniteVoid extends AbstractMagicProjectile implements GeoEntity, 
         pos = pos.add(this.getDeltaMovement());
     }
 
-//    protected void onHitBlock(BlockHitResult blockHitResult) {
-//        super.onHitBlock(blockHitResult);
-//        this.discard();
-//    }
-//    @Override
-//    protected void onHitEntity(EntityHitResult pResult) {
-//        var target = pResult.getEntity();
-//        if (target instanceof LivingEntity livingTarget)
-//        {
-//            livingTarget.addEffect(new MobEffectInstance(PotionEffectRegistry.ANCHORED_POTION_EFFECT, 100, 0));
-//        }
-//        discard();
-//    }
-
 
     @Override
     public void impactParticles(double v, double v1, double v2) {

@@ -4,7 +4,6 @@ import io.redspace.ironsspellbooks.api.spells.IPresetSpellContainer;
 import io.redspace.ironsspellbooks.api.spells.ISpellContainer;
 import io.redspace.ironsspellbooks.compat.Curios;
 import io.redspace.ironsspellbooks.item.UniqueItem;
-import io.redspace.ironsspellbooks.item.curios.CurioBaseItem;
 import io.redspace.ironsspellbooks.item.curios.SimpleDescriptiveCurio;
 import io.redspace.ironsspellbooks.registries.ComponentRegistry;
 import io.redspace.ironsspellbooks.util.ItemPropertiesHelper;
@@ -14,7 +13,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
-import top.theillusivec4.curios.common.inventory.CurioSlot;
 
 import java.util.List;
 
@@ -42,6 +40,5 @@ public class EnderTreasuryKeyCurio extends SimpleDescriptiveCurio implements IPr
     @Override
     public void appendHoverText(ItemStack pStack, TooltipContext context, List<Component> lines, TooltipFlag pIsAdvanced) {
         super.appendHoverText(pStack, context, lines, pIsAdvanced);
-        //lines.add(description);
     }
 }

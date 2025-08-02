@@ -3,7 +3,6 @@ package net.fireofpower.firesenderexpansion;
 import io.redspace.ironsspellbooks.item.SpellBook;
 import io.redspace.ironsspellbooks.render.PocketDimensionEffects;
 import io.redspace.ironsspellbooks.render.SpellBookCurioRenderer;
-import io.redspace.ironsspellbooks.setup.ClientSetup;
 import net.fireofpower.firesenderexpansion.entities.mobs.PorphyromancerRenderer;
 import net.fireofpower.firesenderexpansion.entities.spells.GateOfEnder.GatePortalRenderer;
 import net.fireofpower.firesenderexpansion.entities.spells.HollowCrystal.HollowCrystalRenderer;
@@ -58,7 +57,7 @@ public class FiresEnderExpansion
         CREATIVE_MODE_TABS.register(modEventBus);
 
         SpellRegistries.register(modEventBus);
-        PotionEffectRegistry.register(modEventBus);
+        EffectRegistry.register(modEventBus);
         EntityRegistry.register(modEventBus);
         ItemRegistry.register(modEventBus);
         FEEArmorMaterials.register(modEventBus);
@@ -123,14 +122,6 @@ public class FiresEnderExpansion
 
         @SubscribeEvent
         public static void buildContents(BuildCreativeModeTabContentsEvent event) {
-            // Is this the tab we want to add to?
-//            if (event.getTabKey() == CreativeModeTabs.COMBAT) {
-//                event.accept(ItemRegistry.VOID_STAFF.get());
-//            }else if (event.getTabKey() == CreativeModeTabs.SPAWN_EGGS) {
-//                event.accept(ItemRegistry.PORPHYROMANCER_SPAWN_EGG.get());
-//            }else if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
-//                event.accept(ItemRegistry.ENDERMAN_TRAVEL_GUIDE.get());
-//            }
         }
 
     }

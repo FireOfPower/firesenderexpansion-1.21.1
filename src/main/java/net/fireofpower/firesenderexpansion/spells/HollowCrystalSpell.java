@@ -1,26 +1,21 @@
 package net.fireofpower.firesenderexpansion.spells;
 
-import dev.kosmx.playerAnim.minecraftApi.PlayerAnimationRegistry;
 import io.redspace.ironsspellbooks.api.config.DefaultConfig;
 import io.redspace.ironsspellbooks.api.magic.MagicData;
 import io.redspace.ironsspellbooks.api.registry.SchoolRegistry;
 import io.redspace.ironsspellbooks.api.spells.*;
 import io.redspace.ironsspellbooks.api.util.AnimationHolder;
-import io.redspace.ironsspellbooks.api.util.CameraShakeData;
-import io.redspace.ironsspellbooks.api.util.CameraShakeManager;
 import io.redspace.ironsspellbooks.api.util.Utils;
 import io.redspace.ironsspellbooks.capabilities.magic.RecastInstance;
 import io.redspace.ironsspellbooks.capabilities.magic.RecastResult;
-import io.redspace.ironsspellbooks.player.ClientSpellCastHelper;
 import io.redspace.ironsspellbooks.registries.ParticleRegistry;
 import io.redspace.ironsspellbooks.registries.SoundRegistry;
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
 import net.fireofpower.firesenderexpansion.entities.spells.HollowCrystal.HollowCrystal;
 //import net.fireofpower.firesenderexpansion.network.SyncFinalCastPacket;
 import net.fireofpower.firesenderexpansion.network.SyncFinalCastPacket;
-import net.fireofpower.firesenderexpansion.registries.PotionEffectRegistry;
+import net.fireofpower.firesenderexpansion.registries.EffectRegistry;
 import net.fireofpower.firesenderexpansion.registries.SpellRegistries;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -33,8 +28,6 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 
@@ -78,10 +71,10 @@ public class HollowCrystalSpell extends AbstractSpell {
         if (!playerMagicData.getPlayerRecasts().hasRecastForSpell(getSpellId())) {
             playerMagicData.getPlayerRecasts().addRecast(new RecastInstance(getSpellId(), spellLevel, getRecastCount(spellLevel, entity), ticksOfEffect, castSource, null), playerMagicData);
         }
-        if(entity.hasEffect(PotionEffectRegistry.HOLLOW_CRYSTAL_POTION_EFFECT)){
-            entity.addEffect(new MobEffectInstance(PotionEffectRegistry.HOLLOW_CRYSTAL_POTION_EFFECT, ticksOfEffect, entity.getEffect(PotionEffectRegistry.HOLLOW_CRYSTAL_POTION_EFFECT).getAmplifier() + 1, false, false, true));
+        if(entity.hasEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT)){
+            entity.addEffect(new MobEffectInstance(EffectRegistry.HOLLOW_CRYSTAL_EFFECT, ticksOfEffect, entity.getEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT).getAmplifier() + 1, false, false, true));
         }else{
-            entity.addEffect(new MobEffectInstance(PotionEffectRegistry.HOLLOW_CRYSTAL_POTION_EFFECT, (int) getSpellPower(spellLevel, entity) * 20, 1, false, false, true));
+            entity.addEffect(new MobEffectInstance(EffectRegistry.HOLLOW_CRYSTAL_EFFECT, (int) getSpellPower(spellLevel, entity) * 20, 1, false, false, true));
         }
         for(int i = 0; i < 20; i++){
             spawnParticles(entity);
@@ -104,7 +97,7 @@ public class HollowCrystalSpell extends AbstractSpell {
     public void onRecastFinished(ServerPlayer serverPlayer, RecastInstance recastInstance, RecastResult recastResult, ICastDataSerializable castDataSerializable) {
         super.onRecastFinished(serverPlayer, recastInstance, recastResult, castDataSerializable);
         if(recastResult.isSuccess()) {
-            if (serverPlayer.hasEffect(PotionEffectRegistry.HOLLOW_CRYSTAL_POTION_EFFECT)) {
+            if (serverPlayer.hasEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT)) {
                 //animation
                 PacketDistributor.sendToPlayersTrackingEntityAndSelf(serverPlayer, new SyncFinalCastPacket(serverPlayer.getUUID(), SpellRegistries.HOLLOW_CRYSTAL.toString(), false));
 
@@ -119,7 +112,7 @@ public class HollowCrystalSpell extends AbstractSpell {
                         hollowCrystal.setDamage(getDamage(serverPlayer));
                         hollowCrystal.shoot(prevLookDir);
                         hollowCrystal.setDeltaMovement(hollowCrystal.getDeltaMovement().multiply(0.5, 0.5, 0.5));
-                        serverPlayer.removeEffect(PotionEffectRegistry.HOLLOW_CRYSTAL_POTION_EFFECT);
+                        serverPlayer.removeEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT);
                         serverPlayer.level().addFreshEntity(hollowCrystal);
                         serverPlayer.level().playLocalSound(serverPlayer, SoundRegistry.SONIC_BOOM.get(), SoundSource.PLAYERS, 3f, 1f);
                     }
@@ -129,9 +122,9 @@ public class HollowCrystalSpell extends AbstractSpell {
     }
 
     public float getDamage(LivingEntity entity){
-        float damagePerCharge = (float) 15; //FEEModConfig.damagePerCrystalCharge;
-        if(entity.getEffect(PotionEffectRegistry.HOLLOW_CRYSTAL_POTION_EFFECT) != null) {
-            return entity.getEffect(PotionEffectRegistry.HOLLOW_CRYSTAL_POTION_EFFECT).getAmplifier() * damagePerCharge * getSpellPower(1 /* the spell power doesn't change per level */,entity)/50;
+        float damagePerCharge = (float) 15;
+        if(entity.getEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT) != null) {
+            return entity.getEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT).getAmplifier() * damagePerCharge * getSpellPower(1 /* the spell power doesn't change per level */,entity)/50;
         }else{
             return damagePerCharge;
         }

@@ -28,7 +28,6 @@ import java.util.Collection;
 import java.util.function.Supplier;
 
 public class ItemRegistry {
-    //public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(Registries.ITEM, FiresEnderExpansion.MODID);
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(FiresEnderExpansion.MODID);
     public static void register(IEventBus eventBus)
     {
@@ -37,7 +36,6 @@ public class ItemRegistry {
 
     //Items
     public static final DeferredHolder<Item, VoidStaffItem> VOID_STAFF = ITEMS.register("void_staff", VoidStaffItem::new);
-    //public static final DeferredHolder<Item, Item> ENDERMAN_TRAVEL_GUIDE = ITEMS.register("enderman_travel_guide", EndermanTravelGuide::new);
     public static final DeferredHolder<Item,Item> INFUSED_OBSIDIAN_FRAGMENTS = ITEMS.register("infused_obsidian_fragments", InfusedObsidianFragments::new);
     public static final DeferredHolder<Item,Item> STABILIZED_CORE_OF_ENDER = ITEMS.register("stabilized_core_of_ender", StabilizedCoreOfEnder::new);
     public static final DeferredItem<Item> PORPHYROMANCER_SPAWN_EGG = ITEMS.register("porphyromancer_spawn_egg", () -> new DeferredSpawnEggItem(EntityRegistry.PORPHYROMANCER, 0x0f0517, 0x3f195e, new Item.Properties()));
