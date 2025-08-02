@@ -94,17 +94,17 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
             this.level().getEntitiesOfClass(ServerPlayer.class,this.getBoundingBox().inflate(3)).stream().forEach(e -> {
                 this.level().playSeededSound(null,this.getX(),this.getY(),this.getZ(),SoundRegistry.BLACK_HOLE_LOOP.get(),SoundSource.PLAYERS,3f,1f,1239831800);
             });
-            this.level().getEntitiesOfClass(Projectile.class,
-                            this.getBoundingBox()
-                                    .inflate(1))
-                    .stream()
-                    .filter(proj -> proj.distanceTo(this) < 5)
-                    .forEach(e -> {
-                        if(Utils.shouldBreakHollowCrystal(e)){
-                            e.discard();
-                            this.allowIdleAnim = 60;
-                        }
-                    });
+//            this.level().getEntitiesOfClass(Projectile.class,
+//                            this.getBoundingBox()
+//                                    .inflate(1))
+//                    .stream()
+//                    .filter(proj -> proj.distanceTo(this) < 5)
+//                    .forEach(e -> {
+//                        if(Utils.shouldBreakHollowCrystal(e)){
+//                            e.discard();
+//                            this.allowIdleAnim = 60;
+//                        }
+//                    });
         }
         if(this.allowIdleAnim == 0){
             discardThis();
