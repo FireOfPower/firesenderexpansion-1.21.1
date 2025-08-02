@@ -9,6 +9,7 @@ import io.redspace.ironsspellbooks.registries.SoundRegistry;
 import io.redspace.ironsspellbooks.util.ParticleHelper;
 import net.fireofpower.firesenderexpansion.registries.EntityRegistry;
 import net.fireofpower.firesenderexpansion.registries.SpellRegistries;
+import net.fireofpower.firesenderexpansion.util.ModTags;
 import net.fireofpower.firesenderexpansion.util.Utils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -101,10 +102,7 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
                     .forEach(e -> {
                         if(Utils.shouldBreakHollowCrystal(e)){
                             e.discard();
-                            System.out.println("Value updated");
-                            this.setDeltaMovement(this.getDeltaMovement().normalize().scale(getSpeed() / 2));
                             this.allowIdleAnim = 60;
-                            System.out.println("Updated Value: " + this.allowIdleAnim);
                         }
                     });
         }
@@ -216,11 +214,9 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
     }
 
     private PlayState predicate(AnimationState<HollowCrystal> event){
-        System.out.println(this.allowIdleAnim);
         if (this.allowIdleAnim < 0) {
             event.getController().setAnimation(DefaultAnimations.IDLE);
         }else{
-            System.out.println("Attempted to begin death animation");
             event.getController().setAnimation(DefaultAnimations.DIE);
         }
         return PlayState.CONTINUE;
