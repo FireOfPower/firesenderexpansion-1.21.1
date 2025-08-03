@@ -3,8 +3,11 @@ package net.fireofpower.firesenderexpansion.entities.spells.HollowCrystal;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import io.redspace.ironsspellbooks.render.RenderHelper;
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
+import net.fireofpower.firesenderexpansion.entities.spells.UnstableSwords.UnstableWeaponEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -16,7 +19,7 @@ import software.bernie.geckolib.renderer.layer.AutoGlowingGeoLayer;
 public class HollowCrystalRenderer extends GeoEntityRenderer<HollowCrystal> {
     public HollowCrystalRenderer(EntityRendererProvider.Context context) {
         super(context, new HollowCrystalModel(ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "hollow_crystal")));
-        addRenderLayer(new AutoGlowingGeoLayer<>(this));
+        //addRenderLayer(new AutoGlowingGeoLayer<>(this));
 
         this.shadowRadius = 0.5f;
     }
@@ -24,6 +27,11 @@ public class HollowCrystalRenderer extends GeoEntityRenderer<HollowCrystal> {
     @Override
     public ResourceLocation getTextureLocation(HollowCrystal hollowCrystal) {
         return ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "textures/entity/hollow_crystal.png");
+    }
+
+    @Override
+    public @Nullable RenderType getRenderType(HollowCrystal animatable, ResourceLocation texture, @Nullable MultiBufferSource bufferSource, float partialTick) {
+        return RenderHelper.CustomerRenderType.magic(texture);
     }
 
     @Override

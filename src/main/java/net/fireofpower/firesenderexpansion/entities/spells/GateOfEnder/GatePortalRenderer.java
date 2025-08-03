@@ -3,8 +3,11 @@ package net.fireofpower.firesenderexpansion.entities.spells.GateOfEnder;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import io.redspace.ironsspellbooks.render.RenderHelper;
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
+import net.fireofpower.firesenderexpansion.entities.spells.HollowCrystal.HollowCrystal;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -24,6 +27,11 @@ public class GatePortalRenderer extends GeoEntityRenderer<GatePortal> {
     @Override
     public ResourceLocation getTextureLocation(GatePortal gatePortal) {
         return ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "textures/entity/gate_portal.png");
+    }
+
+    @Override
+    public @Nullable RenderType getRenderType(GatePortal animatable, ResourceLocation texture, @Nullable MultiBufferSource bufferSource, float partialTick) {
+        return RenderHelper.CustomerRenderType.magic(texture);
     }
 
     @Override

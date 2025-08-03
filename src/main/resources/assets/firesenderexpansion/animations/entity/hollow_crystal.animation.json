@@ -57,60 +57,32 @@
 			"bones": {
 				"CenterHolder": {
 					"scale": {
-						"0.0": {
-							"vector": ["1-query.anim_time", "1-query.anim_time", "1-query.anim_time"]
-						},
-						"0.5": {
-							"vector": [0, 0, 0]
-						}
+						"0.0": ["1-query.anim_time", "1-query.anim_time", "1-query.anim_time"],
+						"0.5": [0, 0, 0]
 					}
 				},
 				"bone3": {
-					"rotation": {
-						"vector": ["query.anim_time * 180", "query.anim_time * 180", "query.anim_time * 180"]
-					},
+					"rotation": ["query.anim_time * 180", "query.anim_time * 180", "query.anim_time * 180"],
 					"scale": {
-						"0.0": {
-							"vector": ["1-query.anim_time", "1-query.anim_time", "1-query.anim_time"]
-						},
-						"0.5": {
-							"vector": ["(1-query.anim_time * 2)", "(1-query.anim_time * 2)", "(1-query.anim_time * 2)"]
-						},
-						"2.0": {
-							"vector": ["afterboom * (query.anim_time)", "afterboom * (query.anim_time)", "afterboom * (query.anim_time)"]
-						}
+						"0.0": ["1-query.anim_time", "1-query.anim_time", "1-query.anim_time"],
+						"0.5": ["(1-query.anim_time * 2)", "(1-query.anim_time * 2)", "(1-query.anim_time * 2)"],
+						"2.0": ["5 * (query.anim_time)", "5 * (query.anim_time)", "5 * (query.anim_time)"]
 					}
 				},
 				"bone": {
-					"rotation": {
-						"vector": ["query.anim_time * 90", "query.anim_time * 90", "query.anim_time * 90"]
-					},
+					"rotation": ["query.anim_time * 90", "query.anim_time * 90", "query.anim_time * 90"],
 					"scale": {
-						"0.0": {
-							"vector": ["1-query.anim_time", "1-query.anim_time", "1-query.anim_time"]
-						},
-						"0.5": {
-							"vector": ["(1-query.anim_time * 2)", "(1-query.anim_time * 2)", "(1-query.anim_time * 2)"]
-						},
-						"2.0": {
-							"vector": ["afterboom * (query.anim_time)", "afterboom * (query.anim_time)", "afterboom * (query.anim_time)"]
-						}
+						"0.0": ["1-query.anim_time", "1-query.anim_time", "1-query.anim_time"],
+						"0.5": ["(1-query.anim_time * 2)", "(1-query.anim_time * 2)", "(1-query.anim_time * 2)"],
+						"2.0": ["5 * (query.anim_time)", "5 * (query.anim_time)", "5 * (query.anim_time)"]
 					}
 				},
 				"bone2": {
-					"rotation": {
-						"vector": ["-query.anim_time * 90", "-query.anim_time * 90", "-query.anim_time * 90"]
-					},
+					"rotation": ["-query.anim_time * 90", "-query.anim_time * 90", "-query.anim_time * 90"],
 					"scale": {
-						"0.0": {
-							"vector": ["1-query.anim_time", "1-query.anim_time", "1-query.anim_time"]
-						},
-						"0.5": {
-							"vector": ["(1-query.anim_time * 2)", "(1-query.anim_time * 2)", "(1-query.anim_time * 2)"]
-						},
-						"2.0": {
-							"vector": ["(query.anim_time) * afterboom", "(query.anim_time) * afterboom", "(query.anim_time) * afterboom"]
-						}
+						"0.0": ["1-query.anim_time", "1-query.anim_time", "1-query.anim_time"],
+						"0.5": ["(1-query.anim_time * 2)", "(1-query.anim_time * 2)", "(1-query.anim_time * 2)"],
+						"2.0": ["(query.anim_time) * 5", "(query.anim_time) * 5", "(query.anim_time) * 5"]
 					}
 				}
 			}

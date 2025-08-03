@@ -4,14 +4,11 @@ import io.redspace.ironsspellbooks.api.magic.MagicData;
 import io.redspace.ironsspellbooks.capabilities.magic.MagicManager;
 import io.redspace.ironsspellbooks.damage.DamageSources;
 import io.redspace.ironsspellbooks.entity.mobs.AntiMagicSusceptible;
-import io.redspace.ironsspellbooks.entity.mobs.IAnimatedAttacker;
 import io.redspace.ironsspellbooks.entity.spells.AbstractMagicProjectile;
 import io.redspace.ironsspellbooks.registries.SoundRegistry;
 import io.redspace.ironsspellbooks.util.ParticleHelper;
-import net.acetheeldritchking.discerning_the_eldritch.entity.mobs.GaolerEntity;
 import net.fireofpower.firesenderexpansion.registries.EntityRegistry;
 import net.fireofpower.firesenderexpansion.registries.SpellRegistries;
-import net.fireofpower.firesenderexpansion.util.ModTags;
 import net.fireofpower.firesenderexpansion.util.Utils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -21,7 +18,6 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.entity.Entity;
@@ -83,11 +79,22 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
                         if(Utils.shouldBreakHollowCrystal(e)){
                             e.discard();
                             triggerBreakAnimation();
+                            this.setDeltaMovement(0,0,0);
                             this.timeAlive = 60;
                         }
                     });
         }
         if(this.timeAlive == 0 || tickCount > 600){
+            //final move
+            this.level().getEntitiesOfClass(LivingEntity.class,
+                            this.getBoundingBox()
+                                    .inflate(15))
+                    .stream()
+                    .forEach(e -> {
+                        if(canHitEntity(e)){
+                            damageEntity(e);
+                        }
+                    });
             discardThis();
         }
         if(timeAlive > 0) {
