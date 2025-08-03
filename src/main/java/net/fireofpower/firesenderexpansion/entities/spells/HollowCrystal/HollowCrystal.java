@@ -8,6 +8,7 @@ import io.redspace.ironsspellbooks.entity.mobs.IAnimatedAttacker;
 import io.redspace.ironsspellbooks.entity.spells.AbstractMagicProjectile;
 import io.redspace.ironsspellbooks.registries.SoundRegistry;
 import io.redspace.ironsspellbooks.util.ParticleHelper;
+import net.acetheeldritchking.discerning_the_eldritch.entity.mobs.GaolerEntity;
 import net.fireofpower.firesenderexpansion.registries.EntityRegistry;
 import net.fireofpower.firesenderexpansion.registries.SpellRegistries;
 import net.fireofpower.firesenderexpansion.util.ModTags;
@@ -15,6 +16,9 @@ import net.fireofpower.firesenderexpansion.util.Utils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -42,9 +46,11 @@ import java.util.stream.Collectors;
 
 public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity, AntiMagicSusceptible {
     private int timeAlive = -1;
-    private RawAnimation animationToPlay = DefaultAnimations.IDLE;
+    private RawAnimation animationToPlay = null;
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private List<Entity> victims;
+    private static final EntityDataAccessor<Boolean> DATA_IS_PLAYING_BREAK_ANIM = SynchedEntityData.defineId(HollowCrystal.class, EntityDataSerializers.BOOLEAN);
+
 
 
     public HollowCrystal(Level level, LivingEntity shooter) {
@@ -76,7 +82,7 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
                     .forEach(e -> {
                         if(Utils.shouldBreakHollowCrystal(e)){
                             e.discard();
-                            playAnimation("misc.die");
+                            triggerBreakAnimation();
                             this.timeAlive = 60;
                         }
                     });
@@ -188,24 +194,41 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
         return cache;
     }
 
-    public void playAnimation(String animationId) {
-        animationToPlay = RawAnimation.begin().thenPlay(animationId);
-        System.out.println("Attempting to play animation " + animationId + ", with result " + animationToPlay);
+    private PlayState predicate(AnimationState<HollowCrystal> event) {
+        if (!isPlayingBreakAnimation())
+        {
+            if (this.animationToPlay == null)
+            {
+                event.getController().setAnimation(DefaultAnimations.IDLE);
+                return PlayState.CONTINUE;
+            }
+        }
+        else
+        {
+            event.getController().setAnimation(DefaultAnimations.DIE);
+            return PlayState.CONTINUE;
+        }
+        return PlayState.STOP;
     }
 
-    private PlayState predicate(AnimationState<HollowCrystal> animationEvent) {
+    public boolean isPlayingBreakAnimation()
+    {
+        return entityData.get(DATA_IS_PLAYING_BREAK_ANIM);
+    }
 
-        System.out.println(animationToPlay);
-        if (this.animationToPlay != null) {
-            animationController.forceAnimationReset();
-            animationController.setAnimation(animationToPlay);
-            animationToPlay = null;
-        }
-        return PlayState.CONTINUE;
+    public void triggerBreakAnimation()
+    {
+        entityData.set(DATA_IS_PLAYING_BREAK_ANIM, true);
     }
 
     @Override
     public void onAntiMagic(MagicData playerMagicData) {
 
+    }
+
+    @Override
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(DATA_IS_PLAYING_BREAK_ANIM, false);
     }
 }
