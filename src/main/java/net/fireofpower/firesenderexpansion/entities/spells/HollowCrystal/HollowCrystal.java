@@ -4,6 +4,7 @@ import io.redspace.ironsspellbooks.api.magic.MagicData;
 import io.redspace.ironsspellbooks.capabilities.magic.MagicManager;
 import io.redspace.ironsspellbooks.damage.DamageSources;
 import io.redspace.ironsspellbooks.entity.mobs.AntiMagicSusceptible;
+import io.redspace.ironsspellbooks.entity.mobs.IAnimatedAttacker;
 import io.redspace.ironsspellbooks.entity.spells.AbstractMagicProjectile;
 import io.redspace.ironsspellbooks.registries.SoundRegistry;
 import io.redspace.ironsspellbooks.util.ParticleHelper;
@@ -40,8 +41,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity, AntiMagicSusceptible {
-    private int soundCounter = 19;
-    private int allowIdleAnim = -1;
+    private int timeAlive = -1;
+    private RawAnimation animationToPlay = DefaultAnimations.IDLE;
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private List<Entity> victims;
 
@@ -59,33 +60,6 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
 
     @Override
     public void trailParticles() {
-        //ok i'm using it for sounds sue me
-//        soundCounter++;
-//        if(soundCounter == 20){
-//            this.level().playLocalSound(this,SoundRegistry.BLACK_HOLE_LOOP.get(),SoundSource.PLAYERS,3f,1f);
-//        }
-//        //ok this is just actual code I gave up (credit to Snack for the airblast code)
-//        this.level().getEntitiesOfClass(Projectile.class,
-//                        this.getBoundingBox()
-//                                .inflate(1))
-//                .stream()
-//                .filter(proj -> proj.distanceTo(this) < 5 /*&&
-//                        !Objects.equals(proj.getOwner(), this.getOwner())*/)
-//                .forEach(e -> {
-//                    if(Utils.shouldBreakHollowCrystal(e)){
-//                        e.discard();
-//                        allowIdleAnim = false;
-//                        //setting deltaMovement here didn't work
-//                        Timer timer = new Timer();
-//                        timer.schedule(new TimerTask() {
-//                            @Override
-//                            public void run() {
-//                                discardThis();
-//                                allowIdleAnim = true;
-//                            }
-//                        },3000);
-//                    }
-//                });
     }
 
     @Override
@@ -94,23 +68,24 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
             this.level().getEntitiesOfClass(ServerPlayer.class,this.getBoundingBox().inflate(3)).stream().forEach(e -> {
                 this.level().playSeededSound(null,this.getX(),this.getY(),this.getZ(),SoundRegistry.BLACK_HOLE_LOOP.get(),SoundSource.PLAYERS,3f,1f,1239831800);
             });
-//            this.level().getEntitiesOfClass(Projectile.class,
-//                            this.getBoundingBox()
-//                                    .inflate(1))
-//                    .stream()
-//                    .filter(proj -> proj.distanceTo(this) < 5)
-//                    .forEach(e -> {
-//                        if(Utils.shouldBreakHollowCrystal(e)){
-//                            e.discard();
-//                            this.allowIdleAnim = 60;
-//                        }
-//                    });
+            this.level().getEntitiesOfClass(Projectile.class,
+                            this.getBoundingBox()
+                                    .inflate(1))
+                    .stream()
+                    .filter(proj -> proj.distanceTo(this) < 5)
+                    .forEach(e -> {
+                        if(Utils.shouldBreakHollowCrystal(e)){
+                            e.discard();
+                            playAnimation("misc.die");
+                            this.timeAlive = 60;
+                        }
+                    });
         }
-        if(this.allowIdleAnim == 0){
+        if(this.timeAlive == 0 || tickCount > 600){
             discardThis();
         }
-        if(allowIdleAnim > 0) {
-            allowIdleAnim--;
+        if(timeAlive > 0) {
+            timeAlive--;
             for(int i = 0; i < 10; i++) {
                 this.level().addParticle(ParticleTypes.END_ROD, particleRangeX(0), particleRangeY(0), particleRangeZ(0), Math.random() -0.5, Math.random() -0.5, Math.random() - 0.5);
             }
@@ -213,11 +188,18 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
         return cache;
     }
 
-    private PlayState predicate(AnimationState<HollowCrystal> event){
-        if (this.allowIdleAnim < 0) {
-            event.getController().setAnimation(DefaultAnimations.IDLE);
-        }else{
-            event.getController().setAnimation(DefaultAnimations.DIE);
+    public void playAnimation(String animationId) {
+        animationToPlay = RawAnimation.begin().thenPlay(animationId);
+        System.out.println("Attempting to play animation " + animationId + ", with result " + animationToPlay);
+    }
+
+    private PlayState predicate(AnimationState<HollowCrystal> animationEvent) {
+
+        System.out.println(animationToPlay);
+        if (this.animationToPlay != null) {
+            animationController.forceAnimationReset();
+            animationController.setAnimation(animationToPlay);
+            animationToPlay = null;
         }
         return PlayState.CONTINUE;
     }
