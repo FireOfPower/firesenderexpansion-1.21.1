@@ -21,7 +21,6 @@ public class WeaponTiers implements Tier, IronsWeaponTier {
             new AttributeContainer(AttributeRegistry.ENDER_SPELL_POWER, 0.1, AttributeModifier.Operation.ADD_MULTIPLIED_BASE),
             new AttributeContainer(AttributeRegistry.CAST_TIME_REDUCTION, 0.15, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
 
-    //private final int level;
     private final int uses;
     private final float speed;
     private final float damage;
