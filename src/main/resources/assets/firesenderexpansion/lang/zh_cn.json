@@ -1,0 +1,82 @@
+{
+  "itemGroup.firesenderexpansion": "Fire's 末地拓展",
+
+  "itemGroup.firesenderexpansion.creative_tab": "Fire's 末地拓展",
+
+  "item.firesenderexpansion.void_staff": "终与始",
+  "item.firesenderexpansion.void_staff.description": "虚空亦在凝视你",
+
+  "item.firesenderexpansion.void_staff_holder": "华饰空无法杖",
+  "item.firesenderexpansion.void_staff_holder.description": "足以约束黑洞",
+
+  "item.firesenderexpansion.porphyromancer_spawn_egg": "绛咒师刷怪蛋",
+
+  "item.firesenderexpansion.endchiridion": "终末诗谕",
+  "item.firesenderexpansion.endchiridion.desc": "为追寻至高英勇境界者而著的法术书。",
+
+  "item.firesenderexpansion.core_of_ender": "末影核心",
+  "item.firesenderexpansion.core_of_ender.desc": "施放法术时会释放不稳定的能量使施法者随机传送",
+
+  "item.firesenderexpansion.stabilized_core_of_ender": "稳定末影核心",
+
+  "item.firesenderexpansion.ender_treasury_key": "终末宝库王钥",
+  "item.firesenderexpansion.ender_treasury_key.desc": "无尽终末武库的门扉将为你敞开",
+
+  "item.firesenderexpansion.anchoring_ring": "锚影之戒",
+  "item.firesenderexpansion.anchoring_ring.desc": "使大多数魔法传送效果失效",
+
+  "item.firesenderexpansion.infused_obsidian_fragments": "注能黑曜石残片",
+  "item.firesenderexpansion.infused_obsidian_fragments.desc": "用黑曜石柱魔法砸向远古残骸上所得",
+
+  "item.firesenderexpansion.end_lord_helmet": "终末君王头冠",
+  "item.firesenderexpansion.end_lord_chestplate": "终末君王胸甲",
+  "item.firesenderexpansion.end_lord_leggings": "终末君王护腿",
+  "item.firesenderexpansion.end_lord_boots": "终末君王战靴",
+
+  "spell.firesenderexpansion.partial_teleport": "解离传送",
+  "spell.firesenderexpansion.partial_teleport.guide": "选择性地传送目标身体的一部分。目标魔力越低，伤害越高。",
+  "death.attack.firesenderexpansion.partial_teleport": "%1$s被%2$s的末影能量撕成了两半",
+
+  "spell.firesenderexpansion.aspect_of_the_shulker": "潜影之形",
+  "spell.firesenderexpansion.aspect_of_the_shulker.guide": "用魔法攻击命中实体时，召唤一枚追踪的潜影贝导弹。",
+
+  "spell.firesenderexpansion.displacement_cage": "相位囚笼",
+  "spell.firesenderexpansion.displacement_cage.guide": "创造一个由传送门构成的环阵，将任何试图离开其中的生灵传送回囚笼内部",
+
+  "spell.firesenderexpansion.dimensional_adaptation": "维度适应",
+  "spell.firesenderexpansion.dimensional_adaptation.guide": "运用远古的末影知识，适应各维度险境。",
+  "msg.firesenderexpansion.dimensional_adaptation": "拥有终末诗谕时，方可破译此法术",
+
+  "spell.firesenderexpansion.gate_of_ender": "末王宝库",
+  "spell.firesenderexpansion.gate_of_ender.guide": "召唤大量不稳定的利刃，以毁灭性的力量射向敌人",
+  "death.attack.firesenderexpansion.gate_of_ender": "%1$s成了活靶子",
+
+  "spell.firesenderexpansion.obsidian_rod": "黑曜石柱",
+  "spell.firesenderexpansion.obsidian_rod.guide": "向对手发射一系列来自异维度的黑曜石柱，将其锚定于现实之中，阻止其传送。",
+  "death.attack.firesenderexpansion.obsidian_rod": "%1$s被%2$s刺穿",
+
+  "spell.firesenderexpansion.hollow_crystal": "空无水晶",
+  "spell.firesenderexpansion.hollow_crystal.guide": "显化一道末影魔法的悖论造物，令其向外迸发，穿透方块并摧毁路径上的一切。",
+  "death.attack.firesenderexpansion.hollow_crystal": "%1$s狂妄到直面%2$s",
+
+  "spell.firesenderexpansion.dragons_fury": "末影龙怒",
+  "spell.firesenderexpansion.dragons_fury.guide": "以末影龙的怒焰进行攻击，造成广泛但伤害较低的伤害，并将目标击退。",
+  "death.attack.firesenderexpansion.dragons_fury": "%1$s感受到了%2$s的怒火",
+
+  "spell.firesenderexpansion.infinite_void": "显化领域：虚空之境",
+  "spell.firesenderexpansion.infinite_void.guide": "在世界上显化出一个微缩虚空，将附近一切吸入虚空之境。此空间存在时间较短，但存在期间施法者将获得强大的力量。",
+
+  "ui.firesenderexpansion.charge_count": "%d次充能",
+  "ui.firesenderexpansion.hollow_crystal_damage": "最高%d点伤害",
+  "ui.firesenderexpansion.force": "%d级力量",
+  "ui.firesenderexpansion.radius": "%d格半径",
+  "ui.firesenderexpansion.numSwords": "%d柄利剑",
+
+  "effect.firesenderexpansion.aspect_of_the_shulker_effect": "潜影之形",
+  "effect.firesenderexpansion.infinite_void_effect": "虚无",
+  "effect.firesenderexpansion.anchored_effect": "禁锢",
+  "effect.firesenderexpansion.hollow_crystal_effect": "晶能充溢",
+  "effect.firesenderexpansion.ascended_caster_effect": "升华",
+
+  "entity.firesenderexpansion.porphyromancer": "绛咒师"
+}
