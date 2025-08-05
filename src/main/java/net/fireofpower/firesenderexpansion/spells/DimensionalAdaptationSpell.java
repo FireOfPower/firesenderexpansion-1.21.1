@@ -68,7 +68,7 @@ public class DimensionalAdaptationSpell extends AbstractSpell {
             entity.addEffect(new MobEffectInstance(MobEffects.SATURATION, getDuration(spellLevel,entity), 0, false, false, true));
         } else if (entity.level().dimension() == VoidDimensionManager.VOID_DIMENSION){
             if(entity instanceof ServerPlayer serverPlayer){
-                serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(Component.literal(ChatFormatting.BOLD + "The spell cannot adapt you to this place")
+                serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("msg.firesenderexpansion.cannot_adapt")
                         .withStyle(s -> s.withColor(TextColor.fromRgb(0xF35F5F)))));
                 serverPlayer.level().playSound(null, serverPlayer.position().x, serverPlayer.position().y, serverPlayer.position().z,
                         SoundEvents.FIRE_EXTINGUISH, SoundSource.PLAYERS, 0.5f, 1f);

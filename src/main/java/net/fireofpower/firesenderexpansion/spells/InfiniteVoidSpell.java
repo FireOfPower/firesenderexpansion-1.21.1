@@ -85,7 +85,6 @@ public class InfiniteVoidSpell extends AbstractSpell {
                         target.addEffect(new MobEffectInstance(EffectRegistry.INFINITE_VOID_EFFECT, (duration-4) * 20, 0, false, false, true));
                     }
                 }
-
             }
         },2*1000);
         super.onCast(level, spellLevel, entity, castSource, playerMagicData);

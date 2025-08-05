@@ -74,10 +74,6 @@ public class GatePortal extends AbstractMagicProjectile implements GeoEntity {
         super.tick();
     }
 
-    public void destroy(){
-        discard();
-    }
-
     @Override
     public void trailParticles() {
 

@@ -59,7 +59,7 @@ public class ServerEvents {
                 if (player instanceof ServerPlayer serverPlayer)
                 {
                     // display a message to the player
-                    serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(Component.literal(ChatFormatting.BOLD + "Unable to use teleportation")
+                    serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("msg.firesenderexpansion.cannot_teleport")
                             .withStyle(s -> s.withColor(TextColor.fromRgb(0xF35F5F)))));
                     serverPlayer.level().playSound(null , player.getX() , player.getY() , player.getZ() ,
                             SoundEvents.FIRE_EXTINGUISH , SoundSource.PLAYERS , 0.5f , 1f);
@@ -103,7 +103,7 @@ public class ServerEvents {
                 if(Objects.equals(event.getSpellId(), SpellRegistry.ROOT_SPELL.get().getSpellId()) || Objects.equals(event.getSpellId(),SpellRegistries.INFINITE_VOID.get().getSpellId()) || Objects.equals(event.getSpellId(),SpellRegistry.RECALL_SPELL.get().getSpellId())) {
                     event.setCanceled(true);
                     if (entity instanceof ServerPlayer serverPlayer) {
-                        serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(Component.literal(ChatFormatting.BOLD + "That cannot be casted right now")
+                        serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("msg.firesenderexpansion.cannot_cast")
                                 .withStyle(s -> s.withColor(TextColor.fromRgb(0xF35F5F)))));
                         serverPlayer.level().playSound(null, player.getX(), player.getY(), player.getZ(),
                                 SoundEvents.FIRE_EXTINGUISH, SoundSource.PLAYERS, 0.5f, 1f);
@@ -153,7 +153,7 @@ public class ServerEvents {
 
                     if (player instanceof ServerPlayer serverPlayer) {
                         // display a message to the player
-                        serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(Component.literal(ChatFormatting.BOLD + "Unable to cast teleportation")
+                        serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("msg.firesenderexpansion.cannot_teleport")
                                 .withStyle(s -> s.withColor(TextColor.fromRgb(0xF35F5F)))));
                         serverPlayer.level().playSound(null, player.getX(), player.getY(), player.getZ(),
                                 SoundEvents.FIRE_EXTINGUISH, SoundSource.PLAYERS, 0.5f, 1f);
