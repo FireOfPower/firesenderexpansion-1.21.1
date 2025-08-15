@@ -41,6 +41,7 @@ import net.minecraft.world.level.portal.DimensionTransition;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.EntitySpectatorShaderManager;
 import net.neoforged.neoforge.event.ItemAttributeModifierEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
 import net.neoforged.neoforge.event.entity.living.LivingExperienceDropEvent;
@@ -116,6 +117,18 @@ public class ServerEvents {
                         serverPlayer.level().playSound(null, player.getX(), player.getY(), player.getZ(),
                                 SoundEvents.FIRE_EXTINGUISH, SoundSource.PLAYERS, 0.5f, 1f);
                     }
+                }
+            }
+        }
+        if(entity.level().isClientSide()){
+            if(Objects.equals(event.getSpellId(), SpellRegistries.HOLLOW_CRYSTAL.get().getSpellId())){
+                Minecraft mc = Minecraft.getInstance();
+                System.out.println("Test");
+                GameRenderer render = mc.gameRenderer;
+                LocalPlayer clientPlayer = (LocalPlayer) entity;
+                if(clientPlayer != null) {
+                    System.out.println("Test2");
+                    render.loadEffect(ResourceLocation.fromNamespaceAndPath(MODID,"shaders/hollow_crystal_shader.json"));
                 }
             }
         }

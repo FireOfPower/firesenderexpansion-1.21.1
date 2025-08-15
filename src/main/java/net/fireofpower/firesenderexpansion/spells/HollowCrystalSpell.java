@@ -13,6 +13,8 @@ import io.redspace.ironsspellbooks.registries.SoundRegistry;
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
 import net.fireofpower.firesenderexpansion.entities.spells.HollowCrystal.HollowCrystal;
 //import net.fireofpower.firesenderexpansion.network.SyncFinalCastPacket;
+import net.fireofpower.firesenderexpansion.network.PlayShaderEffectPacket;
+import net.fireofpower.firesenderexpansion.network.RemoveShaderEffectPacket;
 import net.fireofpower.firesenderexpansion.network.SyncFinalCastPacket;
 import net.fireofpower.firesenderexpansion.registries.EffectRegistry;
 import net.fireofpower.firesenderexpansion.registries.SpellRegistries;
@@ -101,17 +103,21 @@ public class HollowCrystalSpell extends AbstractSpell {
                 //animation
                 PacketDistributor.sendToPlayersTrackingEntityAndSelf(serverPlayer, new SyncFinalCastPacket(serverPlayer.getUUID(), SpellRegistries.HOLLOW_CRYSTAL.toString(), false));
 
+                //flash
+                PacketDistributor.sendToPlayersTrackingEntityAndSelf(serverPlayer, new PlayShaderEffectPacket());
+
                 Vec3 prevLookDir = serverPlayer.getLookAngle();
                 //actual casting it
                 Timer timer = new Timer();
                 timer.schedule(new TimerTask() {
                     @Override
                     public void run() {
+                        PacketDistributor.sendToPlayer(serverPlayer, new RemoveShaderEffectPacket());
                         HollowCrystal hollowCrystal = new HollowCrystal(serverPlayer.level(), serverPlayer);
                         hollowCrystal.setPos(serverPlayer.position().add(0, serverPlayer.getEyeHeight() + hollowCrystal.getBoundingBox().getYsize() * .25f - 3, 0).add(serverPlayer.getForward().multiply(3, 3, 3)));
                         hollowCrystal.setDamage(getDamage(serverPlayer));
+                        hollowCrystal.setDeltaMovement(hollowCrystal.getDeltaMovement().multiply(0.5,0.5,0.5));
                         hollowCrystal.shoot(prevLookDir);
-                        hollowCrystal.setDeltaMovement(hollowCrystal.getDeltaMovement().multiply(0.5, 0.5, 0.5));
                         serverPlayer.removeEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT);
                         serverPlayer.level().addFreshEntity(hollowCrystal);
                         serverPlayer.level().playLocalSound(serverPlayer, SoundRegistry.SONIC_BOOM.get(), SoundSource.PLAYERS, 3f, 1f);

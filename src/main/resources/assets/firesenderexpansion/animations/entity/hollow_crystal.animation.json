@@ -52,6 +52,39 @@
 				}
 			}
 		},
+		"attack.cast": {
+			"animation_length": 1,
+			"bones": {
+				"bone": {
+					"rotation": {
+						"0.0": {
+							"post": ["query.anim_time * 90", "query.anim_time * 90", "query.anim_time * 90"],
+							"lerp_mode": "catmullrom"
+						}
+					},
+					"scale": "Math.sin(query.anim_time * 270) * 0.25 + 1"
+				},
+				"bone2": {
+					"rotation": ["-query.anim_time * 90", "-query.anim_time * 90", "-query.anim_time * 90"],
+					"scale": "Math.cos(query.anim_time * 270) * 0.25 + 1"
+				},
+				"bone3": {
+					"rotation": ["query.anim_time * 180", "query.anim_time * 180", "query.anim_time * 180"]
+				},
+				"CenterHolder": {
+					"rotation": {
+						"0.0": [0, 0, 0],
+						"1.0": [0, 90, 0],
+						"2.0": [0, 180, 0],
+						"3.0": [0, 270, 0],
+						"4.0": [0, 360, 0]
+					}
+				},
+				"Everything": {
+					"scale": "query.anim_time * 4"
+				}
+			}
+		},
 		"misc.die": {
 			"animation_length": 3,
 			"bones": {

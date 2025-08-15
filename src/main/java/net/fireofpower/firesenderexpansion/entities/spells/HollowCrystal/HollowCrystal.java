@@ -212,8 +212,7 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
     private PlayState predicate(AnimationState<HollowCrystal> event) {
         if (!isPlayingBreakAnimation())
         {
-            if (this.animationToPlay == null)
-            {
+            if (this.animationToPlay == null) {
                 event.getController().setAnimation(DefaultAnimations.IDLE);
                 return PlayState.CONTINUE;
             }

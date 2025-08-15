@@ -14,6 +14,8 @@ public class PayloadHandler {
 
 
         payloadRegistrar.playToClient(SyncFinalCastPacket.TYPE, SyncFinalCastPacket.STREAM_CODEC, SyncFinalCastPacket::handle);
+        payloadRegistrar.playToClient(PlayShaderEffectPacket.TYPE, PlayShaderEffectPacket.STREAM_CODEC, PlayShaderEffectPacket::handle);
+        payloadRegistrar.playToClient(RemoveShaderEffectPacket.TYPE, RemoveShaderEffectPacket.STREAM_CODEC, RemoveShaderEffectPacket::handle);
 
     }
 }
