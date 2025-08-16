@@ -18,6 +18,7 @@ import net.fireofpower.firesenderexpansion.network.RemoveShaderEffectPacket;
 import net.fireofpower.firesenderexpansion.network.SyncFinalCastPacket;
 import net.fireofpower.firesenderexpansion.registries.EffectRegistry;
 import net.fireofpower.firesenderexpansion.registries.SpellRegistries;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -100,25 +101,30 @@ public class HollowCrystalSpell extends AbstractSpell {
         super.onRecastFinished(serverPlayer, recastInstance, recastResult, castDataSerializable);
         if(recastResult.isSuccess()) {
             if (serverPlayer.hasEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT)) {
+                Timer timer = new Timer();
                 //animation
                 PacketDistributor.sendToPlayersTrackingEntityAndSelf(serverPlayer, new SyncFinalCastPacket(serverPlayer.getUUID(), SpellRegistries.HOLLOW_CRYSTAL.toString(), false));
 
                 //flash
-                PacketDistributor.sendToPlayersTrackingEntityAndSelf(serverPlayer, new PlayShaderEffectPacket());
-
-                Vec3 prevLookDir = serverPlayer.getLookAngle();
-                //actual casting it
-                Timer timer = new Timer();
                 timer.schedule(new TimerTask() {
                     @Override
                     public void run() {
-                        PacketDistributor.sendToPlayer(serverPlayer, new RemoveShaderEffectPacket());
+                        //PacketDistributor.sendToPlayersTrackingEntityAndSelf(serverPlayer, new PlayShaderEffectPacket());
+                    }
+                },0);
+
+                //actual casting it
+                Vec3 prevLookDir = serverPlayer.getLookAngle();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        //PacketDistributor.sendToPlayer(serverPlayer, new RemoveShaderEffectPacket());
+                        serverPlayer.removeEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT);
                         HollowCrystal hollowCrystal = new HollowCrystal(serverPlayer.level(), serverPlayer);
                         hollowCrystal.setPos(serverPlayer.position().add(0, serverPlayer.getEyeHeight() + hollowCrystal.getBoundingBox().getYsize() * .25f - 3, 0).add(serverPlayer.getForward().multiply(3, 3, 3)));
                         hollowCrystal.setDamage(getDamage(serverPlayer));
                         hollowCrystal.setDeltaMovement(hollowCrystal.getDeltaMovement().multiply(0.5,0.5,0.5));
                         hollowCrystal.shoot(prevLookDir);
-                        serverPlayer.removeEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT);
                         serverPlayer.level().addFreshEntity(hollowCrystal);
                         serverPlayer.level().playLocalSound(serverPlayer, SoundRegistry.SONIC_BOOM.get(), SoundSource.PLAYERS, 3f, 1f);
                     }
