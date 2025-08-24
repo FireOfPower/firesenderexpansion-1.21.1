@@ -1,5 +1,8 @@
 {
   "values": [
     "#has_structure/end_city"
+  ],
+  "remove": [
+    "minecraft:end_midlands"
   ]
 }
