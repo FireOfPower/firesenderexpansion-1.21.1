@@ -62,6 +62,29 @@ public class GatePortal extends AbstractMagicProjectile implements GeoEntity {
         this.level().addFreshEntity(weapon);
     }
 
+    public void shootSword(LivingEntity target, Vec3 spawnPos){
+        Entity owner = this.getOwner();
+        Vec3 origin = this.position();
+        double choice = Math.random() * 3;
+        UnstableWeaponEntity weapon;
+        if(choice < 1){
+            weapon = new UnstableSummonedSwordEntity(this.level(), (LivingEntity) this.getOwner());
+        }else if (choice < 2){
+            weapon = new UnstableSummonedRapierEntity(this.level(), (LivingEntity) this.getOwner());
+        }else{
+            weapon = new UnstableSummonedClaymoreEntity(this.level(), (LivingEntity) this.getOwner());
+        }
+        this.weapon = weapon;
+        this.setPos(origin.subtract(0.0,this.getBbHeight()/2,0.0));
+        weapon.setPos(origin.add(0,weapon.getBbHeight()/2,0));
+        weapon.setDamage(this.getDamage());
+        weapon.setSpeed(0.01f);
+        Vec3 lookAngle = target.position().subtract(spawnPos).normalize().multiply(360,360,360);
+        weapon.shoot(lookAngle);
+        this.level().playSound((Player)null, origin.x, origin.y, origin.z, SoundRegistry.ECHOING_STRIKE, SoundSource.PLAYERS, 0.1F, 1.0F);
+        this.level().addFreshEntity(weapon);
+    }
+
     @Override
     public void tick() {
         if(tickCount > 10 && weapon != null && weapon.getSpeed() < 2){

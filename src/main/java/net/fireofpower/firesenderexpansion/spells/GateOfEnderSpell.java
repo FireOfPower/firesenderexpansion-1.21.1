@@ -13,6 +13,7 @@ import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -90,13 +91,13 @@ public class GateOfEnderSpell extends AbstractSpell {
     @Override
     public void onServerCastTick(Level level, int spellLevel, LivingEntity entity, @Nullable MagicData playerMagicData) {
         if (playerMagicData != null && (playerMagicData.getCastDurationRemaining() + 1) % 5 == 0) {
-            if (playerMagicData.getAdditionalCastData() instanceof TargetEntityCastData castTargetingData) {
+            if (playerMagicData.getAdditionalCastData() instanceof TargetEntityCastData castTargetingData && castTargetingData.getTarget((ServerLevel) level) != null) {
                 //targeted function
                 LivingEntity targeted = castTargetingData.getTarget(level.getServer().getLevel(level.dimension()));
                 int swords = getNumSwords(spellLevel,entity);
                 assert targeted != null;
                 for (int i = 0; i < swords; i++) {
-                    shootTargetedSword(level,spellLevel, entity,targeted);
+                    shootTargetedSword(level,spellLevel,entity,targeted);
                 }
             }else {
                 //normal function
@@ -109,6 +110,7 @@ public class GateOfEnderSpell extends AbstractSpell {
     }
 
     public void shootTargetedSword(Level world, int spellLevel, LivingEntity caster, LivingEntity targeted){
+        assert targeted != null;
         float radius = 3;
         if(targeted.getBbWidth() < targeted.getBbHeight()){
             radius += targeted.getBbHeight();
@@ -117,14 +119,16 @@ public class GateOfEnderSpell extends AbstractSpell {
         }
         double angle = Math.random() * 2 * Math.PI; //0-360
         Vec3 spawnPos = targeted.position().add(Math.cos(angle) * radius, Math.random() * radius ,Math.sin(angle)  * radius);
-        GatePortal gate = new GatePortal(world,targeted);
+        GatePortal gate = new GatePortal(world,caster);
         gate.setPos(spawnPos);
-        //gate.lookAt(EntityAnchorArgument.Anchor.EYES,targeted.position());
+        gate.lookAt(EntityAnchorArgument.Anchor.EYES,targeted.position());
         Vec3 lookAngle = targeted.position().subtract(spawnPos).normalize().multiply(360,360,360);
+        System.out.println(lookAngle);
         gate.shoot(lookAngle);
+        gate.turn(lookAngle.y, lookAngle.x);
         gate.setDamage(this.getDamage(spellLevel, caster));
         world.addFreshEntity(gate);
-        gate.shootSword();
+        gate.shootSword(targeted,spawnPos);
     }
 
     public void shootRandomSword(Level world, int spellLevel, LivingEntity entity) {
