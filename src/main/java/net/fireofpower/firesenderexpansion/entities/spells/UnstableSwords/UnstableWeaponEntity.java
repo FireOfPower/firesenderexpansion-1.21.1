@@ -109,12 +109,12 @@ public abstract class UnstableWeaponEntity extends AbstractMagicProjectile imple
 
     @Override
     protected void onHitBlock(BlockHitResult result) {
-        if(!this.level().isClientSide()){
-        MagicManager.spawnParticles(this.level(), new BlastwaveParticleOptions(SchoolRegistry.ENDER.get().getTargetingColor(), 1),
-                this.position().x, this.position().y, this.position().z, 1, 0, 0, 0, 0, true);
-        }
+//        if(!this.level().isClientSide()){
+//        MagicManager.spawnParticles(this.level(), new BlastwaveParticleOptions(SchoolRegistry.ENDER.get().getTargetingColor(), 1),
+//                this.position().x, this.position().y, this.position().z, 1, 0, 0, 0, 0, true);
+//        }
         super.onHitBlock(result);
-        this.discard();
+        //this.discard();
     }
 
     @Override
@@ -137,7 +137,7 @@ public abstract class UnstableWeaponEntity extends AbstractMagicProjectile imple
             }
         }
         //remove(RemovalReason.DISCARDED);
-        discard();
+        //discard();
         super.onHit(hitResult);
     }
 
