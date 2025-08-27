@@ -43,6 +43,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.EntitySpectatorShaderManager;
 import net.neoforged.neoforge.event.ItemAttributeModifierEvent;
+import net.neoforged.neoforge.event.entity.EntityTeleportEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
 import net.neoforged.neoforge.event.entity.living.LivingExperienceDropEvent;
 
@@ -131,6 +132,13 @@ public class ServerEvents {
                     render.loadEffect(ResourceLocation.fromNamespaceAndPath(MODID,"shaders/hollow_crystal_shader.json"));
                 }
             }
+        }
+    }
+
+    @SubscribeEvent
+    public static void preventPocketDimensionTeleportation(EntityTeleportEvent event) {
+        if (event.getEntity().level() instanceof ServerLevel && event.getEntity() instanceof LivingEntity living && living.hasEffect(EffectRegistry.ANCHORED_EFFECT) && !(event instanceof EntityTeleportEvent.TeleportCommand)) {
+            event.setCanceled(true);
         }
     }
 

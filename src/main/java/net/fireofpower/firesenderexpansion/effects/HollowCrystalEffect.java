@@ -3,24 +3,16 @@ package net.fireofpower.firesenderexpansion.effects;
 import io.redspace.ironsspellbooks.api.magic.MagicData;
 import io.redspace.ironsspellbooks.capabilities.magic.SyncedSpellData;
 import io.redspace.ironsspellbooks.effect.MagicMobEffect;
-import net.fireofpower.firesenderexpansion.util.Utils;
+import io.redspace.ironsspellbooks.api.util.Utils;
+//import net.fireofpower.firesenderexpansion.util.Utils;
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.phys.Vec3;
 
 public class HollowCrystalEffect extends MagicMobEffect {
     public HollowCrystalEffect(){
-        super(MobEffectCategory.BENEFICIAL, Utils.rgbToInt(255,224,255));
-    }
-
-    @Override
-    public void onEffectAdded(LivingEntity pLivingEntity, int pAmplifier) {
-        super.onEffectAdded(pLivingEntity, pAmplifier);
-        MagicData.getPlayerMagicData(pLivingEntity).getSyncedData().addEffects(SyncedSpellData.PLANAR_SIGHT);
-    }
-
-    @Override
-    public void onEffectRemoved(LivingEntity pLivingEntity, int pAmplifier) {
-        super.onEffectRemoved(pLivingEntity, pAmplifier);
-        MagicData.getPlayerMagicData(pLivingEntity).getSyncedData().removeEffects(SyncedSpellData.PLANAR_SIGHT);
+        super(MobEffectCategory.BENEFICIAL, net.fireofpower.firesenderexpansion.util.Utils.rgbToInt(255,224,255));
     }
 }
