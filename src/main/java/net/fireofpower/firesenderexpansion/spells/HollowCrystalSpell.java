@@ -77,7 +77,7 @@ public class HollowCrystalSpell extends AbstractSpell {
         if(entity.hasEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT)){
             entity.addEffect(new MobEffectInstance(EffectRegistry.HOLLOW_CRYSTAL_EFFECT, ticksOfEffect, entity.getEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT).getAmplifier() + 1, false, false, true));
         }else{
-            entity.addEffect(new MobEffectInstance(EffectRegistry.HOLLOW_CRYSTAL_EFFECT, (int) getSpellPower(spellLevel, entity) * 20, 1, false, false, true));
+            entity.addEffect(new MobEffectInstance(EffectRegistry.HOLLOW_CRYSTAL_EFFECT, ticksOfEffect, 1, false, false, true));
         }
         for(int i = 0; i < 20; i++){
             spawnParticles(entity);

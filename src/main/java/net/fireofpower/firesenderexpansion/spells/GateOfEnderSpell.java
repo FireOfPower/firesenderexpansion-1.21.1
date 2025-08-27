@@ -82,30 +82,34 @@ public class GateOfEnderSpell extends AbstractSpell {
         super.onCast(level, spellLevel, entity, castSource, playerMagicData);
     }
 
-    @Override
-    public boolean checkPreCastConditions(Level level, int spellLevel, LivingEntity entity, MagicData playerMagicData) {
-        Utils.preCastTargetHelper(level, entity, playerMagicData, this, 32, .15f, false);
-        return true;
-    }
+//    @Override
+//    public boolean checkPreCastConditions(Level level, int spellLevel, LivingEntity entity, MagicData playerMagicData) {
+//        Utils.preCastTargetHelper(level, entity, playerMagicData, this, 32, .15f, false);
+//        return true;
+//    }
 
     @Override
     public void onServerCastTick(Level level, int spellLevel, LivingEntity entity, @Nullable MagicData playerMagicData) {
         if (playerMagicData != null && (playerMagicData.getCastDurationRemaining() + 1) % 5 == 0) {
-            if (playerMagicData.getAdditionalCastData() instanceof TargetEntityCastData castTargetingData && castTargetingData.getTarget((ServerLevel) level) != null) {
-                //targeted function
-                LivingEntity targeted = castTargetingData.getTarget(level.getServer().getLevel(level.dimension()));
-                int swords = getNumSwords(spellLevel,entity);
-                assert targeted != null;
-                for (int i = 0; i < swords; i++) {
-                    shootTargetedSword(level,spellLevel,entity,targeted);
-                }
-            }else {
-                //normal function
-                int swords = getNumSwords(spellLevel, entity);
+//            if (playerMagicData.getAdditionalCastData() instanceof TargetEntityCastData castTargetingData && castTargetingData.getTarget((ServerLevel) level) != null) {
+//                //targeted function
+//                LivingEntity targeted = castTargetingData.getTarget(level.getServer().getLevel(level.dimension()));
+//                int swords = getNumSwords(spellLevel,entity);
+//                assert targeted != null;
+//                for (int i = 0; i < swords; i++) {
+//                    shootTargetedSword(level,spellLevel,entity,targeted);
+//                }
+//            }else {
+//                //normal function
+//                int swords = getNumSwords(spellLevel, entity);
+//                for (int i = 0; i < swords; i++) {
+//                    this.shootRandomSword(level, spellLevel, entity);
+//                }
+//            }
+            int swords = getNumSwords(spellLevel, entity);
                 for (int i = 0; i < swords; i++) {
                     this.shootRandomSword(level, spellLevel, entity);
                 }
-            }
         }
     }
 
