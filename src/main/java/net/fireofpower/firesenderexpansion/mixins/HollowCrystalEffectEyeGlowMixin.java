@@ -17,4 +17,11 @@ public class HollowCrystalEffectEyeGlowMixin {
             cir.setReturnValue(GlowingEyesLayer.EyeType.Planar_Sight);
         }
     }
+
+    @Inject(method="getEyeScale",at=@At("HEAD"), cancellable = true)
+    private static void getEyeScale(LivingEntity entity, CallbackInfoReturnable<Float> cir){
+        if(entity.hasEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT)){
+            cir.setReturnValue(GlowingEyesLayer.EyeType.Planar_Sight.scale);
+        }
+    }
 }
