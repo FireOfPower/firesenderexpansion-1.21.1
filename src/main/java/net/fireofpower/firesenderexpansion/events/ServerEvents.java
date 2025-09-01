@@ -121,18 +121,6 @@ public class ServerEvents {
                 }
             }
         }
-        if(entity.level().isClientSide()){
-            if(Objects.equals(event.getSpellId(), SpellRegistries.HOLLOW_CRYSTAL.get().getSpellId())){
-                Minecraft mc = Minecraft.getInstance();
-                System.out.println("Test");
-                GameRenderer render = mc.gameRenderer;
-                LocalPlayer clientPlayer = (LocalPlayer) entity;
-                if(clientPlayer != null) {
-                    System.out.println("Test2");
-                    render.loadEffect(ResourceLocation.fromNamespaceAndPath(MODID,"shaders/hollow_crystal_shader.json"));
-                }
-            }
-        }
     }
 
     @SubscribeEvent
