@@ -70,6 +70,7 @@ public class GatePortal extends AbstractMagicProjectile implements GeoEntity {
         float xRot = -((float) (Mth.atan2(motion.horizontalDistance(), motion.y) * (double) (180F / (float) Math.PI)) - 90.0F);
         float yRot = -((float) (Mth.atan2(motion.z, motion.x) * (double) (180F / (float) Math.PI)) + 90.0F);
         //System.out.println("Set dir for " + this.toString() + " to " + Mth.wrapDegrees(xRot) + ", " + Mth.wrapDegrees(yRot) + ", Also, my look angle is " + this.getLookAngle());
+        //TODO: FIX ALL PRINT STATEMENTS
         this.setXRot(xRot);
         this.setYRot(yRot);
     }
