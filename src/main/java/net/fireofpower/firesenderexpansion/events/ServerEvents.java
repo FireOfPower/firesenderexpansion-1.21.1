@@ -124,7 +124,7 @@ public class ServerEvents {
     }
 
     @SubscribeEvent
-    public static void preventPocketDimensionTeleportation(EntityTeleportEvent event) {
+    public static void preventAnchoredTeleportation(EntityTeleportEvent event) {
         if (event.getEntity().level() instanceof ServerLevel && event.getEntity() instanceof LivingEntity living && living.hasEffect(EffectRegistry.ANCHORED_EFFECT) && !(event instanceof EntityTeleportEvent.TeleportCommand)) {
             event.setCanceled(true);
         }
