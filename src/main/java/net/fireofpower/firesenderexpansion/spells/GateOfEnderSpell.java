@@ -15,6 +15,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -121,33 +122,33 @@ public class GateOfEnderSpell extends AbstractSpell {
         Vec3 spawnPos = targeted.position().add(Math.cos(angle) * radius, Math.random() * radius ,Math.sin(angle)  * radius);
         GatePortal gate = new GatePortal(world,caster);
         gate.setPos(spawnPos);
-        gate.lookAt(EntityAnchorArgument.Anchor.EYES,targeted.position());
         Vec3 lookAngle = targeted.position().subtract(spawnPos).normalize().multiply(360,360,360);
-        System.out.println(lookAngle);
-        gate.shoot(lookAngle);
-        gate.turn(lookAngle.y, lookAngle.x);
+        float xRot = -((float)(Mth.atan2(lookAngle.horizontalDistance(), lookAngle.y) * (double)(180F / (float)Math.PI)) - 90.0F);
+        float yRot = -((float)(Mth.atan2(lookAngle.z, lookAngle.x) * (double)(180F / (float)Math.PI)) + 90.0F);
         gate.setDamage(this.getDamage(spellLevel, caster));
         world.addFreshEntity(gate);
+        gate.setXRot(Mth.wrapDegrees(xRot));
+        gate.setYRot(Mth.wrapDegrees(yRot));
         gate.shootSword(targeted,spawnPos);
     }
 
     public void shootRandomSword(Level world, int spellLevel, LivingEntity entity) {
-        double degree = Math.random() * Math.PI * 1.5 - Math.PI * 0.25;
-        double radius = Math.random() * 3 + 1;
-        radius *= getRadius(spellLevel,entity) / 3;
-        double xOffset = Math.cos(degree) * radius;
-        double yOffset = Math.sin(degree) * radius + 2;
-        double cosPsi = Math.cos(Math.toRadians(entity.getYRot()));
-        double sinPsi = Math.sin(Math.toRadians(entity.getYRot()));
-        double cosTheta = Math.cos(Math.toRadians(entity.getXRot()));
-        double sinTheta = Math.sin(Math.toRadians(entity.getXRot()));
-        Vec3 origin = entity.position().add(xOffset* cosPsi- yOffset * sinTheta * sinPsi,yOffset * cosTheta,xOffset * sinPsi + yOffset * sinTheta * cosPsi);
-        GatePortal gate = new GatePortal(world,entity);
-        gate.setPos(origin);
-        gate.shoot(entity.getLookAngle());
-        gate.setDamage(this.getDamage(spellLevel,entity));
-        world.addFreshEntity(gate);
-        gate.shootSword();
+//        double degree = Math.random() * Math.PI * 1.5 - Math.PI * 0.25;
+//        double radius = Math.random() * 3 + 1;
+//        radius *= getRadius(spellLevel,entity) / 3;
+//        double xOffset = Math.cos(degree) * radius;
+//        double yOffset = Math.sin(degree) * radius + 2;
+//        double cosPsi = Math.cos(Math.toRadians(entity.getYRot()));
+//        double sinPsi = Math.sin(Math.toRadians(entity.getYRot()));
+//        double cosTheta = Math.cos(Math.toRadians(entity.getXRot()));
+//        double sinTheta = Math.sin(Math.toRadians(entity.getXRot()));
+//        Vec3 origin = entity.position().add(xOffset* cosPsi- yOffset * sinTheta * sinPsi,yOffset * cosTheta,xOffset * sinPsi + yOffset * sinTheta * cosPsi);
+//        GatePortal gate = new GatePortal(world,entity);
+//        gate.setPos(origin);
+//        //gate.shoot(entity.getLookAngle());
+//        gate.setDamage(this.getDamage(spellLevel,entity));
+//        world.addFreshEntity(gate);
+//        gate.shootSword();
     }
 
     private float getDamage(int spellLevel, LivingEntity entity) {

@@ -10,10 +10,12 @@ import net.fireofpower.firesenderexpansion.registries.EntityRegistry;
 import net.minecraft.core.Holder;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -60,6 +62,16 @@ public class GatePortal extends AbstractMagicProjectile implements GeoEntity {
         weapon.shoot(owner.getLookAngle());
         this.level().playSound((Player)null, origin.x, origin.y, origin.z, SoundRegistry.ECHOING_STRIKE, SoundSource.PLAYERS, 0.1F, 1.0F);
         this.level().addFreshEntity(weapon);
+    }
+
+    @Override
+    public void travel() {
+        Vec3 motion = this.getLookAngle();
+        float xRot = -((float) (Mth.atan2(motion.horizontalDistance(), motion.y) * (double) (180F / (float) Math.PI)) - 90.0F);
+        float yRot = -((float) (Mth.atan2(motion.z, motion.x) * (double) (180F / (float) Math.PI)) + 90.0F);
+        //System.out.println("Set dir for " + this.toString() + " to " + Mth.wrapDegrees(xRot) + ", " + Mth.wrapDegrees(yRot) + ", Also, my look angle is " + this.getLookAngle());
+        this.setXRot(xRot);
+        this.setYRot(yRot);
     }
 
     public void shootSword(LivingEntity target, Vec3 spawnPos){
