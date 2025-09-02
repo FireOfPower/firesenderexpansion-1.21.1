@@ -8,7 +8,6 @@ import net.fireofpower.firesenderexpansion.entities.spells.InfiniteVoid.Infinite
 import net.fireofpower.firesenderexpansion.entities.spells.MagicShulkerBullet;
 import net.fireofpower.firesenderexpansion.entities.spells.ObsidianRod.ObsidianRod;
 import net.fireofpower.firesenderexpansion.entities.spells.TeleportAoe;
-import net.fireofpower.firesenderexpansion.entities.spells.TeleportRend;
 import net.fireofpower.firesenderexpansion.entities.spells.UnstableSwords.claymore.UnstableSummonedClaymoreEntity;
 import net.fireofpower.firesenderexpansion.entities.spells.UnstableSwords.rapier.UnstableSummonedRapierEntity;
 import net.fireofpower.firesenderexpansion.entities.spells.UnstableSwords.sword.UnstableSummonedSwordEntity;
@@ -26,12 +25,6 @@ public class EntityRegistry {
     public static void register(IEventBus eventBus) {
         ENTITIES.register(eventBus);
     }
-
-    public static final DeferredHolder<EntityType<?>, EntityType<TeleportRend>> TELEPORT_REND =
-            ENTITIES.register("teleport_rend", () -> EntityType.Builder.<TeleportRend>of(TeleportRend::new, MobCategory.MISC)
-                    .sized(1f, 1f)
-                    .clientTrackingRange(64)
-                    .build((ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "teleport_rend")).toString()));
 
     public static final DeferredHolder<EntityType<?>, EntityType<MagicShulkerBullet>> MAGIC_SHULKER_BULLET =
             ENTITIES.register("magic_shulker_bullet", () -> EntityType.Builder.<MagicShulkerBullet>of(MagicShulkerBullet::new, MobCategory.MISC)
