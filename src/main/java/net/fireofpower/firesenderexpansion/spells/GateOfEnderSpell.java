@@ -85,7 +85,7 @@ public class GateOfEnderSpell extends AbstractSpell {
 
     @Override
     public boolean checkPreCastConditions(Level level, int spellLevel, LivingEntity entity, MagicData playerMagicData) {
-        Utils.preCastTargetHelper(level, entity, playerMagicData, this, 32, .15f, false);
+        Utils.preCastTargetHelper(level, entity, playerMagicData, this, 8, .15f, false);
         return true;
     }
 
@@ -97,7 +97,7 @@ public class GateOfEnderSpell extends AbstractSpell {
                 LivingEntity targeted = castTargetingData.getTarget(level.getServer().getLevel(level.dimension()));
                 int swords = getNumSwords(spellLevel,entity);
                 assert targeted != null;
-                for (int i = 0; i < swords; i++) {
+                for (int i = 0; i < swords / 2; i++) {
                     shootTargetedSword(level,spellLevel,entity,targeted);
                 }
             }else {
@@ -125,11 +125,10 @@ public class GateOfEnderSpell extends AbstractSpell {
         Vec3 lookAngle = targeted.position().subtract(spawnPos);
         float xRot = ((float)(Mth.atan2(lookAngle.horizontalDistance(), lookAngle.y) * (180F / Math.PI)) - 90.0F);
         float yRot = ((float)(Mth.atan2(lookAngle.z, lookAngle.x) * (180F / Math.PI)) - 90);
-        gate.setDamage(this.getDamage(spellLevel, caster));
+        gate.setDamage(this.getDamage(spellLevel, caster) / 2);
         world.addFreshEntity(gate);
         gate.setXRot(Mth.wrapDegrees(xRot));
         gate.setYRot(Mth.wrapDegrees(yRot));
-        gate.shootSword(targeted,spawnPos);
     }
 
     public void shootRandomSword(Level world, int spellLevel, LivingEntity entity) {
@@ -152,7 +151,6 @@ public class GateOfEnderSpell extends AbstractSpell {
         world.addFreshEntity(gate);
         gate.setXRot(Mth.wrapDegrees(xRot));
         gate.setYRot(Mth.wrapDegrees(yRot));
-        gate.shootSword();
     }
 
     private float getDamage(int spellLevel, LivingEntity entity) {

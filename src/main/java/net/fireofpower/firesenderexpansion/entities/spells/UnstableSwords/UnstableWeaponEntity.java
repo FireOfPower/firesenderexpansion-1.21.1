@@ -5,11 +5,14 @@ import io.redspace.ironsspellbooks.capabilities.magic.MagicManager;
 import io.redspace.ironsspellbooks.damage.DamageSources;
 import io.redspace.ironsspellbooks.entity.spells.AbstractMagicProjectile;
 import io.redspace.ironsspellbooks.particle.BlastwaveParticleOptions;
+import io.redspace.ironsspellbooks.registries.ParticleRegistry;
 import net.fireofpower.firesenderexpansion.registries.EntityRegistry;
 import net.fireofpower.firesenderexpansion.registries.SpellRegistries;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -120,6 +123,17 @@ public abstract class UnstableWeaponEntity extends AbstractMagicProjectile imple
     @Override
     public float getExplosionRadius() {
         return 1.5f;
+    }
+
+    @Override
+    public void tick() {
+        if(tickCount > 10){
+            if(speed < 2) {
+                speed = 2;
+                setDeltaMovement(getDeltaMovement().normalize().scale(2));
+            }
+        }
+        super.tick();
     }
 
     @Override

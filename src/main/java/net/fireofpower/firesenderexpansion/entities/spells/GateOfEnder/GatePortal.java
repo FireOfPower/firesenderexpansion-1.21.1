@@ -1,6 +1,7 @@
 package net.fireofpower.firesenderexpansion.entities.spells.GateOfEnder;
 
 import io.redspace.ironsspellbooks.entity.spells.AbstractMagicProjectile;
+import io.redspace.ironsspellbooks.registries.ParticleRegistry;
 import io.redspace.ironsspellbooks.registries.SoundRegistry;
 import net.fireofpower.firesenderexpansion.entities.spells.UnstableSwords.UnstableWeaponEntity;
 import net.fireofpower.firesenderexpansion.entities.spells.UnstableSwords.claymore.UnstableSummonedClaymoreEntity;
@@ -8,6 +9,10 @@ import net.fireofpower.firesenderexpansion.entities.spells.UnstableSwords.rapier
 import net.fireofpower.firesenderexpansion.entities.spells.UnstableSwords.sword.UnstableSummonedSwordEntity;
 import net.fireofpower.firesenderexpansion.registries.EntityRegistry;
 import net.minecraft.core.Holder;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -31,7 +36,6 @@ import java.util.Optional;
 
 public class GatePortal extends AbstractMagicProjectile implements GeoEntity {
     public float speed = 0;
-    private UnstableWeaponEntity weapon;
     public GatePortal(Level level, LivingEntity shooter) {
         this((EntityType) EntityRegistry.GATE_PORTAL.get(), level);
         this.setOwner(shooter);
@@ -43,7 +47,6 @@ public class GatePortal extends AbstractMagicProjectile implements GeoEntity {
     }
 
     public void shootSword(){
-        Entity owner = this.getOwner();
         Vec3 origin = this.position();
         double choice = Math.random() * 3;
         UnstableWeaponEntity weapon;
@@ -54,47 +57,28 @@ public class GatePortal extends AbstractMagicProjectile implements GeoEntity {
         }else{
             weapon = new UnstableSummonedClaymoreEntity(this.level(), (LivingEntity) this.getOwner());
         }
-        this.weapon = weapon;
         this.setPos(origin.subtract(0.0,this.getBbHeight()/2,0.0));
         weapon.setPos(origin.add(0,weapon.getBbHeight()/2,0));
         weapon.setDamage(this.getDamage());
         weapon.setSpeed(0.01f);
-        weapon.shoot(owner.getLookAngle());
+        weapon.shoot(this.getLookAngle());
         this.level().playSound((Player)null, origin.x, origin.y, origin.z, SoundRegistry.ECHOING_STRIKE, SoundSource.PLAYERS, 0.1F, 1.0F);
         this.level().addFreshEntity(weapon);
+
+        //particles
+        if(this.level() instanceof ServerLevel level) {
+            level.sendParticles(ParticleRegistry.UNSTABLE_ENDER_PARTICLE.get(), this.getX(), this.getY(), this.getZ(), 5, 0, 0, 0, 0.1);
+        }
     }
 
     @Override
     public void travel() {
     }
 
-    public void shootSword(LivingEntity target, Vec3 spawnPos){
-        Vec3 origin = this.position();
-        double choice = Math.random() * 3;
-        UnstableWeaponEntity weapon;
-        if(choice < 1){
-            weapon = new UnstableSummonedSwordEntity(this.level(), (LivingEntity) this.getOwner());
-        }else if (choice < 2){
-            weapon = new UnstableSummonedRapierEntity(this.level(), (LivingEntity) this.getOwner());
-        }else{
-            weapon = new UnstableSummonedClaymoreEntity(this.level(), (LivingEntity) this.getOwner());
-        }
-        this.weapon = weapon;
-        this.setPos(origin.subtract(0.0,this.getBbHeight()/2,0.0));
-        weapon.setPos(origin.add(0,weapon.getBbHeight()/2,0));
-        weapon.setDamage(this.getDamage());
-        weapon.setSpeed(0.01f);
-        Vec3 lookAngle = target.position().subtract(spawnPos).normalize().multiply(360,360,360);
-        weapon.shoot(lookAngle);
-        this.level().playSound((Player)null, origin.x, origin.y, origin.z, SoundRegistry.ECHOING_STRIKE, SoundSource.PLAYERS, 0.1F, 1.0F);
-        this.level().addFreshEntity(weapon);
-    }
-
     @Override
     public void tick() {
-        if(tickCount > 10 && weapon != null && weapon.getSpeed() < 2){
-            weapon.setSpeed(2f);
-            weapon.setDeltaMovement(weapon.getDeltaMovement().normalize().scale(weapon.getSpeed()));
+        if(tickCount == 5){
+            shootSword();
         }
         if(tickCount > 20){
             discard();
