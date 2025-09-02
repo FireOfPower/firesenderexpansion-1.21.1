@@ -7,10 +7,13 @@ import io.redspace.ironsspellbooks.api.registry.SchoolRegistry;
 import io.redspace.ironsspellbooks.api.spells.*;
 import io.redspace.ironsspellbooks.api.util.AnimationHolder;
 import io.redspace.ironsspellbooks.api.util.Utils;
+import io.redspace.ironsspellbooks.capabilities.magic.MagicManager;
 import io.redspace.ironsspellbooks.capabilities.magic.TargetEntityCastData;
 import io.redspace.ironsspellbooks.damage.DamageSources;
+import io.redspace.ironsspellbooks.particle.BlastwaveParticleOptions;
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
 import net.fireofpower.firesenderexpansion.entities.spells.TeleportRend;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -77,10 +80,16 @@ public class PartialTeleportSpell extends AbstractSpell {
         if (targetEntityData instanceof TargetEntityCastData targetData) {
             LivingEntity targetEntity = targetData.getTarget((ServerLevel)world);
             if (targetEntity != null) {
-                TeleportRend echo = new TeleportRend(world, entity, 0, 1.0F, 1);
-                echo.setPos(targetEntity.getBoundingBox().getCenter().subtract((double)0.0F, (double)(echo.getBbHeight() * 0.5F), (double)0.0F));
-                world.addFreshEntity(echo);
-                DamageSources.applyDamage(targetEntity,getDamage(spellLevel,entity,targetEntity),this.getDamageSource(echo,entity));
+                int squareSize = (int)(targetEntity.getBbWidth() + 1.5f) * 16;
+                if(squareSize > 100){
+                    squareSize = 100;
+                }
+                for(int x = 0; x < squareSize; x++){
+                    for(int y = 0; y < squareSize; y++){
+                        ((ServerLevel) world).sendParticles(ParticleTypes.PORTAL, targetEntity.position().x - squareSize/32.0 + x/16.0, targetEntity.position().y + targetEntity.getBbHeight()/2 - 0.5 - squareSize/32.0 + y/16.0, targetEntity.position().z - squareSize/32.0 + y/16.0,1,0,0,0,0);
+                    }
+                }
+                DamageSources.applyDamage(targetEntity,getDamage(spellLevel,entity,targetEntity),this.getDamageSource(entity));
             }
         }
 
