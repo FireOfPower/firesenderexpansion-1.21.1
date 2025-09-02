@@ -4,6 +4,10 @@ import io.redspace.ironsspellbooks.item.SpellBook;
 import io.redspace.ironsspellbooks.render.PocketDimensionEffects;
 import io.redspace.ironsspellbooks.render.SpellBookCurioRenderer;
 import net.fireofpower.firesenderexpansion.entities.mobs.PorphyromancerRenderer;
+import net.fireofpower.firesenderexpansion.entities.spells.BinaryStars.BinaryStarRenderer;
+import net.fireofpower.firesenderexpansion.entities.spells.BinaryStars.NovaStar.NovaStarEntity;
+import net.fireofpower.firesenderexpansion.entities.spells.BinaryStars.NovaStar.NovaStarModel;
+import net.fireofpower.firesenderexpansion.entities.spells.BinaryStars.ObsidianStar.ObsidianStarModel;
 import net.fireofpower.firesenderexpansion.entities.spells.GateOfEnder.GatePortalRenderer;
 import net.fireofpower.firesenderexpansion.entities.spells.HollowCrystal.HollowCrystalRenderer;
 import net.fireofpower.firesenderexpansion.entities.spells.InfiniteVoid.InfiniteVoidRenderer;
@@ -118,6 +122,8 @@ public class FiresEnderExpansion
             event.registerEntityRenderer(EntityRegistry.UNSTABLE_SUMMONED_SWORD.get(), (e) -> new UnstableSummonedSwordRenderer(e, UnstableSummonedSwordModel::new));
             event.registerEntityRenderer(EntityRegistry.UNSTABLE_SUMMONED_RAPIER.get(), (e) -> new UnstableSummonedSwordRenderer(e, UnstableSummonedRapierModel::new));
             event.registerEntityRenderer(EntityRegistry.UNSTABLE_SUMMONED_CLAYMORE.get(), (e) -> new UnstableSummonedSwordRenderer(e, UnstableSummonedClaymoreModel::new));
+            event.registerEntityRenderer(EntityRegistry.NOVA_STAR.get(), (e) -> new BinaryStarRenderer(e, NovaStarModel::new));
+            event.registerEntityRenderer(EntityRegistry.OBSIDIAN_STAR.get(), (e) -> new BinaryStarRenderer(e, ObsidianStarModel::new));
         }
 
         @SubscribeEvent

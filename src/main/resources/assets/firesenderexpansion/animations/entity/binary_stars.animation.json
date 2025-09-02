@@ -1,0 +1,17 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"misc.idle": {
+			"loop": true,
+			"animation_length": 1,
+			"bones": {
+				"Star": {
+					"rotation": {
+						"vector": [0, 0, "query.anim_time * 360"]
+					}
+				}
+			}
+		}
+	},
+	"geckolib_format_version": 2
+}

@@ -2,6 +2,8 @@ package net.fireofpower.firesenderexpansion.registries;
 
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
 import net.fireofpower.firesenderexpansion.entities.mobs.Porphyromancer;
+import net.fireofpower.firesenderexpansion.entities.spells.BinaryStars.NovaStar.NovaStarEntity;
+import net.fireofpower.firesenderexpansion.entities.spells.BinaryStars.ObsidianStar.ObsidianStarEntity;
 import net.fireofpower.firesenderexpansion.entities.spells.GateOfEnder.GatePortal;
 import net.fireofpower.firesenderexpansion.entities.spells.HollowCrystal.HollowCrystal;
 import net.fireofpower.firesenderexpansion.entities.spells.InfiniteVoid.InfiniteVoid;
@@ -87,4 +89,16 @@ public class EntityRegistry {
                     .sized(16f, .8f)
                     .clientTrackingRange(64)
                     .build(ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "teleport_area").toString()));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<NovaStarEntity>> NOVA_STAR =
+            ENTITIES.register("nova_star", () -> EntityType.Builder.<NovaStarEntity>of(NovaStarEntity::new, MobCategory.MISC)
+                    .sized(.6f, .6f)
+                    .clientTrackingRange(64)
+                    .build(ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "nova_star").toString()));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<ObsidianStarEntity>> OBSIDIAN_STAR =
+            ENTITIES.register("obsidian_star", () -> EntityType.Builder.<ObsidianStarEntity>of(ObsidianStarEntity::new, MobCategory.MISC)
+                    .sized(.6f, .6f)
+                    .clientTrackingRange(64)
+                    .build(ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "obsidian_star").toString()));
 }
