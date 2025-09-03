@@ -122,7 +122,7 @@ public class GateOfEnderSpell extends AbstractSpell {
         Vec3 spawnPos = targeted.position().add(Math.cos(angle) * radius, Math.random() * radius ,Math.sin(angle) * radius);
         GatePortal gate = new GatePortal(world,caster);
         gate.setPos(spawnPos);
-        Vec3 lookAngle = targeted.position().subtract(spawnPos);
+        Vec3 lookAngle = targeted.position().add(0,targeted.getBbHeight()/2,0).subtract(spawnPos);
         float xRot = ((float)(Mth.atan2(lookAngle.horizontalDistance(), lookAngle.y) * (180F / Math.PI)) - 90.0F);
         float yRot = ((float)(Mth.atan2(lookAngle.z, lookAngle.x) * (180F / Math.PI)) - 90);
         gate.setDamage(this.getDamage(spellLevel, caster) / 2);
