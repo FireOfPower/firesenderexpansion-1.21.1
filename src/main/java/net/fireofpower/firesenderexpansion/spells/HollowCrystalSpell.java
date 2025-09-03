@@ -177,4 +177,9 @@ public class HollowCrystalSpell extends AbstractSpell {
     public CastType getCastType() {
         return CastType.LONG;
     }
+
+    @Override
+    public int getCastTime(int spellLevel) {
+        return 30;
+    }
 }

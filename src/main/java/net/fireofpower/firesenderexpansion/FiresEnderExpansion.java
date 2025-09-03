@@ -65,6 +65,7 @@ public class FiresEnderExpansion
         EntityRegistry.register(modEventBus);
         ItemRegistry.register(modEventBus);
         FEEArmorMaterials.register(modEventBus);
+        SoundRegistry.register(modEventBus);
 
         // Register our mod's ModConfigSpec so that FML can create and load the config file for us
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);

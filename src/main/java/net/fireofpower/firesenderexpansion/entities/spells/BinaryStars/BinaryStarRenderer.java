@@ -5,6 +5,8 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import io.redspace.ironsspellbooks.render.RenderHelper;
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
+import net.fireofpower.firesenderexpansion.entities.spells.BinaryStars.NovaStar.NovaStarEntity;
+import net.fireofpower.firesenderexpansion.entities.spells.BinaryStars.NovaStar.NovaStarModel;
 import net.fireofpower.firesenderexpansion.entities.spells.ObsidianRod.ObsidianRod;
 import net.fireofpower.firesenderexpansion.entities.spells.ObsidianRod.ObsidianRodModel;
 import net.fireofpower.firesenderexpansion.entities.spells.UnstableSwords.UnstableWeaponEntity;
@@ -18,6 +20,7 @@ import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
+import software.bernie.geckolib.renderer.layer.AutoGlowingGeoLayer;
 import software.bernie.geckolib.util.Color;
 
 import java.util.function.Supplier;
@@ -35,6 +38,15 @@ public class BinaryStarRenderer extends GeoEntityRenderer<BinaryStarEntity> {
         poseStack.mulPose(Axis.YP.rotationDegrees(yRot));
         poseStack.mulPose(Axis.XP.rotationDegrees(xRot));
         super.preRender(poseStack, animatable, model, bufferSource, buffer, isReRender, partialTicks, packedLight, packedOverlay, colour);
+    }
+
+    @Override
+    public @Nullable RenderType getRenderType(BinaryStarEntity animatable, ResourceLocation texture, @Nullable MultiBufferSource bufferSource, float partialTick) {
+        if(animatable instanceof NovaStarEntity) {
+            return RenderHelper.CustomerRenderType.magic(texture);
+        }else{
+            return super.getRenderType(animatable, texture, bufferSource, partialTick);
+        }
     }
 
     @Override

@@ -7,7 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.GeoModel;
 
 public class NovaStarModel extends GeoModel<BinaryStarEntity> {
-    public static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "textures/entity/nova_star_texture.png");
+    public static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "textures/entity/nova_star.png");
     public static final ResourceLocation MODEL = ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "geo/entity/nova_star.geo.json");
     public static final ResourceLocation ANIMATIONS = ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "animations/entity/binary_stars.animation.json");
 

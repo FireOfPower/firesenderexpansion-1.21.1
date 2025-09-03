@@ -7,7 +7,7 @@
 			"bones": {
 				"Star": {
 					"rotation": {
-						"vector": [0, 0, "query.anim_time * 360"]
+						"vector": [0, 0, "query.anim_time * 720"]
 					}
 				}
 			}
