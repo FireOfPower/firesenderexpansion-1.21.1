@@ -66,6 +66,7 @@
 
   "spell.firesenderexpansion.binary_stars": "Binary Stars",
   "spell.firesenderexpansion.binary_stars.guide": "Select 1-2 targets and shoot 2 homing stars. The first applies a debuff that is effective against mages and the second against melee. After passing through once, they will teleport above the target again and slam down, doing AoE damage.",
+
   "death.attack.firesenderexpansion.binary_stars": "%1$s was scattered among the stars by %2$s",
 
   "spell.firesenderexpansion.infinite_void": "Manifest Domain: Void",
