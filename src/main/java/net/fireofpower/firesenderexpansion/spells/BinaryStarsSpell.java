@@ -140,6 +140,7 @@ public class BinaryStarsSpell extends AbstractSpell {
                         novaStar.shoot(vec.scale(.75f));
                         novaStar.setDamage(getDamage(recastInstance.getSpellLevel(), serverPlayer));
                         novaStar.setHomingTarget(target);
+                        novaStar.setDuration(getDuration(recastInstance.getSpellLevel(),serverPlayer));
                         level.addFreshEntity(novaStar);
                     }
                 }
@@ -155,6 +156,7 @@ public class BinaryStarsSpell extends AbstractSpell {
                         obsidianStar.shoot(vec.scale(.75f));
                         obsidianStar.setDamage(getDamage(recastInstance.getSpellLevel(), serverPlayer));
                         obsidianStar.setHomingTarget(target);
+                        obsidianStar.setDuration(getDuration(recastInstance.getSpellLevel(),serverPlayer));
                         level.addFreshEntity(obsidianStar);
                     }
                 }

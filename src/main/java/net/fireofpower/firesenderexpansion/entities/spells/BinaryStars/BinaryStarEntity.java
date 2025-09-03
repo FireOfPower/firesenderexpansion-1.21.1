@@ -101,6 +101,16 @@ public class BinaryStarEntity extends AbstractMagicProjectile implements GeoEnti
     @Nullable
     Entity cachedTarget;
 
+    private int duration;
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
     @Nullable
     public Entity getHomingTarget() {
         if (this.cachedHomingTarget != null && !this.cachedHomingTarget.isRemoved()) {
@@ -122,7 +132,6 @@ public class BinaryStarEntity extends AbstractMagicProjectile implements GeoEnti
     protected void onHitEntity(EntityHitResult pResult) {
         if(canHitEntity(pResult.getEntity())){
             DamageSources.applyDamage(pResult.getEntity(), damage, SpellRegistries.BINARY_STARS.get().getDamageSource(this, getOwner()));
-            //TODO: Apply effect here
         }
     }
 
