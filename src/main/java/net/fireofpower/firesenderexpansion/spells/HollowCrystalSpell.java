@@ -105,6 +105,15 @@ public class HollowCrystalSpell extends AbstractSpell {
                 //animation
                 PacketDistributor.sendToPlayersTrackingEntityAndSelf(serverPlayer, new SyncFinalCastPacket(serverPlayer.getUUID(), SpellRegistries.HOLLOW_CRYSTAL.toString(), false));
 
+                //flash
+//                timer.schedule(new TimerTask() {
+//                    @Override
+//                    public void run() {
+//                        PacketDistributor.sendToPlayersTrackingEntityAndSelf(serverPlayer, new PlayShaderEffectPacket());
+//                    }
+//                },0);
+
+
                 //actual casting it
                 Vec3 prevLookDir = serverPlayer.getLookAngle();
                 timer.schedule(new TimerTask() {
