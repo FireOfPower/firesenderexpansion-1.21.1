@@ -123,7 +123,7 @@ public class DisplacementCageSpell extends AbstractSpell {
     }
 
     @Override
-    public Optional<SoundEvent> getCastFinishSound() {
+    public Optional<SoundEvent> getCastStartSound() {
         return Optional.of(net.fireofpower.firesenderexpansion.registries.SoundRegistry.DISPLACEMENT_CAGE_SPELL_CAST.get());
     }
 }
