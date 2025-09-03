@@ -122,12 +122,12 @@ public class BinaryStarsSpell extends AbstractSpell {
         var level = serverPlayer.level();
         if (castDataSerializable instanceof MultiTargetEntityCastData targetingData) {
             List<UUID> targets = targetingData.getTargets();
+            double yOffset = 2;
+            double cosPsi = Math.cos(Math.toRadians(serverPlayer.getYRot()));
+            double sinPsi = Math.sin(Math.toRadians(serverPlayer.getYRot()));
+            double cosTheta = Math.cos(Math.toRadians(serverPlayer.getXRot()));
+            double sinTheta = Math.sin(Math.toRadians(serverPlayer.getXRot()));
             for(int i = 0; i < targets.size(); i++){
-                double yOffset = 3;
-                double cosPsi = Math.cos(Math.toRadians(serverPlayer.getYRot()));
-                double sinPsi = Math.sin(Math.toRadians(serverPlayer.getYRot()));
-                double cosTheta = Math.cos(Math.toRadians(serverPlayer.getXRot()));
-                double sinTheta = Math.sin(Math.toRadians(serverPlayer.getXRot()));
                 if(targets.size() == 1 || i == 0) {
                     //Fire Nova Star
                     var target = (LivingEntity) ((ServerLevel) serverPlayer.level()).getEntity(targets.get(i));
@@ -135,7 +135,7 @@ public class BinaryStarsSpell extends AbstractSpell {
                     Vec3 origin = serverPlayer.position().add(xOffset* cosPsi- yOffset * sinTheta * sinPsi,yOffset * cosTheta,xOffset * sinPsi + yOffset * sinTheta * cosPsi);
                     if (target != null) {
                         NovaStarEntity novaStar = new NovaStarEntity(level, serverPlayer);
-                        novaStar.setPos(origin.subtract(0, novaStar.getBbHeight(), 0));
+                        novaStar.setPos(origin);
                         var vec = target.getBoundingBox().getCenter().subtract(serverPlayer.getEyePosition()).normalize();
                         novaStar.shoot(vec.scale(.75f));
                         novaStar.setDamage(getDamage(recastInstance.getSpellLevel(), serverPlayer));
@@ -147,11 +147,11 @@ public class BinaryStarsSpell extends AbstractSpell {
                 if(targets.size() == 1 || i == 1){
                     //Fire Obsidian Star
                     var target = (LivingEntity) ((ServerLevel) serverPlayer.level()).getEntity(targets.get(i));
-                    double xOffset = -2;
+                    double xOffset = -1;
                     Vec3 origin = serverPlayer.position().add(xOffset* cosPsi- yOffset * sinTheta * sinPsi,yOffset * cosTheta,xOffset * sinPsi + yOffset * sinTheta * cosPsi);
                     if (target != null) {
                         ObsidianStarEntity obsidianStar = new ObsidianStarEntity(level, serverPlayer);
-                        obsidianStar.setPos(origin.subtract(0, obsidianStar.getBbHeight(), -1));
+                        obsidianStar.setPos(origin);
                         var vec = target.getBoundingBox().getCenter().subtract(serverPlayer.getEyePosition()).normalize();
                         obsidianStar.shoot(vec.scale(.75f));
                         obsidianStar.setDamage(getDamage(recastInstance.getSpellLevel(), serverPlayer));

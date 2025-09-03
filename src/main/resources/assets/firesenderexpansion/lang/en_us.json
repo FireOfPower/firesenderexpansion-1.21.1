@@ -64,6 +64,10 @@
   "spell.firesenderexpansion.dragons_fury.guide": "Strike with the fury of the Ender Dragon, dealing wide but low damage and knocking things away.",
   "death.attack.firesenderexpansion.dragons_fury": "%1$s felt the fury of %2$s",
 
+  "spell.firesenderexpansion.binary_stars": "Binary Stars",
+  "spell.firesenderexpansion.binary_stars.guide": "Select 1-2 targets and shoot 2 homing stars. The first applies a debuff that is effective against mages and the second against melee. After passing through once, they will teleport above the target again and slam down, doing AoE damage.",
+  "death.attack.firesenderexpansion.binary_stars": "%1$s was scattered among the stars by %2$s",
+
   "spell.firesenderexpansion.infinite_void": "Manifest Domain: Void",
   "spell.firesenderexpansion.infinite_void.guide": "Manifest a small vacuum in the world, drawing everyone nearby into an existence where all is void. The space will collapse shortly after existing, but while active you will also gain significant strength.",
 
@@ -78,6 +82,8 @@
   "effect.firesenderexpansion.anchored_effect": "Anchored",
   "effect.firesenderexpansion.hollow_crystal_effect": "Crystal Charge",
   "effect.firesenderexpansion.ascended_caster_effect": "Ascended",
+  "effect.firesenderexpansion.nova_burn_effect": "Nova Burn",
+  "effect.firesenderexpansion.eclipsed_effect": "Eclipsed",
 
   "msg.firesenderexpansion.cannot_teleport": "You cannot teleport while anchored",
   "msg.firesenderexpansion.cannot_adapt": "You cannot adapt to this place",
