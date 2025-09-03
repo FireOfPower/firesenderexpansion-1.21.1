@@ -3,5 +3,10 @@
     "sounds": [
       "firesenderexpansion:binary_stars_cast"
     ]
+  },
+  "displacement_cage_cast": {
+    "sounds": [
+      "firesenderexpansion:displacement_cage_cast"
+    ]
   }
 }

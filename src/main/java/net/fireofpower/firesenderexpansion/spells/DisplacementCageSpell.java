@@ -8,7 +8,6 @@ import io.redspace.ironsspellbooks.api.util.AnimationHolder;
 import io.redspace.ironsspellbooks.api.util.Utils;
 import io.redspace.ironsspellbooks.capabilities.magic.TargetEntityCastData;
 import io.redspace.ironsspellbooks.entity.spells.target_area.TargetedAreaEntity;
-import io.redspace.ironsspellbooks.registries.SoundRegistry;
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
 import net.fireofpower.firesenderexpansion.entities.spells.TeleportAoe;
 import net.minecraft.network.chat.Component;
@@ -67,11 +66,6 @@ public class DisplacementCageSpell extends AbstractSpell {
     }
 
     @Override
-    public Optional<SoundEvent> getCastStartSound() {
-        return Optional.of(SoundRegistry.ABYSSAL_TELEPORT.get());
-    }
-
-    @Override
     public boolean checkPreCastConditions(Level level, int spellLevel, LivingEntity entity, MagicData playerMagicData) {
         Utils.preCastTargetHelper(level, entity, playerMagicData, this, 32, .15f, false);
         return true;
@@ -126,5 +120,10 @@ public class DisplacementCageSpell extends AbstractSpell {
     @Override
     public Vector3f getTargetingColor() {
         return SchoolRegistry.ENDER.get().getTargetingColor();
+    }
+
+    @Override
+    public Optional<SoundEvent> getCastFinishSound() {
+        return Optional.of(net.fireofpower.firesenderexpansion.registries.SoundRegistry.DISPLACEMENT_CAGE_SPELL_CAST.get());
     }
 }

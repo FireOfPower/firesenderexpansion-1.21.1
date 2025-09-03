@@ -16,10 +16,14 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.SoundType;
 
 import java.util.List;
+import java.util.Optional;
 
 @AutoSpellConfig
 public class PartialTeleportSpell extends AbstractSpell {
@@ -51,6 +55,12 @@ public class PartialTeleportSpell extends AbstractSpell {
     @Override
     public AnimationHolder getCastStartAnimation() {
         return SpellAnimations.ONE_HANDED_HORIZONTAL_SWING_ANIMATION;
+    }
+
+
+    @Override
+    public Optional<SoundEvent> getCastFinishSound() {
+        return Optional.of(SoundEvents.ENDERMAN_TELEPORT);
     }
 
     @Override
