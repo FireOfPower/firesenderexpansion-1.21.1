@@ -25,7 +25,7 @@ public class ClientSpellCastHelper {
         GameRenderer render = mc.gameRenderer;
         LocalPlayer clientPlayer = mc.player;
         if(clientPlayer != null) {
-            render.loadEffect(ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID,"shaders/hollow_crystal_shader.json"));
+            render.loadEffect(ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID,"shaders/pink_shader.json"));
         }
     }
 

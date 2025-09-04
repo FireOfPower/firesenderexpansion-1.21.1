@@ -13,7 +13,7 @@ import io.redspace.ironsspellbooks.registries.SoundRegistry;
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
 import net.fireofpower.firesenderexpansion.entities.spells.HollowCrystal.HollowCrystal;
 //import net.fireofpower.firesenderexpansion.network.SyncFinalCastPacket;
-import net.fireofpower.firesenderexpansion.network.PlayShaderEffectPacket;
+import net.fireofpower.firesenderexpansion.network.AddShaderEffectPacket;
 import net.fireofpower.firesenderexpansion.network.RemoveShaderEffectPacket;
 import net.fireofpower.firesenderexpansion.network.SyncFinalCastPacket;
 import net.fireofpower.firesenderexpansion.registries.EffectRegistry;
@@ -106,12 +106,36 @@ public class HollowCrystalSpell extends AbstractSpell {
                 PacketDistributor.sendToPlayersTrackingEntityAndSelf(serverPlayer, new SyncFinalCastPacket(serverPlayer.getUUID(), SpellRegistries.HOLLOW_CRYSTAL.toString(), false));
 
                 //flash
-//                timer.schedule(new TimerTask() {
-//                    @Override
-//                    public void run() {
-//                        PacketDistributor.sendToPlayersTrackingEntityAndSelf(serverPlayer, new PlayShaderEffectPacket());
-//                    }
-//                },0);
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        PacketDistributor.sendToPlayersTrackingEntityAndSelf(serverPlayer, new AddShaderEffectPacket(FiresEnderExpansion.MODID,"shaders/light_burst_shader.json"));
+                    }
+                },0);
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        PacketDistributor.sendToPlayersTrackingEntityAndSelf(serverPlayer, new AddShaderEffectPacket(FiresEnderExpansion.MODID,"shaders/blue_shader.json"));
+                    }
+                },200);
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        PacketDistributor.sendToPlayersTrackingEntityAndSelf(serverPlayer, new AddShaderEffectPacket(FiresEnderExpansion.MODID,"shaders/red_shader.json"));
+                    }
+                },250);
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        PacketDistributor.sendToPlayersTrackingEntityAndSelf(serverPlayer, new AddShaderEffectPacket(FiresEnderExpansion.MODID,"shaders/light_burst_shader.json"));
+                    }
+                },300);
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        PacketDistributor.sendToPlayersTrackingEntityAndSelf(serverPlayer, new AddShaderEffectPacket(FiresEnderExpansion.MODID,"shaders/pink_shader.json"));
+                    }
+                },400);
 
 
                 //actual casting it
@@ -119,7 +143,7 @@ public class HollowCrystalSpell extends AbstractSpell {
                 timer.schedule(new TimerTask() {
                     @Override
                     public void run() {
-                        //PacketDistributor.sendToPlayer(serverPlayer, new RemoveShaderEffectPacket());
+                        PacketDistributor.sendToPlayer(serverPlayer, new RemoveShaderEffectPacket());
                         serverPlayer.removeEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT);
                         HollowCrystal hollowCrystal = new HollowCrystal(serverPlayer.level(), serverPlayer);
                         hollowCrystal.setPos(serverPlayer.position().add(0, serverPlayer.getEyeHeight() + hollowCrystal.getBoundingBox().getYsize() * .25f - 3, 0).add(serverPlayer.getForward().multiply(3, 3, 3)));
