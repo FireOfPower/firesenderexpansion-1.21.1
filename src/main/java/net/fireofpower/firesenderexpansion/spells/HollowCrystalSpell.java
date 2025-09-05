@@ -99,43 +99,43 @@ public class HollowCrystalSpell extends AbstractSpell {
     @Override
     public void onRecastFinished(ServerPlayer serverPlayer, RecastInstance recastInstance, RecastResult recastResult, ICastDataSerializable castDataSerializable) {
         super.onRecastFinished(serverPlayer, recastInstance, recastResult, castDataSerializable);
-        if(recastResult.isSuccess()) {
+        if(recastResult.isSuccess() && !serverPlayer.level().isClientSide()) {
             if (serverPlayer.hasEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT)) {
                 Timer timer = new Timer();
                 //animation
                 PacketDistributor.sendToPlayersTrackingEntityAndSelf(serverPlayer, new SyncFinalCastPacket(serverPlayer.getUUID(), SpellRegistries.HOLLOW_CRYSTAL.toString(), false));
 
                 //flash
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        PacketDistributor.sendToPlayersTrackingEntityAndSelf(serverPlayer, new AddShaderEffectPacket(FiresEnderExpansion.MODID,"shaders/light_burst_shader.json"));
-                    }
-                },0);
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        PacketDistributor.sendToPlayersTrackingEntityAndSelf(serverPlayer, new AddShaderEffectPacket(FiresEnderExpansion.MODID,"shaders/blue_shader.json"));
-                    }
-                },200);
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        PacketDistributor.sendToPlayersTrackingEntityAndSelf(serverPlayer, new AddShaderEffectPacket(FiresEnderExpansion.MODID,"shaders/red_shader.json"));
-                    }
-                },250);
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        PacketDistributor.sendToPlayersTrackingEntityAndSelf(serverPlayer, new AddShaderEffectPacket(FiresEnderExpansion.MODID,"shaders/light_burst_shader.json"));
-                    }
-                },300);
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        PacketDistributor.sendToPlayersTrackingEntityAndSelf(serverPlayer, new AddShaderEffectPacket(FiresEnderExpansion.MODID,"shaders/pink_shader.json"));
-                    }
-                },400);
+//                timer.schedule(new TimerTask() {
+//                    @Override
+//                    public void run() {
+//                        PacketDistributor.sendToPlayersTrackingEntityAndSelf(serverPlayer, new AddShaderEffectPacket(FiresEnderExpansion.MODID,"shaders/light_burst_shader.json"));
+//                    }
+//                },0);
+//                timer.schedule(new TimerTask() {
+//                    @Override
+//                    public void run() {
+//                        PacketDistributor.sendToPlayersTrackingEntityAndSelf(serverPlayer, new AddShaderEffectPacket(FiresEnderExpansion.MODID,"shaders/blue_shader.json"));
+//                    }
+//                },200);
+//                timer.schedule(new TimerTask() {
+//                    @Override
+//                    public void run() {
+//                        PacketDistributor.sendToPlayersTrackingEntityAndSelf(serverPlayer, new AddShaderEffectPacket(FiresEnderExpansion.MODID,"shaders/red_shader.json"));
+//                    }
+//                },250);
+//                timer.schedule(new TimerTask() {
+//                    @Override
+//                    public void run() {
+//                        PacketDistributor.sendToPlayersTrackingEntityAndSelf(serverPlayer, new AddShaderEffectPacket(FiresEnderExpansion.MODID,"shaders/light_burst_shader.json"));
+//                    }
+//                },300);
+//                timer.schedule(new TimerTask() {
+//                    @Override
+//                    public void run() {
+//                        PacketDistributor.sendToPlayersTrackingEntityAndSelf(serverPlayer, new AddShaderEffectPacket(FiresEnderExpansion.MODID,"shaders/pink_shader.json"));
+//                    }
+//                },400);
 
 
                 //actual casting it
@@ -143,7 +143,7 @@ public class HollowCrystalSpell extends AbstractSpell {
                 timer.schedule(new TimerTask() {
                     @Override
                     public void run() {
-                        PacketDistributor.sendToPlayer(serverPlayer, new RemoveShaderEffectPacket());
+                        //PacketDistributor.sendToPlayer(serverPlayer, new RemoveShaderEffectPacket());
                         serverPlayer.removeEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT);
                         HollowCrystal hollowCrystal = new HollowCrystal(serverPlayer.level(), serverPlayer);
                         hollowCrystal.setPos(serverPlayer.position().add(0, serverPlayer.getEyeHeight() + hollowCrystal.getBoundingBox().getYsize() * .25f - 3, 0).add(serverPlayer.getForward().multiply(3, 3, 3)));
