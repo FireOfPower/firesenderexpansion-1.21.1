@@ -1,6 +1,5 @@
 package net.fireofpower.firesenderexpansion.entities.spells.BinaryStars.ObsidianStar;
 
-import io.redspace.ironsspellbooks.IronsSpellbooks;
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
 import net.fireofpower.firesenderexpansion.entities.spells.BinaryStars.BinaryStarEntity;
 import net.minecraft.resources.ResourceLocation;

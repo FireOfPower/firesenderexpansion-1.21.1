@@ -7,13 +7,9 @@ import io.redspace.ironsspellbooks.entity.spells.AbstractMagicProjectile;
 import io.redspace.ironsspellbooks.particle.BlastwaveParticleOptions;
 import io.redspace.ironsspellbooks.registries.ParticleRegistry;
 import io.redspace.ironsspellbooks.util.ParticleHelper;
-import net.fireofpower.firesenderexpansion.entities.spells.GateOfEnder.GatePortal;
-import net.fireofpower.firesenderexpansion.entities.spells.HollowCrystal.HollowCrystal;
-import net.fireofpower.firesenderexpansion.entities.spells.UnstableSwords.UnstableWeaponEntity;
 import net.fireofpower.firesenderexpansion.registries.EntityRegistry;
 import net.fireofpower.firesenderexpansion.registries.SpellRegistries;
 import net.minecraft.core.Holder;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
@@ -34,7 +30,6 @@ import software.bernie.geckolib.constant.DefaultAnimations;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 

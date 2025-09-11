@@ -2,7 +2,6 @@ package net.fireofpower.firesenderexpansion.mixins;
 
 import io.redspace.ironsspellbooks.effect.EvasionEffect;
 import net.fireofpower.firesenderexpansion.registries.EffectRegistry;
-import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket;
@@ -16,8 +15,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import static net.fireofpower.firesenderexpansion.events.ServerEvents.convertTicksToTime;
-
 @Mixin(EvasionEffect.class)
 public class AnchoredEvasionStopperMixin {
 
@@ -25,7 +22,6 @@ public class AnchoredEvasionStopperMixin {
     private static void doEffect(LivingEntity livingEntity, DamageSource damageSource, CallbackInfoReturnable<Boolean> cir){
         if(livingEntity.hasEffect(EffectRegistry.ANCHORED_EFFECT)){
             cir.setReturnValue(false);
-
             if (livingEntity instanceof ServerPlayer serverPlayer)
             {
                 // display a message to the player

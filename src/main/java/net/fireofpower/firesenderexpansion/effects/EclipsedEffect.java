@@ -1,7 +1,6 @@
 package net.fireofpower.firesenderexpansion.effects;
 
 import io.redspace.ironsspellbooks.effect.MagicMobEffect;
-import io.redspace.ironsspellbooks.registries.ParticleRegistry;
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
 import net.fireofpower.firesenderexpansion.util.Utils;
 import net.minecraft.util.Mth;

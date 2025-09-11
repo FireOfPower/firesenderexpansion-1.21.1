@@ -1,7 +1,6 @@
 package net.fireofpower.firesenderexpansion.network;
 
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
-import net.fireofpower.firesenderexpansion.util.ClientSpellCastHelper;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -9,8 +8,6 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.UUID;
 
 public class RemoveShaderEffectPacket implements CustomPacketPayload {
     public static final Type<RemoveShaderEffectPacket> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "remove_shader_effect"));
