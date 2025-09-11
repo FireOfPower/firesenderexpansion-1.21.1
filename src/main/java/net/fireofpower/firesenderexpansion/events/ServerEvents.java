@@ -127,6 +127,12 @@ public class ServerEvents {
     public static void preventAnchoredTeleportation(EntityTeleportEvent event) {
         if (event.getEntity().level() instanceof ServerLevel && event.getEntity() instanceof LivingEntity living && living.hasEffect(EffectRegistry.ANCHORED_EFFECT) && !(event instanceof EntityTeleportEvent.TeleportCommand)) {
             event.setCanceled(true);
+            if(event.getEntity() instanceof ServerPlayer serverPlayer) {
+                serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("msg.firesenderexpansion.cannot_teleport")
+                        .withStyle(s -> s.withColor(TextColor.fromRgb(0xF35F5F)))));
+                serverPlayer.level().playSound(null, serverPlayer.getX(), serverPlayer.getY(), serverPlayer.getZ(),
+                        SoundEvents.FIRE_EXTINGUISH, SoundSource.PLAYERS, 0.5f, 1f);
+            }
         }
     }
 
