@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:end/obtain_void_staff",
+  "parent": "firesenderexpansion:end/obtain_core_of_ender",
   "criteria": {
     "end_lord_boots": {
       "conditions": {

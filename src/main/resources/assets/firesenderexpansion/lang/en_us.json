@@ -95,7 +95,9 @@
   "advancements.firesenderexpansion.find_end_library.title": "Arcane Knowledge",
   "advancements.firesenderexpansion.find_end_library.description": "Find the End Library",
   "advancements.firesenderexpansion.wear_end_lord_armor.title": "Voidwracker",
-  "advancements.firesenderexpansion.wear_end_lord_armor.description": "Wear the full End Lord armor set.",
+  "advancements.firesenderexpansion.wear_end_lord_armor.description": "Wear the full End Lord armor set",
+  "advancements.firesenderexpansion.obtain_core_of_ender.title": "Instability",
+  "advancements.firesenderexpansion.obtain_core_of_ender.description": "Create an item that is currently too volatile to use for crafting, but may have other uses",
 
 
   "msg.firesenderexpansion.cannot_teleport": "You cannot teleport while anchored",

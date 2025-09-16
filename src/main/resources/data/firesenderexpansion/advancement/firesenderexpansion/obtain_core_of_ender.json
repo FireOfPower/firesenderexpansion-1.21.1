@@ -1,26 +1,26 @@
 {
   "display": {
     "icon": {
-      "id": "firesenderexpansion:void_staff"
+      "id": "firesenderexpansion:core_of_ender"
     },
     "title": {
-      "translate": "advancements.firesenderexpansion.obtain_void_staff.title"
+      "translate": "advancements.firesenderexpansion.obtain_core_of_ender.title"
     },
     "description": {
-      "translate": "advancements.firesenderexpansion.obtain_void_staff.description"
+      "translate": "advancements.firesenderexpansion.obtain_core_of_ender.description"
     },
     "announce_to_chat": true,
     "show_toast": true,
-    "frame": "challenge"
+    "frame": "task"
   },
-  "parent": "firesenderexpansion:end/obtain_core_of_ender",
+  "parent": "minecraft:end/kill_dragon",
   "criteria": {
     "requirement": {
       "conditions": {
         "items": [
           {
             "items": [
-              "firesenderexpansion:void_staff"
+              "firesenderexpansion:core_of_ender"
             ]
           }
         ]
