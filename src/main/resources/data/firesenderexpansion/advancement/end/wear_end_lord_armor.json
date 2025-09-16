@@ -1,5 +1,5 @@
 {
-  "parent": "firesenderexpansion:firesenderexpansion/obtain_core_of_ender",
+  "parent": "firesenderexpansion:end/obtain_core_of_ender",
   "criteria": {
     "end_lord_boots": {
       "conditions": {
