@@ -1,0 +1,66 @@
+{
+  "parent": "minecraft:end/obtain_void_staff",
+  "criteria": {
+    "end_lord_boots": {
+      "conditions": {
+        "items": [
+          {
+            "items": "firesenderexpansion:end_lord_boots"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "end_lord_chestplate": {
+      "conditions": {
+        "items": [
+          {
+            "items": "firesenderexpansion:end_lord_chestplate"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "end_lord_helmet": {
+      "conditions": {
+        "items": [
+          {
+            "items": "firesenderexpansion:end_lord_helmet"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "end_lord_leggings": {
+      "conditions": {
+        "items": [
+          {
+            "items": "firesenderexpansion:end_lord_leggings"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.firesenderexpansion.wear_end_lord_armor.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "firesenderexpansion:end_lord_helmet"
+    },
+    "title": {
+      "translate": "advancements.firesenderexpansion.wear_end_lord_armor.title"
+    }
+  },
+  "requirements": [
+    [
+      "end_lord_helmet",
+      "end_lord_chestplate",
+      "end_lord_leggings",
+      "end_lord_boots"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

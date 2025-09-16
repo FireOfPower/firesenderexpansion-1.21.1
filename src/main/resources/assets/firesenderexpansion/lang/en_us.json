@@ -86,7 +86,7 @@
   "effect.firesenderexpansion.nova_burn_effect": "Nova Burn",
   "effect.firesenderexpansion.eclipsed_effect": "Eclipsed",
 
-  "advancements.firesenderexpansion.kill_porphyromancer.title": "Poor Porphyromancer",
+  "advancements.firesenderexpansion.kill_porphyromancer.title": "Poor Porphyromancer!",
   "advancements.firesenderexpansion.kill_porphyromancer.description": "Kill a Porphyromancer",
   "advancements.firesenderexpansion.obtain_gate_key.title": "The Forgotten Armory",
   "advancements.firesenderexpansion.obtain_gate_key.description": "Obtain the Ender Treasury Key",
@@ -94,6 +94,8 @@
   "advancements.firesenderexpansion.obtain_void_staff.description": "Harness the power of a black hole and place it onto a staff capable of warping space itself.",
   "advancements.firesenderexpansion.find_end_library.title": "Arcane Knowledge",
   "advancements.firesenderexpansion.find_end_library.description": "Find the End Library",
+  "advancements.firesenderexpansion.wear_end_lord_armor.title": "Voidwracker",
+  "advancements.firesenderexpansion.wear_end_lord_armor.description": "Wear the full End Lord armor set.",
 
 
   "msg.firesenderexpansion.cannot_teleport": "You cannot teleport while anchored",
