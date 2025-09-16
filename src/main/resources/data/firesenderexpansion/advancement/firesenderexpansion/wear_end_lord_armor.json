@@ -52,7 +52,10 @@
     },
     "title": {
       "translate": "advancements.firesenderexpansion.wear_end_lord_armor.title"
-    }
+    },
+    "announce_to_chat": true,
+    "show_toast": true,
+    "frame": "challenge"
   },
   "requirements": [
     [
