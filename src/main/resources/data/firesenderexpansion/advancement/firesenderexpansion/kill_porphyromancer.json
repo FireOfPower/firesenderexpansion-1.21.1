@@ -1,0 +1,31 @@
+{
+  "display": {
+    "icon": {
+      "id": "firesenderexpansion:porphyromancer_spawn_egg"
+    },
+    "title": {
+      "translate": "advancements.firesenderexpansion.kill_porphyromancer.title"
+    },
+    "description": {
+      "translate": "advancements.firesenderexpansion.kill_porphyromancer.description"
+    },
+    "announce_to_chat": true,
+    "show_toast": true,
+    "frame": "task"
+  },
+  "parent": "minecraft:end/kill_dragon",
+  "criteria": {
+    "requirement": {
+      "conditions": {
+        "entity": [
+          {
+            "entity": [
+              "firesenderexpansion:porphyromancer"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:player_killed_entity"
+    }
+  }
+}
