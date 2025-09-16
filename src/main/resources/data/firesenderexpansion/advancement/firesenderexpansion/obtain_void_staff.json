@@ -13,7 +13,7 @@
     "show_toast": true,
     "frame": "challenge"
   },
-  "parent": "firesenderexpansion:end/obtain_core_of_ender",
+  "parent": "firesenderexpansion:firesenderexpansion/obtain_core_of_ender",
   "criteria": {
     "requirement": {
       "conditions": {
