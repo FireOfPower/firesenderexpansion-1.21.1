@@ -103,6 +103,7 @@
   "msg.firesenderexpansion.cannot_teleport": "You cannot teleport while anchored",
   "msg.firesenderexpansion.cannot_adapt": "You cannot adapt to this place",
   "msg.firesenderexpansion.cannot_cast": "You cannot cast this right now",
+  "msg.firesenderexpansion.fail_step": "Scintillating Step cannot teleport across dimensions",
 
 
   "entity.firesenderexpansion.porphyromancer": "Porphyromancer"

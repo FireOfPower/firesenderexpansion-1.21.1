@@ -1,15 +1,18 @@
 package net.fireofpower.firesenderexpansion.events;
 
 import com.mojang.blaze3d.shaders.Shader;
+import io.redspace.ironsspellbooks.api.events.SpellOnCastEvent;
 import io.redspace.ironsspellbooks.api.events.SpellPreCastEvent;
 import io.redspace.ironsspellbooks.api.events.SpellTeleportEvent;
 import io.redspace.ironsspellbooks.api.registry.AttributeRegistry;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
+import io.redspace.ironsspellbooks.damage.DamageSources;
 import io.redspace.ironsspellbooks.item.curios.CurioBaseItem;
 import io.redspace.ironsspellbooks.item.weapons.AttributeContainer;
 import io.redspace.ironsspellbooks.registries.ItemRegistry;
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
 import net.fireofpower.firesenderexpansion.effects.InfiniteVoidEffect;
+import net.fireofpower.firesenderexpansion.entities.spells.InfiniteVoid.InfiniteVoid;
 import net.fireofpower.firesenderexpansion.registries.EffectRegistry;
 import net.fireofpower.firesenderexpansion.registries.SpellRegistries;
 import net.fireofpower.firesenderexpansion.util.Utils;
@@ -119,6 +122,16 @@ public class ServerEvents {
                                 SoundEvents.FIRE_EXTINGUISH, SoundSource.PLAYERS, 0.5f, 1f);
                     }
                 }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void preventInfiniteVoidOverlap(SpellPreCastEvent event){
+        Player entity = event.getEntity();
+        if(Objects.equals(event.getSpellId(), SpellRegistries.INFINITE_VOID.get().getSpellId())){
+            if(!entity.level().getEntitiesOfClass(InfiniteVoid.class, entity.getBoundingBox().inflate(30)).isEmpty()){
+                event.setCanceled(true);
             }
         }
     }

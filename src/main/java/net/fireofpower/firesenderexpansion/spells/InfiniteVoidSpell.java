@@ -63,30 +63,33 @@ public class InfiniteVoidSpell extends AbstractSpell {
     
     @Override
     public void onCast(Level level, int spellLevel, LivingEntity entity, CastSource castSource, MagicData playerMagicData) {
-        InfiniteVoid infiniteVoid = new InfiniteVoid(entity.level(), entity);
-        infiniteVoid.setPos(entity.position().add(0, entity.getEyeHeight() - infiniteVoid.getBoundingBox().getYsize() * 0.5f, 0));
-        infiniteVoid.setDeltaMovement(new Vec3(0,0,0));
-        entity.level().addFreshEntity(infiniteVoid);
-        CameraShakeManager.addCameraShake(new CameraShakeData(40, entity.position(), 20));
-        Timer timer = new Timer();
-        entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 40, 10, false, false, false));
-        List<Entity> targets = entity.level().getEntities(entity,new AABB(entity.getX() - range, entity.getY() - range, entity.getZ() - range, entity.getX() + range, entity.getY() + range, entity.getZ() + range));
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                for(int i = 0; i < targets.size(); i++){
-                    entity.addEffect(new MobEffectInstance(EffectRegistry.ASCENDED_CASTER_EFFECT, (duration-4) * 20, 0, false, false, true));
-                    entity.addEffect(new MobEffectInstance(EffectRegistry.ANCHORED_EFFECT, (duration-4) * 20, 0, false, false, true));
-                    entity.addEffect(new MobEffectInstance(MobEffectRegistry.ANTIGRAVITY, (duration-4) * 20, 0, false, false, true));
-                    entity.addEffect(new MobEffectInstance(EffectRegistry.INFINITE_VOID_EFFECT, (duration-4) * 20, 0, false, false, true));
-                    if(targets.get(i) instanceof LivingEntity target){
-                        target.addEffect(new MobEffectInstance(EffectRegistry.ANCHORED_EFFECT, (duration-4) * 20, 0, false, false, true));
-                        target.addEffect(new MobEffectInstance(MobEffectRegistry.ANTIGRAVITY, (duration-4) * 20, 0, false, false, true));
-                        target.addEffect(new MobEffectInstance(EffectRegistry.INFINITE_VOID_EFFECT, (duration-4) * 20, 0, false, false, true));
+        //no domain clashes >:(
+        if(entity.level().getEntitiesOfClass(InfiniteVoid.class, entity.getBoundingBox().inflate(30)).isEmpty()) {
+            InfiniteVoid infiniteVoid = new InfiniteVoid(entity.level(), entity);
+            infiniteVoid.setPos(entity.position().add(0, entity.getEyeHeight() - infiniteVoid.getBoundingBox().getYsize() * 0.5f, 0));
+            infiniteVoid.setDeltaMovement(new Vec3(0, 0, 0));
+            entity.level().addFreshEntity(infiniteVoid);
+            CameraShakeManager.addCameraShake(new CameraShakeData(40, entity.position(), 20));
+            Timer timer = new Timer();
+            entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 40, 10, false, false, false));
+            List<Entity> targets = entity.level().getEntities(entity, new AABB(entity.getX() - range, entity.getY() - range, entity.getZ() - range, entity.getX() + range, entity.getY() + range, entity.getZ() + range));
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    for (int i = 0; i < targets.size(); i++) {
+                        entity.addEffect(new MobEffectInstance(EffectRegistry.ASCENDED_CASTER_EFFECT, (duration - 4) * 20, 0, false, false, true));
+                        entity.addEffect(new MobEffectInstance(EffectRegistry.ANCHORED_EFFECT, (duration - 4) * 20, 0, false, false, true));
+                        entity.addEffect(new MobEffectInstance(MobEffectRegistry.ANTIGRAVITY, (duration - 4) * 20, 0, false, false, true));
+                        entity.addEffect(new MobEffectInstance(EffectRegistry.INFINITE_VOID_EFFECT, (duration - 4) * 20, 0, false, false, true));
+                        if (targets.get(i) instanceof LivingEntity target) {
+                            target.addEffect(new MobEffectInstance(EffectRegistry.ANCHORED_EFFECT, (duration - 4) * 20, 0, false, false, true));
+                            target.addEffect(new MobEffectInstance(MobEffectRegistry.ANTIGRAVITY, (duration - 4) * 20, 0, false, false, true));
+                            target.addEffect(new MobEffectInstance(EffectRegistry.INFINITE_VOID_EFFECT, (duration - 4) * 20, 0, false, false, true));
+                        }
                     }
                 }
-            }
-        },2*1000);
+            }, 2 * 1000);
+        }
         super.onCast(level, spellLevel, entity, castSource, playerMagicData);
     }
 
