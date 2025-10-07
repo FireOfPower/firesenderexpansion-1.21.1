@@ -64,6 +64,10 @@
   "spell.firesenderexpansion.dragons_fury.guide": "Strike with the fury of the Ender Dragon, dealing wide but low damage and knocking things away.",
   "death.attack.firesenderexpansion.dragons_fury": "%1$s felt the fury of %2$s",
 
+  "spell.firesenderexpansion.scintillating_stride": "Scintillating Stride",
+  "spell.firesenderexpansion.scintillating_stride.guide": "Launch forward once, then trigger again to teleport to your previous location and leave behind a burst of damage",
+  "death.attack.firesenderexpansion.scintillating_stride": "%1$s was turned to sparkles by %2$s",
+
   "spell.firesenderexpansion.binary_stars": "Binary Stars",
   "spell.firesenderexpansion.binary_stars.guide": "Select 1-2 targets and shoot 2 homing stars. The first applies a debuff that is effective against mages and the second against melee. After passing through once, they will teleport above the target again and slam down, doing AoE damage.",
 

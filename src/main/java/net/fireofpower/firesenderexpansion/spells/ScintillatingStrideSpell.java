@@ -42,7 +42,7 @@ public class ScintillatingStrideSpell extends AbstractSpell {
 
     private final DefaultConfig defaultConfig = new DefaultConfig()
             .setMaxLevel(10)
-            .setCooldownSeconds(30)
+            .setCooldownSeconds(10)
             .setMinRarity(SpellRarity.COMMON)
             .setSchoolResource(SchoolRegistry.ENDER_RESOURCE)
             .build();
@@ -58,11 +58,11 @@ public class ScintillatingStrideSpell extends AbstractSpell {
 
     public ScintillatingStrideSpell()
     {
-        this.manaCostPerLevel = 25;
-        this.baseSpellPower = 30;
-        this.spellPowerPerLevel = 8;
+        this.manaCostPerLevel = 2;
+        this.baseSpellPower = 1;
+        this.spellPowerPerLevel = 1;
         this.castTime = 0;
-        this.baseManaCost = 55;
+        this.baseManaCost = 20;
     }
 
     @Override
@@ -85,21 +85,21 @@ public class ScintillatingStrideSpell extends AbstractSpell {
         return 2;
     }
 
-    private float getDamage(int spellLevel, LivingEntity caster) {
-        return this.getSpellPower(spellLevel, caster) * 0.07F + 5;
-    }
-
     @Override
     public Optional<SoundEvent> getCastFinishSound() {
         return Optional.of(SoundEvents.FIREWORK_ROCKET_LAUNCH);
     }
 
+    private float getDamage(int spellLevel, LivingEntity caster) {
+        return this.getSpellPower(spellLevel, caster) * 0.5F + 5;
+    }
+
     private float getForce(int spellLevel, LivingEntity entity) {
-        return getSpellPower(spellLevel, entity) * 0.03f;
+        return getSpellPower(spellLevel, entity) * 0.5f;
     }
 
     private float getRadius(int spellLevel, LivingEntity entity){
-        return (2 + getSpellPower(spellLevel,entity)) / 16;
+        return 1 + getSpellPower(spellLevel,entity) / 2;
     }
 
     private void spawnParticles(LivingEntity entity)
@@ -113,7 +113,7 @@ public class ScintillatingStrideSpell extends AbstractSpell {
         if (!playerMagicData.getPlayerRecasts().hasRecastForSpell(getSpellId())) {
             playerMagicData.getPlayerRecasts().addRecast(new RecastInstance(getSpellId(), spellLevel, getRecastCount(spellLevel, entity), 100, castSource, null), playerMagicData);
         }
-        entity.addEffect(new MobEffectInstance(EffectRegistry.STRIDING_EFFECT, 100));
+        entity.addEffect(new MobEffectInstance(EffectRegistry.STRIDING_EFFECT, 150, 1, false, false, false));
         Vec3 angleVector = entity.getLookAngle().multiply(1,0.25,1).normalize();
         var vec = angleVector.scale(getForce(spellLevel, entity));
         if (entity instanceof ServerPlayer serverPlayer) {
