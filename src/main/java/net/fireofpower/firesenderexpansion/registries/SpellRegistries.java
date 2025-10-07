@@ -31,4 +31,5 @@ public class SpellRegistries {
     public static final Supplier<AbstractSpell> GATE_OF_ENDER = registerSpell(new GateOfEnderSpell());
     public static final Supplier<AbstractSpell> DISPLACEMENT_CAGE = registerSpell(new DisplacementCageSpell());
     public static final Supplier<AbstractSpell> BINARY_STARS = registerSpell(new BinaryStarsSpell());
+    public static final Supplier<AbstractSpell> SCINTILLATING_STRIDE = registerSpell(new ScintillatingStrideSpell());
 }
