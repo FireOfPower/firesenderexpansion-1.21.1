@@ -1,4 +1,4 @@
-package net.fireofpower.firesenderexpansion.entities.mobs;
+package net.fireofpower.firesenderexpansion.entities.mobs.porphyromancer;
 
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
 import io.redspace.ironsspellbooks.api.util.Utils;

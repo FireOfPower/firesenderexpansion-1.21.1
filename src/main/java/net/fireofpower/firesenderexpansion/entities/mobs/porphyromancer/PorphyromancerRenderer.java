@@ -1,4 +1,4 @@
-package net.fireofpower.firesenderexpansion.entities.mobs;
+package net.fireofpower.firesenderexpansion.entities.mobs.porphyromancer;
 
 import io.redspace.ironsspellbooks.entity.mobs.abstract_spell_casting_mob.AbstractSpellCastingMobRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;

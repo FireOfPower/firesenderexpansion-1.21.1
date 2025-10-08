@@ -1,7 +1,8 @@
 package net.fireofpower.firesenderexpansion.registries;
 
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
-import net.fireofpower.firesenderexpansion.entities.mobs.Porphyromancer;
+import net.fireofpower.firesenderexpansion.entities.mobs.porphyromancer.Porphyromancer;
+import net.fireofpower.firesenderexpansion.entities.mobs.void_wyrm.VoidWyrm;
 import net.fireofpower.firesenderexpansion.entities.spells.BinaryStars.NovaStar.NovaStarEntity;
 import net.fireofpower.firesenderexpansion.entities.spells.BinaryStars.ObsidianStar.ObsidianStarEntity;
 import net.fireofpower.firesenderexpansion.entities.spells.GateOfEnder.GatePortal;
@@ -101,4 +102,10 @@ public class EntityRegistry {
                     .sized(.6f, .6f)
                     .clientTrackingRange(64)
                     .build(ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "obsidian_star").toString()));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<VoidWyrm>> VOID_WYRM =
+            ENTITIES.register("void_wyrm", () -> EntityType.Builder.of(VoidWyrm::new, MobCategory.MISC)
+                    .sized(.6f, 1.8f)
+                    .clientTrackingRange(64)
+                    .build(ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "void_wyrm").toString()));
 }
