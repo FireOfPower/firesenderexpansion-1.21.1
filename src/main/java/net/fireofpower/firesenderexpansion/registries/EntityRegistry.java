@@ -105,7 +105,7 @@ public class EntityRegistry {
 
     public static final DeferredHolder<EntityType<?>, EntityType<VoidWyrm>> VOID_WYRM =
             ENTITIES.register("void_wyrm", () -> EntityType.Builder.of(VoidWyrm::new, MobCategory.MISC)
-                    .sized(.6f, 1.8f)
+                    .sized(4f, 1f)
                     .clientTrackingRange(64)
                     .build(ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "void_wyrm").toString()));
 }
