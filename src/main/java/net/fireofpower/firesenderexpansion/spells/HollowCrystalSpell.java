@@ -27,6 +27,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
@@ -156,6 +157,13 @@ public class HollowCrystalSpell extends AbstractSpell {
                 }, 1000);
             }
         }
+    }
+
+    @Override
+    public void onClientPreCast(Level level, int spellLevel, LivingEntity entity, InteractionHand hand, @Nullable MagicData playerMagicData) {
+        super.onClientPreCast(level, spellLevel, entity, hand, playerMagicData);
+        // attempt to align body with arms so the sword animation plays more smoothly
+        entity.setYBodyRot(entity.getYRot());
     }
 
     public float getDamage(LivingEntity entity){
