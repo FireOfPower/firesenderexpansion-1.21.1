@@ -6,6 +6,7 @@ import io.redspace.ironsspellbooks.api.registry.SchoolRegistry;
 import io.redspace.ironsspellbooks.api.spells.*;
 import io.redspace.ironsspellbooks.api.util.AnimationHolder;
 import io.redspace.ironsspellbooks.api.util.Utils;
+import io.redspace.ironsspellbooks.capabilities.magic.PlayerRecasts;
 import io.redspace.ironsspellbooks.capabilities.magic.RecastInstance;
 import io.redspace.ironsspellbooks.capabilities.magic.RecastResult;
 import io.redspace.ironsspellbooks.registries.ParticleRegistry;
@@ -76,7 +77,13 @@ public class HollowCrystalSpell extends AbstractSpell {
             playerMagicData.getPlayerRecasts().addRecast(new RecastInstance(getSpellId(), spellLevel, getRecastCount(spellLevel, entity), ticksOfEffect, castSource, null), playerMagicData);
         }
         if(entity.hasEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT)){
-            entity.addEffect(new MobEffectInstance(EffectRegistry.HOLLOW_CRYSTAL_EFFECT, ticksOfEffect, entity.getEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT).getAmplifier() + 1, false, false, true));
+            if(!entity.isCrouching()) {
+                entity.addEffect(new MobEffectInstance(EffectRegistry.HOLLOW_CRYSTAL_EFFECT, ticksOfEffect, entity.getEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT).getAmplifier() + 1, false, false, true));
+            }else{
+                if(entity instanceof ServerPlayer serverPlayer) {
+                    handleFiring(serverPlayer);
+                }
+            }
         }else{
             entity.addEffect(new MobEffectInstance(EffectRegistry.HOLLOW_CRYSTAL_EFFECT, ticksOfEffect, 1, false, false, true));
         }
@@ -89,24 +96,28 @@ public class HollowCrystalSpell extends AbstractSpell {
 
     @Override
     public int getRecastCount(int spellLevel, @Nullable LivingEntity entity) {
-        if(spellLevel > 1) {
-            return spellLevel;
-        }else{
-            //the recast method breaks otherwise
-            return 2;
-        }
+        return spellLevel;
     }
 
     @Override
     public void onRecastFinished(ServerPlayer serverPlayer, RecastInstance recastInstance, RecastResult recastResult, ICastDataSerializable castDataSerializable) {
         super.onRecastFinished(serverPlayer, recastInstance, recastResult, castDataSerializable);
         if(recastResult.isSuccess() && !serverPlayer.level().isClientSide()) {
-            if (serverPlayer.hasEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT)) {
-                Timer timer = new Timer();
-                //animation
-                PacketDistributor.sendToPlayersTrackingEntityAndSelf(serverPlayer, new SyncFinalCastPacket(serverPlayer.getUUID(), SpellRegistries.HOLLOW_CRYSTAL.toString(), false));
+            handleFiring(serverPlayer);
+        }
+    }
 
-                //flash
+    private void handleFiring(ServerPlayer serverPlayer){
+        if(MagicData.getPlayerMagicData(serverPlayer).getPlayerRecasts().hasRecastForSpell("firesenderexpansion:hollow_crystal")){
+            MagicData.getPlayerMagicData(serverPlayer).getPlayerRecasts().removeRecast("firesenderexpansion:hollow_crystal");
+            MagicData.getPlayerMagicData(serverPlayer).getPlayerRecasts().syncAllToPlayer();
+        }
+        if (serverPlayer.hasEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT)) {
+            Timer timer = new Timer();
+            //animation
+            PacketDistributor.sendToPlayersTrackingEntityAndSelf(serverPlayer, new SyncFinalCastPacket(serverPlayer.getUUID(), SpellRegistries.HOLLOW_CRYSTAL.toString(), false));
+
+            //flash
 //                timer.schedule(new TimerTask() {
 //                    @Override
 //                    public void run() {
@@ -139,23 +150,22 @@ public class HollowCrystalSpell extends AbstractSpell {
 //                },400);
 
 
-                //actual casting it
-                Vec3 prevLookDir = serverPlayer.getLookAngle();
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        //PacketDistributor.sendToPlayer(serverPlayer, new RemoveShaderEffectPacket());
-                        serverPlayer.removeEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT);
-                        HollowCrystal hollowCrystal = new HollowCrystal(serverPlayer.level(), serverPlayer);
-                        hollowCrystal.setPos(serverPlayer.position().add(0, serverPlayer.getEyeHeight() + hollowCrystal.getBoundingBox().getYsize() * .25f - 3, 0).add(serverPlayer.getForward().multiply(3, 3, 3)));
-                        hollowCrystal.setDamage(getDamage(serverPlayer));
-                        hollowCrystal.setDeltaMovement(hollowCrystal.getDeltaMovement().multiply(0.5,0.5,0.5));
-                        hollowCrystal.shoot(prevLookDir);
-                        serverPlayer.level().addFreshEntity(hollowCrystal);
-                        serverPlayer.level().playLocalSound(serverPlayer, SoundRegistry.SONIC_BOOM.get(), SoundSource.PLAYERS, 3f, 1f);
-                    }
-                }, 1000);
-            }
+            //actual casting it
+            Vec3 prevLookDir = serverPlayer.getLookAngle();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    //PacketDistributor.sendToPlayer(serverPlayer, new RemoveShaderEffectPacket());
+                    serverPlayer.removeEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT);
+                    HollowCrystal hollowCrystal = new HollowCrystal(serverPlayer.level(), serverPlayer);
+                    hollowCrystal.setPos(serverPlayer.position().add(0, serverPlayer.getEyeHeight() + hollowCrystal.getBoundingBox().getYsize() * .25f - 3, 0).add(serverPlayer.getForward().multiply(3, 3, 3)));
+                    hollowCrystal.setDamage(getDamage(serverPlayer));
+                    hollowCrystal.setDeltaMovement(hollowCrystal.getDeltaMovement().multiply(0.5,0.5,0.5));
+                    hollowCrystal.shoot(prevLookDir);
+                    serverPlayer.level().addFreshEntity(hollowCrystal);
+                    serverPlayer.level().playLocalSound(serverPlayer, SoundRegistry.SONIC_BOOM.get(), SoundSource.PLAYERS, 3f, 1f);
+                }
+            }, 1000);
         }
     }
 
