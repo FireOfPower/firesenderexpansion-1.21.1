@@ -18,6 +18,8 @@ public class SoundRegistry {
     public static DeferredHolder<SoundEvent, SoundEvent> BINARY_STARS_SPELL_CAST = registerSoundEvent("binary_stars_cast");
     // Displacement Cage Spell Cast
     public static DeferredHolder<SoundEvent, SoundEvent> DISPLACEMENT_CAGE_SPELL_CAST = registerSoundEvent("displacement_cage_cast");
+    // Hollow Crystal Spell Cast
+    public static DeferredHolder<SoundEvent, SoundEvent> HOLLOW_CRYSTAL_SPELL_CAST = registerSoundEvent("hollow_crystal_cast");
 
 
 

@@ -3,6 +3,7 @@ package net.fireofpower.firesenderexpansion.effects;
 import io.redspace.ironsspellbooks.api.events.SpellTeleportEvent;
 import io.redspace.ironsspellbooks.effect.MagicMobEffect;
 import io.redspace.ironsspellbooks.registries.ParticleRegistry;
+import net.fireofpower.firesenderexpansion.registries.EffectRegistry;
 import net.fireofpower.firesenderexpansion.registries.SpellRegistries;
 import net.fireofpower.firesenderexpansion.util.Utils;
 import net.minecraft.client.Minecraft;
@@ -43,7 +44,7 @@ public class StridingEffect extends MagicMobEffect {
             RecordedPosition data = recordedPositions.get(pLivingEntity.getUUID());
             if(pLivingEntity.level().dimension().equals(data.dimension)){
                 NeoForge.EVENT_BUS.post(new SpellTeleportEvent(SpellRegistries.SCINTILLATING_STRIDE.get(), pLivingEntity, pLivingEntity.position().x, pLivingEntity.position().y, pLivingEntity.position().z));
-                io.redspace.ironsspellbooks.api.util.Utils.handleSpellTeleport(SpellRegistries.DISPLACEMENT_CAGE.get(), pLivingEntity, data.position);
+                io.redspace.ironsspellbooks.api.util.Utils.handleSpellTeleport(SpellRegistries.SCINTILLATING_STRIDE.get(), pLivingEntity, data.position);
             }else{
                 if(pLivingEntity instanceof ServerPlayer serverPlayer) {
                     serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("msg.firesenderexpansion.fail_step")

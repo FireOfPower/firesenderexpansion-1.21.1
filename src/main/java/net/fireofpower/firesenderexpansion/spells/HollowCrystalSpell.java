@@ -18,6 +18,7 @@ import net.fireofpower.firesenderexpansion.network.AddShaderEffectPacket;
 import net.fireofpower.firesenderexpansion.network.RemoveShaderEffectPacket;
 import net.fireofpower.firesenderexpansion.network.SyncFinalCastPacket;
 import net.fireofpower.firesenderexpansion.registries.EffectRegistry;
+import net.fireofpower.firesenderexpansion.registries.ItemRegistry;
 import net.fireofpower.firesenderexpansion.registries.SpellRegistries;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
@@ -80,7 +81,7 @@ public class HollowCrystalSpell extends AbstractSpell {
             if(!entity.isCrouching()) {
                 entity.addEffect(new MobEffectInstance(EffectRegistry.HOLLOW_CRYSTAL_EFFECT, ticksOfEffect, entity.getEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT).getAmplifier() + 1, false, false, true));
             }else{
-                if(entity instanceof ServerPlayer serverPlayer) {
+                if(entity instanceof ServerPlayer serverPlayer  && net.fireofpower.firesenderexpansion.util.Utils.hasCurio(serverPlayer, ItemRegistry.CRYSTAL_HEART.get())) {
                     handleFiring(serverPlayer);
                 }
             }

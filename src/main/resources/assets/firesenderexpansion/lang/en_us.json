@@ -6,6 +6,7 @@
 
   "item.firesenderexpansion.void_staff": "The Beginning and the End",
   "item.firesenderexpansion.void_staff.description": "The Void stares back",
+  "item.firesenderexpansion.void_staff.guide":"Right click with the Ornate Empty Staff while near a black hole that you casted.",
 
   "item.firesenderexpansion.void_staff_holder": "Ornate Empty Staff",
   "item.firesenderexpansion.void_staff_holder.description": "Capable of harnessing a Black Hole",
@@ -18,6 +19,10 @@
   "item.firesenderexpansion.core_of_ender": "Core of Ender",
   "item.firesenderexpansion.core_of_ender.desc": "Flares up with unstable energy when you cast a spell",
 
+  "item.firesenderexpansion.crystal_heart": "Hollow Crystal Heart",
+  "item.firesenderexpansion.crystal_heart.desc": "Allows premature casting of Hollow Crystal by sneak-casting",
+  "item.firesenderexpansion.crystal_heart.guide": "Throw an end stone and a core of ender onto the ground, then cast Hollow Crystal on them",
+
   "item.firesenderexpansion.stabilized_core_of_ender": "Stabilized Core of Ender",
 
   "item.firesenderexpansion.ender_treasury_key": "Ender Treasury Key",
@@ -28,6 +33,7 @@
 
   "item.firesenderexpansion.infused_obsidian_fragments": "Infused Obsidian Fragments",
   "item.firesenderexpansion.infused_obsidian_fragments.desc": "Obtained by slamming obsidian rods into ancient debris",
+  "item.firesenderexpansion.infused_obsidian_fragments.guide":"Cast Obsidian Rods on ancient debris, making sure that the projectiles collide with the block",
 
   "item.firesenderexpansion.end_lord_helmet": "End Lord Headpiece",
   "item.firesenderexpansion.end_lord_chestplate": "End Lord Chestplate",

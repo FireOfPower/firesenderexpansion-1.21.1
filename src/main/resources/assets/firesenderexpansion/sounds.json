@@ -8,5 +8,10 @@
     "sounds": [
       "firesenderexpansion:displacement_cage_cast"
     ]
+  },
+  "hollow_crystal_cast": {
+    "sounds": [
+      "firesenderexpansion:hollow_crystal_cast"
+    ]
   }
 }

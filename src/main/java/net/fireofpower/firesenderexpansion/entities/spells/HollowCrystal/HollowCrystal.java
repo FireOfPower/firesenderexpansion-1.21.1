@@ -7,7 +7,9 @@ import io.redspace.ironsspellbooks.entity.mobs.AntiMagicSusceptible;
 import io.redspace.ironsspellbooks.entity.spells.AbstractMagicProjectile;
 import io.redspace.ironsspellbooks.registries.SoundRegistry;
 import io.redspace.ironsspellbooks.util.ParticleHelper;
+import net.fireofpower.firesenderexpansion.Config;
 import net.fireofpower.firesenderexpansion.registries.EntityRegistry;
+import net.fireofpower.firesenderexpansion.registries.ItemRegistry;
 import net.fireofpower.firesenderexpansion.registries.SpellRegistries;
 import net.fireofpower.firesenderexpansion.util.Utils;
 import net.minecraft.core.BlockPos;
@@ -23,10 +25,13 @@ import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ProjectileDeflection;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
@@ -38,6 +43,7 @@ import software.bernie.geckolib.constant.DefaultAnimations;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity, AntiMagicSusceptible {
@@ -70,19 +76,36 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
             this.level().getEntitiesOfClass(ServerPlayer.class,this.getBoundingBox().inflate(3)).stream().forEach(e -> {
                 this.level().playSeededSound(null,this.getX(),this.getY(),this.getZ(),SoundRegistry.BLACK_HOLE_LOOP.get(),SoundSource.PLAYERS,3f,1f,1239831800);
             });
-            this.level().getEntitiesOfClass(Projectile.class,
+            AtomicReference<ItemEntity> core = new AtomicReference<>(null);
+            AtomicReference<ItemEntity> stone = new AtomicReference<>(null);
+            this.level().getEntitiesOfClass(Entity.class,
                             this.getBoundingBox()
                                     .inflate(1))
                     .stream()
                     .filter(proj -> proj.distanceTo(this) < 5)
                     .forEach(e -> {
-                        if(Utils.shouldBreakHollowCrystal(e)){
-                            e.discard();
+                        if(e instanceof Projectile proj && Utils.shouldBreakHollowCrystal(proj)){
+                            proj.discard();
                             triggerBreakAnimation();
                             this.setDeltaMovement(0,0,0);
                             this.timeAlive = 60;
                         }
+                        if(e instanceof ItemEntity items){
+                            if(ItemStack.isSameItem(items.getItem(), new ItemStack(ItemRegistry.CORE_OF_ENDER.get()))){
+                                core.set(items);
+                            }
+                            if(ItemStack.isSameItem(items.getItem(), new ItemStack(Items.END_STONE))){
+                                stone.set(items);
+                            }
+                        }
                     });
+            if(core.get() != null && stone.get() != null && Config.allowCraftingCrystalHeart){
+                ItemStack result = new ItemStack(ItemRegistry.CRYSTAL_HEART.get(), 1);
+                ItemEntity entity = new ItemEntity(level(), core.get().position().x(), core.get().position().y(), core.get().position().z(), result);
+                level().addFreshEntity(entity);
+                core.get().discard();
+                stone.get().discard();
+            }
         }
         if(this.timeAlive == 0 || tickCount > 600){
             //final move
