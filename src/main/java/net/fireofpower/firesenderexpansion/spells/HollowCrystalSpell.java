@@ -108,9 +108,10 @@ public class HollowCrystalSpell extends AbstractSpell {
     }
 
     private void handleFiring(ServerPlayer serverPlayer){
-        if(MagicData.getPlayerMagicData(serverPlayer).getPlayerRecasts().hasRecastForSpell("firesenderexpansion:hollow_crystal")){
-            MagicData.getPlayerMagicData(serverPlayer).getPlayerRecasts().removeRecast("firesenderexpansion:hollow_crystal");
-            MagicData.getPlayerMagicData(serverPlayer).getPlayerRecasts().syncAllToPlayer();
+        PlayerRecasts recasts = MagicData.getPlayerMagicData(serverPlayer).getPlayerRecasts();
+        if(recasts.hasRecastForSpell(SpellRegistries.HOLLOW_CRYSTAL.get().getSpellId())){
+            recasts.removeRecast(SpellRegistries.HOLLOW_CRYSTAL.get().getSpellId());
+            recasts.syncAllToPlayer();
         }
         if (serverPlayer.hasEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT)) {
             Timer timer = new Timer();

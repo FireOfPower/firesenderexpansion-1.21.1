@@ -126,21 +126,22 @@ public class ScintillatingStrideSpell extends AbstractSpell {
     @Override
     public void onRecastFinished(ServerPlayer serverPlayer, RecastInstance recastInstance, RecastResult recastResult, ICastDataSerializable castDataSerializable) {
         super.onRecastFinished(serverPlayer, recastInstance, recastResult, castDataSerializable);
-        //Pre-return
-        for(int i = 0; i < 20; i++){
-            spawnParticles(serverPlayer);
-        }
-        MagicManager.spawnParticles(serverPlayer.level(), new BlastwaveParticleOptions(SchoolRegistry.ENDER.get().getTargetingColor(), getRadius(recastInstance.getSpellLevel(), serverPlayer)),
-                serverPlayer.position().x, serverPlayer.position().y, serverPlayer.position().z, 1, 0, 0, 0, 0, true);
-        serverPlayer.level().playLocalSound(serverPlayer.position().x(), serverPlayer.position().y(), serverPlayer.position().z(), SoundEvents.FIREWORK_ROCKET_BLAST, SoundSource.PLAYERS, 15f, 1f, true);
+        if(recastResult.isSuccess()) {
+            //Pre-return
+            for (int i = 0; i < 20; i++) {
+                spawnParticles(serverPlayer);
+            }
+            MagicManager.spawnParticles(serverPlayer.level(), new BlastwaveParticleOptions(SchoolRegistry.ENDER.get().getTargetingColor(), getRadius(recastInstance.getSpellLevel(), serverPlayer)),
+                    serverPlayer.position().x, serverPlayer.position().y, serverPlayer.position().z, 1, 0, 0, 0, 0, true);
+            serverPlayer.level().playLocalSound(serverPlayer.position().x(), serverPlayer.position().y(), serverPlayer.position().z(), SoundEvents.FIREWORK_ROCKET_BLAST, SoundSource.PLAYERS, 15f, 1f, true);
 
-        serverPlayer.level().getEntitiesOfClass(LivingEntity.class,serverPlayer.getBoundingBox().inflate(getRadius(recastInstance.getSpellLevel(), serverPlayer))).stream().forEach(e -> {
-            DamageSources.applyDamage(e, getDamage(recastInstance.getSpellLevel(), serverPlayer), getDamageSource(serverPlayer));
-        });
-
-        //Trigger return
-        if(serverPlayer.hasEffect(EffectRegistry.STRIDING_EFFECT)){
-            serverPlayer.removeEffect(EffectRegistry.STRIDING_EFFECT);
+            serverPlayer.level().getEntitiesOfClass(LivingEntity.class, serverPlayer.getBoundingBox().inflate(getRadius(recastInstance.getSpellLevel(), serverPlayer))).stream().forEach(e -> {
+                DamageSources.applyDamage(e, getDamage(recastInstance.getSpellLevel(), serverPlayer), getDamageSource(serverPlayer));
+            });
+            //Trigger return
+            if(serverPlayer.hasEffect(EffectRegistry.STRIDING_EFFECT)){
+                serverPlayer.removeEffect(EffectRegistry.STRIDING_EFFECT);
+            }
         }
     }
 }
