@@ -113,7 +113,7 @@ public class ScintillatingStrideSpell extends AbstractSpell {
         if (!playerMagicData.getPlayerRecasts().hasRecastForSpell(getSpellId())) {
             playerMagicData.getPlayerRecasts().addRecast(new RecastInstance(getSpellId(), spellLevel, getRecastCount(spellLevel, entity), 100, castSource, null), playerMagicData);
         }
-        entity.addEffect(new MobEffectInstance(EffectRegistry.STRIDING_EFFECT, 150, 1, false, false, false));
+        entity.addEffect(new MobEffectInstance(EffectRegistry.STRIDING_EFFECT, 100, 1, false, false, false));
         Vec3 angleVector = entity.getLookAngle().multiply(1,0.25,1).normalize();
         var vec = angleVector.scale(getForce(spellLevel, entity));
         if (entity instanceof ServerPlayer serverPlayer) {
