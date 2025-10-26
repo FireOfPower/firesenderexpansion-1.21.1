@@ -24,12 +24,14 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -95,7 +97,7 @@ public class ScintillatingStrideSpell extends AbstractSpell {
     }
 
     private float getForce(int spellLevel, LivingEntity entity) {
-        return getSpellPower(spellLevel, entity) * 0.5f;
+        return getSpellPower(spellLevel, entity) * 0.1f;
     }
 
     private float getRadius(int spellLevel, LivingEntity entity){
@@ -113,13 +115,17 @@ public class ScintillatingStrideSpell extends AbstractSpell {
         if (!playerMagicData.getPlayerRecasts().hasRecastForSpell(getSpellId())) {
             playerMagicData.getPlayerRecasts().addRecast(new RecastInstance(getSpellId(), spellLevel, getRecastCount(spellLevel, entity), 100, castSource, null), playerMagicData);
         }
-        entity.addEffect(new MobEffectInstance(EffectRegistry.STRIDING_EFFECT, 100, 1, false, false, false));
-        Vec3 angleVector = entity.getLookAngle().multiply(1,0.25,1).normalize();
-        var vec = angleVector.scale(getForce(spellLevel, entity));
-        if (entity instanceof ServerPlayer serverPlayer) {
-            serverPlayer.hurtMarked = true;
+        entity.hasImpulse = true;
+        Vec3 angleVector = entity.getLookAngle().multiply(3,1,3).normalize().add(0, .25, 0).scale(getForce(spellLevel,entity));
+        if(!entity.hasEffect(EffectRegistry.STRIDING_EFFECT)) {
+            playerMagicData.setAdditionalCastData(new ImpulseCastData((float) angleVector.x, (float) angleVector.y, (float) angleVector.z, true));
+            entity.setDeltaMovement(new Vec3(
+                    Mth.lerp(1, entity.getDeltaMovement().x, angleVector.x),
+                    Mth.lerp(1, entity.getDeltaMovement().y, angleVector.y),
+                    Mth.lerp(1, entity.getDeltaMovement().z, angleVector.z)
+            ));
         }
-        entity.setDeltaMovement(vec);
+        entity.addEffect(new MobEffectInstance(EffectRegistry.STRIDING_EFFECT, 100, 1, false, false, false));
         super.onCast(level, spellLevel, entity, castSource, playerMagicData);
     }
 
@@ -143,5 +149,20 @@ public class ScintillatingStrideSpell extends AbstractSpell {
                 serverPlayer.removeEffect(EffectRegistry.STRIDING_EFFECT);
             }
         }
+    }
+
+    @Override
+    public void onClientCast(Level level, int spellLevel, LivingEntity entity, ICastData castData) {
+        if (castData instanceof ImpulseCastData bdcd) {
+            entity.hasImpulse = bdcd.hasImpulse;
+            entity.setDeltaMovement(entity.getDeltaMovement().add(bdcd.x, bdcd.y, bdcd.z));
+        }
+
+        super.onClientCast(level, spellLevel, entity, castData);
+    }
+
+    @Override
+    public ICastDataSerializable getEmptyCastData() {
+        return new ImpulseCastData();
     }
 }

@@ -149,8 +149,13 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
         super.tick();
     }
 
+    @Override
+    protected void onHitEntity(EntityHitResult pResult) {
+    }
+
     private void damageEntity(Entity entity) {
         if (!victims.contains(entity)) {
+            System.out.println("Did " + damage + " damage");
             DamageSources.applyDamage(entity, damage, SpellRegistries.HOLLOW_CRYSTAL.get().getDamageSource(this, getOwner()));
             victims.add(entity);
         }

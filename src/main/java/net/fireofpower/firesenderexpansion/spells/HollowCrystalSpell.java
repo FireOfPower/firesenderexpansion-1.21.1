@@ -158,12 +158,12 @@ public class HollowCrystalSpell extends AbstractSpell {
                 @Override
                 public void run() {
                     //PacketDistributor.sendToPlayer(serverPlayer, new RemoveShaderEffectPacket());
-                    serverPlayer.removeEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT);
                     HollowCrystal hollowCrystal = new HollowCrystal(serverPlayer.level(), serverPlayer);
                     hollowCrystal.setPos(serverPlayer.position().add(0, serverPlayer.getEyeHeight() + hollowCrystal.getBoundingBox().getYsize() * .25f - 3, 0).add(serverPlayer.getForward().multiply(3, 3, 3)));
                     hollowCrystal.setDamage(getDamage(serverPlayer));
                     hollowCrystal.setDeltaMovement(hollowCrystal.getDeltaMovement().multiply(0.5,0.5,0.5));
                     hollowCrystal.shoot(prevLookDir);
+                    serverPlayer.removeEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT);
                     serverPlayer.level().addFreshEntity(hollowCrystal);
                     serverPlayer.level().playLocalSound(serverPlayer, SoundRegistry.SONIC_BOOM.get(), SoundSource.PLAYERS, 3f, 1f);
                 }
@@ -183,7 +183,7 @@ public class HollowCrystalSpell extends AbstractSpell {
         if(entity.getEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT) != null) {
             return entity.getEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT).getAmplifier() * damagePerCharge * getSpellPower(1 /* the spell power doesn't change per level */,entity)/50;
         }else{
-            return damagePerCharge;
+            return damagePerCharge * getSpellPower(1 /* the spell power doesn't change per level */,entity)/50;
         }
     }
 

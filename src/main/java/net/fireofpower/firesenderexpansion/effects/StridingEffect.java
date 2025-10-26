@@ -19,12 +19,16 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.portal.DimensionTransition;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+@EventBusSubscriber
 public class StridingEffect extends MagicMobEffect {
 
     public StridingEffect() {
@@ -37,9 +41,9 @@ public class StridingEffect extends MagicMobEffect {
         recordPosition(pLivingEntity);
     }
 
-    @Override
-    public void onEffectRemoved(LivingEntity pLivingEntity, int pAmplifier) {
-        super.onEffectRemoved(pLivingEntity, pAmplifier);
+    @SubscribeEvent
+    public static void onEffectCleared(MobEffectEvent.Remove event){
+        LivingEntity pLivingEntity = event.getEntity();
         if(recordedPositions.containsKey(pLivingEntity.getUUID())) {
             RecordedPosition data = recordedPositions.get(pLivingEntity.getUUID());
             if(pLivingEntity.level().dimension().equals(data.dimension)){
@@ -52,7 +56,6 @@ public class StridingEffect extends MagicMobEffect {
                 }
             }
         }
-        pLivingEntity.setDeltaMovement(0,0,0);
     }
 
     //The below code was provided to me by Gametech (creator of T.O.'s Magic and Extras). Thank you Gametech!
