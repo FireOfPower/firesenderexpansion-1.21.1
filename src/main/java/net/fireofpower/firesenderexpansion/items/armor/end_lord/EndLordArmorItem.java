@@ -25,6 +25,6 @@ public class EndLordArmorItem extends ImbueableFEEGeckolibArmorItem {
     @Override
     @OnlyIn(Dist.CLIENT)
     public GeoArmorRenderer<?> supplyRenderer() {
-        return new GenericCustomArmorRenderer<>(new EndLordArmor());
+        return new EndLordArmorRenderer(new EndLordArmor());
     }
 }

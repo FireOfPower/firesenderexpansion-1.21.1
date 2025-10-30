@@ -38,7 +38,7 @@ public class InfiniteVoidEffect extends MagicMobEffect implements AntiMagicSusce
             recordPosition(pLivingEntity);
             Vec3 newPos = pLivingEntity.position().add(0,500,0);
             if(pLivingEntity.getServer().getLevel(VoidDimensionManager.VOID_DIMENSION) != null){
-                pLivingEntity.changeDimension(new DimensionTransition(Objects.requireNonNull(pLivingEntity.getServer()).getLevel(VoidDimensionManager.VOID_DIMENSION),newPos,pLivingEntity.getLookAngle(),pLivingEntity.getXRot(),pLivingEntity.getYRot(),DimensionTransition.DO_NOTHING));
+                pLivingEntity.changeDimension(new DimensionTransition(Objects.requireNonNull(pLivingEntity.getServer()).getLevel(VoidDimensionManager.VOID_DIMENSION),newPos,Vec3.ZERO,pLivingEntity.getXRot(),pLivingEntity.getYRot(),DimensionTransition.DO_NOTHING));
             }
         }
     }
@@ -52,7 +52,7 @@ public class InfiniteVoidEffect extends MagicMobEffect implements AntiMagicSusce
         }else if(!(pLivingEntity.getType().is(ModTags.INFINITE_VOID_IMMUNE) || pLivingEntity.isDeadOrDying())) {
             ServerChunkCache cache = pLivingEntity.getServer().getLevel(VoidDimensionManager.VOID_DIMENSION).getChunkSource();
             cache.addRegionTicket(TicketType.POST_TELEPORT, Utils.getChunkPos(pLivingEntity.getOnPos()), 10, 239, true);
-            pLivingEntity.changeDimension(new DimensionTransition(pLivingEntity.getServer().getLevel(recordedPositions.get(pLivingEntity.getUUID()).dimension), recordedPositions.get(pLivingEntity.getUUID()).position, pLivingEntity.getLookAngle(), pLivingEntity.getXRot(), pLivingEntity.getYRot(), DimensionTransition.DO_NOTHING));
+            pLivingEntity.changeDimension(new DimensionTransition(pLivingEntity.getServer().getLevel(recordedPositions.get(pLivingEntity.getUUID()).dimension), recordedPositions.get(pLivingEntity.getUUID()).position, Vec3.ZERO, pLivingEntity.getXRot(), pLivingEntity.getYRot(), DimensionTransition.DO_NOTHING));
         }
     }
 
