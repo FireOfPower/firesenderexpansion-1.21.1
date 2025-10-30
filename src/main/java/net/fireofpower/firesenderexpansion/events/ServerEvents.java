@@ -150,25 +150,6 @@ public class ServerEvents {
     }
 
     @SubscribeEvent
-    public static void onLivingDropsEvent(LivingDropsEvent event){
-        Collection<ItemEntity> items = event.getDrops();
-        if(event.getEntity().hasEffect(EffectRegistry.INFINITE_VOID_EFFECT)){
-            if(event.getEntity().getEffect(EffectRegistry.INFINITE_VOID_EFFECT).getEffect().value() instanceof InfiniteVoidEffect voidPotionEffect){
-                if(items != null){
-                    items.forEach(e -> {
-                        if(e != null){
-                            ServerChunkCache cache = e.getServer().getLevel(voidPotionEffect.getSavedDimension().dimension()).getChunkSource();
-                            cache.addRegionTicket(TicketType.POST_TELEPORT, Utils.getChunkPos(new BlockPos((int)voidPotionEffect.getSavedPosition().x,(int)voidPotionEffect.getSavedPosition().y,(int)voidPotionEffect.getSavedPosition().z)), 9, 238, true);
-                            e.changeDimension(new DimensionTransition((ServerLevel) voidPotionEffect.getSavedDimension(), voidPotionEffect.getSavedPosition(), Vec3.ZERO, 0, 0, DimensionTransition.DO_NOTHING));
-                            //Utils.clearRegionTicket(cache,TicketType.POST_TELEPORT,Utils.getChunkPos(new BlockPos((int)voidPotionEffect.getSavedPosition().x,(int)voidPotionEffect.getSavedPosition().y,(int)voidPotionEffect.getSavedPosition().z)),9,239,true);
-                        }
-                    });
-                }
-            }
-        }
-    }
-
-    @SubscribeEvent
     public static void onLivingExperienceDropEvent(LivingExperienceDropEvent event){
         int items = event.getDroppedExperience();
         if(event.getEntity().hasEffect(EffectRegistry.INFINITE_VOID_EFFECT)){

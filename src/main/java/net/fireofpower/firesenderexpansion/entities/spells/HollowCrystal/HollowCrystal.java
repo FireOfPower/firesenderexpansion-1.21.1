@@ -74,7 +74,8 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
     public void tick() {
         if(!level().isClientSide()) {
             this.level().getEntitiesOfClass(ServerPlayer.class,this.getBoundingBox().inflate(3)).stream().forEach(e -> {
-                this.level().playSeededSound(null,this.getX(),this.getY(),this.getZ(),SoundRegistry.BLACK_HOLE_LOOP.get(),SoundSource.PLAYERS,3f,1f,1239831800);
+                this.level().playSeededSound(null,this.getX(),this.getY(),this.getZ(),
+                        SoundRegistry.BLACK_HOLE_LOOP.get(),SoundSource.PLAYERS,3f,1f,1239831800);
             });
             AtomicReference<ItemEntity> core = new AtomicReference<>(null);
             AtomicReference<ItemEntity> stone = new AtomicReference<>(null);
