@@ -12,9 +12,7 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 public class EndLordArmorLayer extends GeoRenderLayer<EndLordArmorItem> {
-    private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(
-            FiresEnderExpansion.MODID,
-            "textures/armor/end_lord_armor_glowmask.png");
+    private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "textures/armor/end_lord_armor_glowmask.png");
 
     public EndLordArmorLayer(GeoRenderer<EndLordArmorItem> entityRenderer) {
         super(entityRenderer);
@@ -34,7 +32,7 @@ public class EndLordArmorLayer extends GeoRenderLayer<EndLordArmorItem> {
                         partialTick,
                         packedLight,
                         OverlayTexture.NO_OVERLAY,
-                        0xFFFFFFFF
+                        0xe2d1ff
                 );
     }
 }
