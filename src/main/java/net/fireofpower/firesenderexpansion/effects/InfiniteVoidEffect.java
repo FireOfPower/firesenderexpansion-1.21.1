@@ -46,7 +46,7 @@ public class InfiniteVoidEffect extends MagicMobEffect implements AntiMagicSusce
     @Override
     public void onEffectRemoved(LivingEntity pLivingEntity, int pAmplifier) {
         super.onEffectRemoved(pLivingEntity, pAmplifier);
-        if(!recordedPositions.containsKey(pLivingEntity.getUUID())){
+        if(!recordedPositions.containsKey(pLivingEntity.getUUID()) || recordedPositions.get(pLivingEntity.getUUID()).dimension.equals(VoidDimensionManager.VOID_DIMENSION)){
             System.out.println("Manifest Domain: Void found an issue while saving previous location, returning affected entities to 0,100,0 in the overworld.");
             pLivingEntity.changeDimension(new DimensionTransition(Objects.requireNonNull(pLivingEntity.getServer()).getLevel(Level.OVERWORLD),new Vec3(0, 100,0),pLivingEntity.getLookAngle(),pLivingEntity.getXRot(),pLivingEntity.getYRot(),DimensionTransition.DO_NOTHING));
         }else if(!(pLivingEntity.getType().is(ModTags.INFINITE_VOID_IMMUNE) || pLivingEntity.isDeadOrDying())) {
