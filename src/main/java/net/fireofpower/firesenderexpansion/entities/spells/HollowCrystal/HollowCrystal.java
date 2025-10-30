@@ -92,7 +92,7 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
                             this.timeAlive = 60;
                         }
                         if(e instanceof ItemEntity items){
-                            if(ItemStack.isSameItem(items.getItem(), new ItemStack(ItemRegistry.CORE_OF_ENDER.get()))){
+                            if(ItemStack.isSameItem(items.getItem(), new ItemStack(ItemRegistry.STABILIZED_CORE_OF_ENDER.get()))){
                                 core.set(items);
                             }
                             if(ItemStack.isSameItem(items.getItem(), new ItemStack(Items.END_STONE))){

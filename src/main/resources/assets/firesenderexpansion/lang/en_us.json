@@ -21,7 +21,7 @@
 
   "item.firesenderexpansion.crystal_heart": "Hollow Crystal Heart",
   "item.firesenderexpansion.crystal_heart.desc": "Allows premature casting of Hollow Crystal by sneak-casting",
-  "item.firesenderexpansion.crystal_heart.guide": "Throw an end stone and a core of ender onto the ground, then cast Hollow Crystal on them",
+  "item.firesenderexpansion.crystal_heart.guide": "Throw an end stone and a stabilized core of ender onto the ground, then cast Hollow Crystal on them",
 
   "item.firesenderexpansion.stabilized_core_of_ender": "Stabilized Core of Ender",
 
@@ -41,14 +41,14 @@
   "item.firesenderexpansion.end_lord_boots": "End Lord Boots",
 
   "spell.firesenderexpansion.partial_teleport": "Partial Teleport",
-  "spell.firesenderexpansion.partial_teleport.guide": "Selectively teleport a part of a person's body. Deals more damage the less mana they have.",
-  "death.attack.firesenderexpansion.partial_teleport": "%1$s was bisected by %2$s's burst of ender energy",
+  "spell.firesenderexpansion.partial_teleport.guide": "Selectively teleport a part of a something's body. Deals more damage the less mana they have.",
+  "death.attack.firesenderexpansion.partial_teleport": "%1$s was bisected by %2$s's plane of ender energy",
 
   "spell.firesenderexpansion.aspect_of_the_shulker": "Aspect of the Shulker",
   "spell.firesenderexpansion.aspect_of_the_shulker.guide": "Manifest a homing shulker bullet when you hit an entity with a magic attack.",
 
   "spell.firesenderexpansion.displacement_cage": "Displacement Cage",
-  "spell.firesenderexpansion.displacement_cage.guide": "Create a circle made of portals, teleporting any living thing that tries to leave it back inside",
+  "spell.firesenderexpansion.displacement_cage.guide": "Create a circular portal, teleporting any living thing that tries to leave it back inside",
 
   "spell.firesenderexpansion.dimensional_adaptation": "Dimensional Adaptation",
   "spell.firesenderexpansion.dimensional_adaptation.guide": "Use ancient Ender knowledge to survive against each dimension's perils.",
@@ -76,7 +76,6 @@
 
   "spell.firesenderexpansion.binary_stars": "Binary Stars",
   "spell.firesenderexpansion.binary_stars.guide": "Select 1-2 targets and shoot 2 homing stars. The first applies a debuff that is effective against mages and the second against melee. After passing through once, they will teleport above the target again and slam down, doing AoE damage.",
-
   "death.attack.firesenderexpansion.binary_stars": "%1$s was scattered among the stars by %2$s",
 
   "spell.firesenderexpansion.infinite_void": "Manifest Domain: Void",
@@ -115,5 +114,6 @@
   "msg.firesenderexpansion.fail_step": "Scintillating Step cannot teleport across dimensions",
 
 
-  "entity.firesenderexpansion.porphyromancer": "Porphyromancer"
+  "entity.firesenderexpansion.porphyromancer": "Porphyromancer",
+  "entity.firesenderexpansion.void_wyrm": "Void Wyrm"
 }
