@@ -5,6 +5,8 @@ import io.redspace.ironsspellbooks.api.magic.MagicData;
 import io.redspace.ironsspellbooks.api.registry.SchoolRegistry;
 import io.redspace.ironsspellbooks.api.spells.*;
 import io.redspace.ironsspellbooks.api.util.AnimationHolder;
+import io.redspace.ironsspellbooks.api.util.CameraShakeData;
+import io.redspace.ironsspellbooks.api.util.CameraShakeManager;
 import io.redspace.ironsspellbooks.api.util.Utils;
 import io.redspace.ironsspellbooks.capabilities.magic.PlayerRecasts;
 import io.redspace.ironsspellbooks.capabilities.magic.RecastInstance;
@@ -163,6 +165,7 @@ public class HollowCrystalSpell extends AbstractSpell {
                     hollowCrystal.setDamage(getDamage(serverPlayer));
                     hollowCrystal.setDeltaMovement(hollowCrystal.getDeltaMovement().multiply(0.5,0.5,0.5));
                     hollowCrystal.shoot(prevLookDir);
+                    CameraShakeManager.addCameraShake(new CameraShakeData(20, serverPlayer.position(), 20));
                     serverPlayer.removeEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT);
                     serverPlayer.level().addFreshEntity(hollowCrystal);
                     serverPlayer.level().playLocalSound(serverPlayer, SoundRegistry.SONIC_BOOM.get(), SoundSource.PLAYERS, 3f, 1f);
