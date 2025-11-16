@@ -52,7 +52,7 @@ public class HollowCrystalSpell extends AbstractSpell {
     @Override
     public List<MutableComponent> getUniqueInfo(int spellLevel, LivingEntity caster) {
         return List.of(
-                Component.translatable("ui.firesenderexpansion.hollow_crystal_damage", Utils.stringTruncation(spellLevel * /*FEEModConfig.damagePerCrystalCharge*/15 * getSpellPower(1 /* the spell power doesn't change per level */,caster)/50,1)),
+                Component.translatable("ui.firesenderexpansion.hollow_crystal_damage", Utils.stringTruncation(getRecastCount(spellLevel,caster) * 15 * getSpellPower(1 /* the spell power doesn't change per level */,caster)/50,1)),
                 Component.translatable("ui.firesenderexpansion.charge_count", getRecastCount(spellLevel,caster))
         );
     }

@@ -8,6 +8,8 @@ import io.redspace.ironsspellbooks.api.util.Utils;
 import io.redspace.ironsspellbooks.entity.mobs.IAnimatedAttacker;
 import io.redspace.ironsspellbooks.entity.mobs.IMagicSummon;
 import io.redspace.ironsspellbooks.entity.mobs.abstract_spell_casting_mob.AbstractSpellCastingMob;
+import io.redspace.ironsspellbooks.entity.mobs.ice_spider.IceSpiderEntity;
+import io.redspace.ironsspellbooks.entity.mobs.ice_spider.IceSpiderPartEntity;
 import io.redspace.ironsspellbooks.util.OwnerHelper;
 import net.fireofpower.firesenderexpansion.registries.EntityRegistry;
 import net.minecraft.core.BlockPos;
@@ -28,6 +30,8 @@ import net.minecraft.world.entity.ai.control.LookControl;
 import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.boss.EnderDragonPart;
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
@@ -43,7 +47,7 @@ import java.util.UUID;
 
 public class VoidWyrm extends AbstractSpellCastingMob implements GeoEntity, IAnimatedAttacker, IMagicSummon, IMagicEntity {
 
-    public static final Vec3 TORSO_OFFSET = new Vec3(0, 18, 0);
+    public static final Vec3 SEGMENT_OFFSET = new Vec3(-8, 0, 0);
     public final Vec3[] cornerPins = {Vec3.ZERO, Vec3.ZERO, Vec3.ZERO, Vec3.ZERO};
 
     public boolean wantsToCastSpells;
@@ -58,11 +62,11 @@ public class VoidWyrm extends AbstractSpellCastingMob implements GeoEntity, IAni
         this.noCulling = true;
         subEntities = new VoidWyrmPartEntity[]{
                 //head
-                new VoidWyrmPartEntity(this, TORSO_OFFSET.add(0, 0, 16), 1.2f, .8f),
+                new VoidWyrmPartEntity(this, SEGMENT_OFFSET.multiply(3.5,0,0), 0.5f, 0.375f),
                 //torso
-                new VoidWyrmPartEntity(this, TORSO_OFFSET, 0.75f, 0.75f),
+                new VoidWyrmPartEntity(this, SEGMENT_OFFSET.multiply(2.5,0,0), 0.5f, 0.375f),
                 //abdomen
-                new VoidWyrmPartEntity(this, TORSO_OFFSET.add(0, 0, -20), 1.75f, 1.5f)
+                new VoidWyrmPartEntity(this, SEGMENT_OFFSET.multiply(1.5,0,0), 0.5f, 0.375f)
         };
         this.setId(ENTITY_COUNTER.getAndAdd(this.subEntities.length + 1) + 1); // Copy of forge fix to sub entity id's
         this.moveControl = createMoveControl();
@@ -79,10 +83,6 @@ public class VoidWyrm extends AbstractSpellCastingMob implements GeoEntity, IAni
                 .add(Attributes.MAX_HEALTH, 60.0)
                 .add(Attributes.FOLLOW_RANGE, 24.0)
                 .add(Attributes.MOVEMENT_SPEED, .25);
-    }
-
-    public double getCrouchHeightMultiplier() {
-        return 1;
     }
 
     @Override
@@ -104,25 +104,25 @@ public class VoidWyrm extends AbstractSpellCastingMob implements GeoEntity, IAni
         // 1 -- 3
         // |    |  <- index map relative to forward
         // 0 -- 2
-        for (int x = 0; x < 2; x++) {
-            for (int y = 0; y < 2; y++) {
-                Vec3 vec = rotateWithBody(new Vec3((x - 0.5) * scalar, 0, (y - 0.5) * scalar));
-                int maxStep = 2;
-                cornerPins[x * 2 + y] = Utils.moveToRelativeGroundLevel(level(), worldpos.add(vec), maxStep, maxStep).subtract(worldpos);
-            }
-        }
-        Vec3[] vx = cornerPins;
-        Vec3 n0 = vx[1].subtract(vx[0]).cross(vx[2].subtract(vx[0]));
-        Vec3 n1 = vx[3].subtract(vx[1]).cross(vx[0].subtract(vx[1]));
-        Vec3 n2 = vx[0].subtract(vx[2]).cross(vx[3].subtract(vx[2]));
-        Vec3 n3 = vx[2].subtract(vx[3]).cross(vx[1].subtract(vx[3]));
-        Vec3 targetNormal = n0.add(n1).add(n2).add(n3).normalize();
-        this.lastNormal = normal;
-        this.normal = Utils.lerp(.2f, normal, targetNormal);
-        var quat = Utils.rotationBetweenVectors(new Vector3f(0, 1, 0), Utils.v3f(normal));
-        for (VoidWyrmPartEntity part : subEntities) {
-            part.positionSelf(quat);
-        }
+//        for (int x = 0; x < 2; x++) {
+//            for (int y = 0; y < 2; y++) {
+//                Vec3 vec = rotateWithBody(new Vec3((x - 0.5) * scalar, 0, (y - 0.5) * scalar));
+//                int maxStep = 2;
+//                cornerPins[x * 2 + y] = Utils.moveToRelativeGroundLevel(level(), worldpos.add(vec), maxStep, maxStep).subtract(worldpos);
+//            }
+//        }
+//        Vec3[] vx = cornerPins;
+//        Vec3 n0 = vx[1].subtract(vx[0]).cross(vx[2].subtract(vx[0]));
+//        Vec3 n1 = vx[3].subtract(vx[1]).cross(vx[0].subtract(vx[1]));
+//        Vec3 n2 = vx[0].subtract(vx[2]).cross(vx[3].subtract(vx[2]));
+//        Vec3 n3 = vx[2].subtract(vx[3]).cross(vx[1].subtract(vx[3]));
+//        Vec3 targetNormal = n0.add(n1).add(n2).add(n3).normalize();
+//        this.lastNormal = normal;
+//        this.normal = Utils.lerp(.2f, normal, targetNormal);
+//        var quat = Utils.rotationBetweenVectors(new Vector3f(0, 1, 0), Utils.v3f(normal));
+//        for (VoidWyrmPartEntity part : subEntities) {
+//            part.positionSelf(quat);
+//        }
     }
 
     @Override
@@ -137,9 +137,9 @@ public class VoidWyrm extends AbstractSpellCastingMob implements GeoEntity, IAni
             return;
         }
         if (spell.getCastType() == CastType.INSTANT) {
-            serverTriggerAnimation("attack_fang_basic");
+            //serverTriggerAnimation("attack_fang_basic");
         } else {
-            serverTriggerAnimation("long_cast");
+            //serverTriggerAnimation("long_cast");
         }
         super.initiateCastSpell(spell, spellLevel);
     }
@@ -251,20 +251,6 @@ public class VoidWyrm extends AbstractSpellCastingMob implements GeoEntity, IAni
         return super.createLookControl();
     }
 
-//    @Override
-//    protected BodyRotationControl createBodyControl() {
-//        return new BodyRotationControl(this) {
-//            @Override
-//            public void rotateHeadTowardsFront() {
-//                float rot = mob.yBodyRot;
-//                super.rotateHeadTowardsFront();
-//                if (rot != mob.yBodyRot) {
-//                    VoidWyrm.this.updateWalkAnimation(1);
-//                }
-//            }
-//        };
-//    }
-
     @Override
     public boolean isInvulnerableTo(DamageSource source) {
         return true;
@@ -275,11 +261,6 @@ public class VoidWyrm extends AbstractSpellCastingMob implements GeoEntity, IAni
         this.discard();
 //        this.level().playSound(null, this.getX(), this.getY(), this.getZ(),
 //                getDeathSound(), SoundSource.PLAYERS, 0.5f, 1f);
-    }
-
-    public Vec3 rotateWithBody(Vec3 vec3) {
-        float y = -this.yBodyRot + Mth.HALF_PI;
-        return vec3.yRot(y * Mth.DEG_TO_RAD);
     }
 
     @Override
@@ -302,14 +283,14 @@ public class VoidWyrm extends AbstractSpellCastingMob implements GeoEntity, IAni
 
     @Override
     public boolean isPickable() {
-        return false;
+        return true;
     }
 
     @Override
     public void refreshDimensions() {
         super.refreshDimensions();
         for (VoidWyrmPartEntity part : this.subEntities) {
-            part.refreshDimensions();
+            //part.refreshDimensions();
         }
     }
 
@@ -328,7 +309,7 @@ public class VoidWyrm extends AbstractSpellCastingMob implements GeoEntity, IAni
     }
 
     RawAnimation animationToPlay = null;
-    private final AnimationController<VoidWyrm> meleeController = new AnimationController<>(this, "melee_animations", 0, this::predicate);
+    private final AnimationController<VoidWyrm> controller = new AnimationController<>(this, "controller", 0, this::predicate);
 
     @Override
     public void playAnimation(String animationId) {
@@ -338,6 +319,7 @@ public class VoidWyrm extends AbstractSpellCastingMob implements GeoEntity, IAni
     private PlayState predicate(AnimationState<VoidWyrm> animationEvent) {
         var controller = animationEvent.getController();
 
+        controller.setAnimation(RawAnimation.begin().thenPlay("fly"));
         if (this.animationToPlay != null) {
             controller.forceAnimationReset();
             controller.setAnimation(animationToPlay);
@@ -348,12 +330,12 @@ public class VoidWyrm extends AbstractSpellCastingMob implements GeoEntity, IAni
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
-        controllerRegistrar.add(meleeController);
+        controllerRegistrar.add(controller);
     }
 
     @Override
     public boolean isAnimating() {
-        return meleeController.getAnimationState() == AnimationController.State.RUNNING;
+        return controller.getAnimationState() == AnimationController.State.RUNNING;
     }
 
     @Override

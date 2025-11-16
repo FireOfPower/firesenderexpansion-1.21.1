@@ -14,6 +14,7 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.client.GeoRenderProvider;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
@@ -41,7 +42,7 @@ public class VoidStaffHolder extends Item implements GeoItem {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand usedHand) {
+    public @NotNull InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand usedHand) {
         level.getEntitiesOfClass(BlackHole.class,
                         player.getBoundingBox()
                                 .inflate(10))
@@ -58,8 +59,7 @@ public class VoidStaffHolder extends Item implements GeoItem {
                         aoe.setDamage(0);
                         aoe.setSlownessAmplifier(0);
                         level.addFreshEntity(aoe);
-                        player.getInventory().removeItem(player.getInventory().selected,1);
-                        player.getInventory().placeItemBackInInventory(new ItemStack(net.fireofpower.firesenderexpansion.registries.ItemRegistry.VOID_STAFF));
+                        player.setItemInHand(usedHand,new ItemStack(net.fireofpower.firesenderexpansion.registries.ItemRegistry.VOID_STAFF));
                     }
                 });
         return super.use(level, player, usedHand);

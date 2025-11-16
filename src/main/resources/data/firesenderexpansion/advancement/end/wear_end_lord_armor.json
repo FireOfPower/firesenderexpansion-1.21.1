@@ -1,41 +1,20 @@
 {
   "parent": "firesenderexpansion:end/obtain_core_of_ender",
   "criteria": {
-    "end_lord_boots": {
-      "conditions": {
-        "items": [
-          {
-            "items": "firesenderexpansion:end_lord_boots"
-          }
-        ]
-      },
-      "trigger": "minecraft:inventory_changed"
-    },
-    "end_lord_chestplate": {
-      "conditions": {
-        "items": [
-          {
-            "items": "firesenderexpansion:end_lord_chestplate"
-          }
-        ]
-      },
-      "trigger": "minecraft:inventory_changed"
-    },
-    "end_lord_helmet": {
+    "end_lord_armor": {
       "conditions": {
         "items": [
           {
             "items": "firesenderexpansion:end_lord_helmet"
-          }
-        ]
-      },
-      "trigger": "minecraft:inventory_changed"
-    },
-    "end_lord_leggings": {
-      "conditions": {
-        "items": [
+          },
+          {
+            "items": "firesenderexpansion:end_lord_chestplate"
+          },
           {
             "items": "firesenderexpansion:end_lord_leggings"
+          },
+          {
+            "items": "firesenderexpansion:end_lord_boots"
           }
         ]
       },
@@ -59,10 +38,7 @@
   },
   "requirements": [
     [
-      "end_lord_helmet",
-      "end_lord_chestplate",
-      "end_lord_leggings",
-      "end_lord_boots"
+      "end_lord_armor"
     ]
   ],
   "sends_telemetry_event": true

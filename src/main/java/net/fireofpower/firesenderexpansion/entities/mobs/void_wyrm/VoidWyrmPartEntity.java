@@ -33,28 +33,9 @@ public class VoidWyrmPartEntity extends PartEntity<VoidWyrm> {
         this(pParentMob, offset16, pWidth, pHeight, false);
     }
 
-    public void positionSelf(Quaternionf normal) {
-        Vec3 parentPos = parent.position();
-        Vec3 offset = baseOffset.multiply(1, parent.getCrouchHeightMultiplier(), 1);
-        //Vec3 localVec = Utils.v3d(normal.transform(Utils.v3f(parent.rotateWithBody(offset))));
-        //hardSetPos(parentPos.add(localVec.scale(parent.getScale())));
-    }
-
     @Override
     public boolean canBeCollidedWith() {
         return collision;
-    }
-
-    private void hardSetPos(Vec3 newVector) {
-        this.setPos(newVector);
-        this.setDeltaMovement(newVector);
-        var vec3 = this.position();
-        this.xo = vec3.x;
-        this.yo = vec3.y;
-        this.zo = vec3.z;
-        this.xOld = vec3.x;
-        this.yOld = vec3.y;
-        this.zOld = vec3.z;
     }
 
     @Override
@@ -62,18 +43,14 @@ public class VoidWyrmPartEntity extends PartEntity<VoidWyrm> {
     }
 
     @Override
-    public boolean hurt(DamageSource pSource, float pAmount) {
-        //return parent.hurt(this, pSource, pAmount);
-        return true;
+    public boolean hurt(DamageSource source, float amount) {
+        return this.isInvulnerableTo(source) ? false : this.parent.hurt(source, amount);
     }
+    @Override
+    protected void readAdditionalSaveData(CompoundTag pCompound) {}
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag pCompound) {
-    }
-
-    @Override
-    protected void addAdditionalSaveData(CompoundTag pCompound) {
-    }
+    protected void addAdditionalSaveData(CompoundTag pCompound) {}
 
     @Override
     public boolean isPickable() {

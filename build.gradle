@@ -210,6 +210,9 @@ dependencies {
     //DISCERNING THE ELDRITCH
     implementation "curse.maven:discerning-the-eldritch-1143065:6090834"
 
+    implementation "curse.maven:mmmmmmmmmmmm-225738:7206981"
+    implementation "curse.maven:selene-499980:7209771"
+
     //FOR SAVING END LIBRARY NBT FILE
     //implementation "curse.maven:huge-structure-blocks-474114:5628956"
 
