@@ -87,11 +87,11 @@ public class BinaryStarsSpell extends AbstractSpell {
     }
 
     private int getDuration(int spellLevel, LivingEntity caster) {
-        return (int) (this.getSpellPower(spellLevel, caster) / 2) + 100;
+        return (int) (this.getSpellPower(spellLevel, caster)) + 100;
     }
 
     private float getDamage(int spellLevel, LivingEntity caster) {
-        return this.getSpellPower(spellLevel, caster) * 0.07F + 5;
+        return this.getSpellPower(spellLevel, caster) * 0.15F + 5;
     }
 
     @Override
