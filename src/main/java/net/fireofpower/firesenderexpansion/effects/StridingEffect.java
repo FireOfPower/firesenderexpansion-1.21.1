@@ -44,15 +44,21 @@ public class StridingEffect extends MagicMobEffect {
     @SubscribeEvent
     public static void onEffectCleared(MobEffectEvent.Remove event){
         LivingEntity pLivingEntity = event.getEntity();
-        if(recordedPositions.containsKey(pLivingEntity.getUUID())) {
-            RecordedPosition data = recordedPositions.get(pLivingEntity.getUUID());
-            if(pLivingEntity.level().dimension().equals(data.dimension)){
-                NeoForge.EVENT_BUS.post(new SpellTeleportEvent(SpellRegistries.SCINTILLATING_STRIDE.get(), pLivingEntity, pLivingEntity.position().x, pLivingEntity.position().y, pLivingEntity.position().z));
-                io.redspace.ironsspellbooks.api.util.Utils.handleSpellTeleport(SpellRegistries.SCINTILLATING_STRIDE.get(), pLivingEntity, data.position);
-            }else{
-                if(pLivingEntity instanceof ServerPlayer serverPlayer) {
-                    serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("msg.firesenderexpansion.fail_step")
-                            .withStyle(s -> s.withColor(TextColor.fromRgb(0xF35F5F)))));
+        if(event.getEffect().equals(EffectRegistry.STRIDING_EFFECT)) {
+            if (recordedPositions.containsKey(pLivingEntity.getUUID())) {
+                RecordedPosition data = recordedPositions.get(pLivingEntity.getUUID());
+                if (pLivingEntity.level().dimension().equals(data.dimension)) {
+                    NeoForge.EVENT_BUS.post(new SpellTeleportEvent(SpellRegistries.SCINTILLATING_STRIDE.get(), pLivingEntity, pLivingEntity.position().x, pLivingEntity.position().y, pLivingEntity.position().z));
+                    io.redspace.ironsspellbooks.api.util.Utils.handleSpellTeleport(SpellRegistries.SCINTILLATING_STRIDE.get(), pLivingEntity, data.position);
+                    if (event.getEntity() instanceof ServerPlayer serverPlayer) {
+                        serverPlayer.hurtMarked = true;
+                        serverPlayer.setDeltaMovement(0, 0, 0);
+                    }
+                } else {
+                    if (pLivingEntity instanceof ServerPlayer serverPlayer) {
+                        serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("msg.firesenderexpansion.fail_step")
+                                .withStyle(s -> s.withColor(TextColor.fromRgb(0xF35F5F)))));
+                    }
                 }
             }
         }

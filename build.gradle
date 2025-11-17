@@ -151,14 +151,14 @@ configurations {
 
 dependencies {
     // ISS ***************************************************************************************************
-    implementation "curse.maven:irons-spells-n-spellbooks-855414:6932556"
+    implementation "curse.maven:irons-spells-n-spellbooks-855414:7114204"
 
     // GECKOLIB ***************************************************************************************************
     implementation "software.bernie.geckolib:geckolib-neoforge-${minecraft_version}:${geckolib_version}"
 
     // CAELUS *****************************************************************************************************
-    compileOnly "com.illusivesoulworks.caelus:caelus-neoforge:${caelus_version}:api"
-    localRuntime "com.illusivesoulworks.caelus:caelus-neoforge:${caelus_version}"
+//    compileOnly "com.illusivesoulworks.caelus:caelus-neoforge:${caelus_version}:api"
+//    localRuntime "com.illusivesoulworks.caelus:caelus-neoforge:${caelus_version}"
 
     // PLAYER ANIMATOR ********************************************************************************************
     //compileOnly "dev.kosmx.player-anim:player-animation-lib-forge:${player_animator_version}"
@@ -173,8 +173,8 @@ dependencies {
     // If you want to run with tetra in dev comment the above line and uncomment the following 2 lines
     //localRuntime "curse.maven:tetra-${tetra_version}"
     //localRuntime "se.mickelus.mutil:mutil:${mutil_version}"
-    localRuntime "curse.maven:better-combat-by-daedelus-639842:5723092"
-    localRuntime "curse.maven:cloth-config-348521:5623420"
+    //localRuntime "curse.maven:better-combat-by-daedelus-639842:5723092"
+    //localRuntime "curse.maven:cloth-config-348521:5623420"
 
     // JEI ********************************************************************************************************
     compileOnly "mezz.jei:jei-${jei_mc_version}-common-api:${jei_version}"
@@ -207,17 +207,11 @@ dependencies {
 
     //OPTIONAL:
 
-    //DISCERNING THE ELDRITCH
-    implementation "curse.maven:discerning-the-eldritch-1143065:6090834"
-
     implementation "curse.maven:mmmmmmmmmmmm-225738:7206981"
     implementation "curse.maven:selene-499980:7209771"
 
     //FOR SAVING END LIBRARY NBT FILE
     //implementation "curse.maven:huge-structure-blocks-474114:5628956"
-
-    //AZURELIB
-    implementation "curse.maven:azurelib-817423:6303718"
 
 }
 

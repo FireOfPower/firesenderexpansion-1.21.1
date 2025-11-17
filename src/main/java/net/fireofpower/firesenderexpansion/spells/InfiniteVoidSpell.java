@@ -71,7 +71,7 @@ public class InfiniteVoidSpell extends AbstractSpell {
             infiniteVoid.setPos(entity.position().add(0, entity.getEyeHeight() - infiniteVoid.getBoundingBox().getYsize() * 0.5f, 0));
             infiniteVoid.setDeltaMovement(new Vec3(0, 0, 0));
             entity.level().addFreshEntity(infiniteVoid);
-            CameraShakeManager.addCameraShake(new CameraShakeData(40, entity.position(), 20));
+            CameraShakeManager.addCameraShake(new CameraShakeData(level,40, entity.position(), 20));
             Timer timer = new Timer();
             entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 40, 10, false, false, false));
             List<Entity> targets = entity.level().getEntities(entity, new AABB(entity.getX() - range, entity.getY() - range, entity.getZ() - range, entity.getX() + range, entity.getY() + range, entity.getZ() + range));
