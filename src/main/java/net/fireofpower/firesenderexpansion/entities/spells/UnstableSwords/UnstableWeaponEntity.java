@@ -1,6 +1,7 @@
 package net.fireofpower.firesenderexpansion.entities.spells.UnstableSwords;
 
 import io.redspace.ironsspellbooks.api.registry.SchoolRegistry;
+import io.redspace.ironsspellbooks.api.util.Utils;
 import io.redspace.ironsspellbooks.capabilities.magic.MagicManager;
 import io.redspace.ironsspellbooks.damage.DamageSources;
 import io.redspace.ironsspellbooks.entity.spells.AbstractMagicProjectile;
@@ -12,15 +13,22 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextColor;
+import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.AnimationState;
@@ -32,6 +40,9 @@ import java.util.Optional;
 public abstract class UnstableWeaponEntity extends AbstractMagicProjectile implements GeoEntity {
 
     private float speed = 2;
+    private boolean isHoming = false;
+    private float homingStrength = 0;
+    private Vec3 location;
 
     public UnstableWeaponEntity(Level level, LivingEntity shooter) {
         this((EntityType) EntityRegistry.UNSTABLE_SUMMONED_SWORD.get(), level);
@@ -46,6 +57,32 @@ public abstract class UnstableWeaponEntity extends AbstractMagicProjectile imple
     @Override
     public boolean fireImmune() {
         return true;
+    }
+
+    public void setHoming(boolean homing) {
+        isHoming = homing;
+    }
+
+    @Override
+    protected void handleCursorHoming() {
+        var cursorHoming = isCursorHoming();
+        if (!cursorHoming) {
+            return;
+        }
+        float maxRange = 48;
+        var owner = getOwner();
+        if (owner == null || position().distanceToSqr(owner.position()) > maxRange * maxRange) {
+            setCursorHoming(false);
+            return;
+        }
+        Vec3 start = owner.getEyePosition();
+        Vec3 end = start.add(owner.getForward().scale(maxRange));
+        HitResult hitresult = Utils.raycastForEntity(level(), owner, start, end, true, 0.5f, entity -> Utils.canHitWithRaycast(entity) && !DamageSources.isFriendlyFireBetween(entity, owner));
+        if(location == null) {
+            location = hitresult instanceof EntityHitResult entityHit ? entityHit.getEntity().getBoundingBox().getCenter() : hitresult.getLocation();
+            location = location.add(this.position().subtract(owner.position())).subtract(this.position().subtract(owner.position()).normalize().scale(3));
+        }
+        homeTowards(location, homingStrength);
     }
 
     @Override
@@ -116,8 +153,10 @@ public abstract class UnstableWeaponEntity extends AbstractMagicProjectile imple
 //        MagicManager.spawnParticles(this.level(), new BlastwaveParticleOptions(SchoolRegistry.ENDER.get().getTargetingColor(), 1),
 //                this.position().x, this.position().y, this.position().z, 1, 0, 0, 0, 0, true);
 //        }
+        if(isHoming){
+            this.discard();
+        }
         super.onHitBlock(result);
-        //this.discard();
     }
 
     @Override
@@ -132,8 +171,26 @@ public abstract class UnstableWeaponEntity extends AbstractMagicProjectile imple
                 speed = 2;
                 setDeltaMovement(getDeltaMovement().normalize().scale(2));
             }
+            if(tickCount > 20 && location != null && this.getOwner() != null ) {
+                if(this.getOwner().position().distanceTo(location) >= 10) {
+                    homingStrength = Mth.clamp((float) (5f / this.getOwner().position().distanceTo(location)), 0, 20);
+                }else{
+                    if(getOwner() instanceof ServerPlayer serverPlayer){
+                        serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("msg.firesenderexpansion.too_close")
+                                .withStyle(s -> s.withColor(TextColor.fromRgb(0xF35F5F)))));
+                    }
+                }
+            }
+        }
+        if(tickCount > 2000){
+            this.discard();
         }
         super.tick();
+    }
+
+    @Override
+    public boolean isCursorHoming() {
+        return isHoming;
     }
 
     @Override

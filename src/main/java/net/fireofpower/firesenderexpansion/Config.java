@@ -27,6 +27,9 @@ public class Config
     private static final ModConfigSpec.BooleanValue ALLOW_CRAFTING_CRYSTAL_HEART = BUILDER
             .comment("Should the Crystal heart be craftable with the in-world method? Default is true")
             .define("crystal_heart_obtainable",true);
+    private static final ModConfigSpec.BooleanValue ALLOW_SWORD_HAIL = BUILDER
+            .comment("Should Gate of Ender have its sneak-cast variant? Default is false")
+            .define("allow_sword_hail",false);
 
     static final ModConfigSpec SPEC = BUILDER.build();
 
@@ -34,6 +37,7 @@ public class Config
     public static boolean allowInfusedObsidianFragments;
     public static boolean allowFillingVoidStaffWithBlackHole;
     public static boolean allowCraftingCrystalHeart;
+    public static boolean allowSwordHail;
 
     private static boolean validateItemName(final Object obj)
     {
@@ -47,5 +51,6 @@ public class Config
         allowInfusedObsidianFragments = ALLOW_INFUSED_OBSIDIAN_FRAGMENTS.get();
         allowFillingVoidStaffWithBlackHole = ALLOW_FILLING_VOID_STAFF_WITH_BLACK_HOLE.get();
         allowCraftingCrystalHeart = ALLOW_CRAFTING_CRYSTAL_HEART.get();
+        allowSwordHail = ALLOW_SWORD_HAIL.get();
     }
 }

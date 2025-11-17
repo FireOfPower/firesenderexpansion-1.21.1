@@ -30,6 +30,7 @@ import java.util.Optional;
 
 public class GatePortal extends AbstractMagicProjectile implements GeoEntity {
     public float speed = 0;
+    public boolean swordHoming = false;
     public GatePortal(Level level, LivingEntity shooter) {
         this((EntityType) EntityRegistry.GATE_PORTAL.get(), level);
         this.setOwner(shooter);
@@ -60,6 +61,7 @@ public class GatePortal extends AbstractMagicProjectile implements GeoEntity {
         weapon.setPos(origin.add(0,weapon.getBbHeight()/2,0));
         weapon.setDamage(this.getDamage());
         weapon.setSpeed(0.01f);
+        weapon.setHoming(swordHoming);
         weapon.shoot(this.getLookAngle());
         this.level().playSound((Player)null, origin.x, origin.y, origin.z, SoundRegistry.ECHOING_STRIKE, SoundSource.PLAYERS, 0.1F, 1.0F);
         this.level().addFreshEntity(weapon);

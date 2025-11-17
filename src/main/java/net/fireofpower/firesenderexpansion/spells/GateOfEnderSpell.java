@@ -7,6 +7,7 @@ import io.redspace.ironsspellbooks.api.spells.*;
 import io.redspace.ironsspellbooks.api.util.AnimationHolder;
 import io.redspace.ironsspellbooks.api.util.Utils;
 import io.redspace.ironsspellbooks.capabilities.magic.TargetEntityCastData;
+import net.fireofpower.firesenderexpansion.Config;
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
 import net.fireofpower.firesenderexpansion.entities.spells.GateOfEnder.GatePortal;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
@@ -101,10 +102,18 @@ public class GateOfEnderSpell extends AbstractSpell {
                     shootTargetedSword(level,spellLevel,entity,targeted);
                 }
             }else {
-                //normal function
-                int swords = getNumSwords(spellLevel, entity);
-                for (int i = 0; i < swords; i++) {
-                    this.shootRandomSword(level, spellLevel, entity);
+                if(entity.isCrouching() && Config.allowSwordHail){
+                    //hail function
+                    int swords = getNumSwords(spellLevel,entity);
+                    for (int i = 0; i < swords; i++) {
+                        this.shootHailSword(level, spellLevel, entity);
+                    }
+                }else {
+                    //normal function
+                    int swords = getNumSwords(spellLevel, entity);
+                    for (int i = 0; i < swords; i++) {
+                        this.shootRandomSword(level, spellLevel, entity);
+                    }
                 }
             }
         }
@@ -148,6 +157,29 @@ public class GateOfEnderSpell extends AbstractSpell {
         float xRot = ((float)(Mth.atan2(lookAngle.horizontalDistance(), lookAngle.y) * (180F / Math.PI)) - 90.0F);
         float yRot = ((float)(Mth.atan2(lookAngle.z, lookAngle.x) * (180F / Math.PI)) - 90);
         gate.setDamage(this.getDamage(spellLevel,entity));
+        world.addFreshEntity(gate);
+        gate.setXRot(Mth.wrapDegrees(xRot));
+        gate.setYRot(Mth.wrapDegrees(yRot));
+    }
+
+    public void shootHailSword(Level world, int spellLevel, LivingEntity entity) {
+        double degree = Math.random() * Math.PI * 1.5 - Math.PI * 0.25;
+        double radius = Math.random() * 3 + 1;
+        radius *= getRadius(spellLevel,entity) / 3;
+        double xOffset = Math.cos(degree) * radius;
+        double yOffset = Math.sin(degree) * radius + 4;
+        double cosPsi = Math.cos(Math.toRadians(entity.getYRot()));
+        double sinPsi = Math.sin(Math.toRadians(entity.getYRot()));
+        double cosTheta = Math.cos(Math.toRadians(-90));
+        double sinTheta = Math.sin(Math.toRadians(-90));
+        Vec3 origin = entity.position().add(xOffset* cosPsi- yOffset * sinTheta * sinPsi,yOffset * cosTheta + 1,xOffset * sinPsi + yOffset * sinTheta * cosPsi);
+        GatePortal gate = new GatePortal(world,entity);
+        gate.setPos(origin);
+        Vec3 lookAngle = new Vec3(0,1,0);
+        float xRot = ((float)(Mth.atan2(lookAngle.horizontalDistance(), lookAngle.y) * (180F / Math.PI)) - 90.0F);
+        float yRot = ((float)(Mth.atan2(lookAngle.z, lookAngle.x) * (180F / Math.PI)) - 90);
+        gate.setDamage(this.getDamage(spellLevel,entity));
+        gate.swordHoming = true;
         world.addFreshEntity(gate);
         gate.setXRot(Mth.wrapDegrees(xRot));
         gate.setYRot(Mth.wrapDegrees(yRot));
