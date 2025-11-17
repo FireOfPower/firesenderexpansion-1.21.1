@@ -40,6 +40,11 @@ public class GatePortal extends AbstractMagicProjectile implements GeoEntity {
         super(gatePortalEntityType,level);
     }
 
+    @Override
+    protected void rotateWithMotion() {
+
+    }
+
     public void shootSword(){
         Vec3 origin = this.position();
         double choice = Math.random() * 3;
