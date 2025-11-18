@@ -80,13 +80,15 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
     @Override
     public void tick() {
         this.age++;
+        if(this.age < this.delay){
+            //handleSpiralParticles(this.delay-this.age);
+        }
         if(this.age == this.delay){
             shoot(fireDir);
             CameraShakeManager.addCameraShake(new CameraShakeData(level(),20, position(), 20));
             handleShootParticles();
         }
         if(this.age > this.delay) {
-            falseRotateWithMotion();
             if (!level().isClientSide()) {
                 this.level().getEntitiesOfClass(ServerPlayer.class, this.getBoundingBox().inflate(3)).stream().forEach(e -> {
                     this.level().playSeededSound(null, this.getX(), this.getY(), this.getZ(),
@@ -170,23 +172,27 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
         this.fireDir = fireDir;
     }
 
-    private void falseRotateWithMotion(){
-        var motion = getDeltaMovement();
-        double speed = motion.horizontalDistance();
-        this.setYRot((float) (Mth.atan2(motion.x, motion.z) * Mth.RAD_TO_DEG));
-        this.setXRot((float) (Mth.atan2(motion.y, speed) * Mth.RAD_TO_DEG));
-        if (this.xRotO == 0.0F && this.yRotO == 0.0F) {
-            // handle first tick/null rotation state
-            this.yRotO = this.getYRot();
-            this.xRotO = this.getXRot();
-        } else {
-            this.xRotO = enforceRotationContinuity(this.xRotO, this.getXRot());
-            this.yRotO = enforceRotationContinuity(this.yRotO, this.getYRot());
-        }
-    }
-
     @Override
     protected void onHitEntity(EntityHitResult pResult) {
+    }
+
+    private void handleSpiralParticles(int i){
+        if(!level().isClientSide) {
+            Vec3 spawnLoc = getOwner().position().add(getOwner().getForward().normalize().scale(2)).add(0, 1.5, 0);
+            for(int rep = 0; rep < 5; rep++) {
+                double degree = rep * 360f/5 + i / 5f;
+                double radius = i/10f;
+                double xOffset = Math.cos(degree) * radius;
+                double yOffset = Math.sin(degree) * radius;
+                double cosPsi = Math.cos(Math.toRadians(getOwner().getYRot()));
+                double sinPsi = Math.sin(Math.toRadians(getOwner().getYRot()));
+                double cosTheta = Math.cos(Math.toRadians(getOwner().getXRot()));
+                double sinTheta = Math.sin(Math.toRadians(getOwner().getXRot()));
+                Vec3 origin = new Vec3(xOffset * cosPsi - yOffset * sinTheta * sinPsi, yOffset * cosTheta, xOffset * sinPsi + yOffset * sinTheta * cosPsi).normalize();
+                Vec3 spots = spawnLoc.add(origin);
+                MagicManager.spawnParticles(level(), ParticleTypes.END_ROD, spots.x, spots.y, spots.z, 1, 0, 0, 0, 0, false);
+            }
+        }
     }
 
     private void handleShootParticles(){
