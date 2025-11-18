@@ -48,6 +48,9 @@ import java.util.stream.Collectors;
 
 public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity, AntiMagicSusceptible {
     private int timeAlive = -1;
+    private int delay;
+    private int age;
+    private Vec3 fireDir;
     private RawAnimation animationToPlay = null;
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private List<Entity> victims;
@@ -72,82 +75,92 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
 
     @Override
     public void tick() {
-        if(!level().isClientSide()) {
-            this.level().getEntitiesOfClass(ServerPlayer.class,this.getBoundingBox().inflate(3)).stream().forEach(e -> {
-                this.level().playSeededSound(null,this.getX(),this.getY(),this.getZ(),
-                        SoundRegistry.BLACK_HOLE_LOOP.get(),SoundSource.PLAYERS,3f,1f,1239831800);
-            });
-            AtomicReference<ItemEntity> core = new AtomicReference<>(null);
-            AtomicReference<ItemEntity> stone = new AtomicReference<>(null);
-            this.level().getEntitiesOfClass(Entity.class,
-                            this.getBoundingBox()
-                                    .inflate(1))
-                    .stream()
-                    .filter(proj -> proj.distanceTo(this) < 5)
-                    .forEach(e -> {
-                        if(e instanceof Projectile proj && Utils.shouldBreakHollowCrystal(proj)){
-                            proj.discard();
-                            triggerBreakAnimation();
-                            this.setDeltaMovement(0,0,0);
-                            this.timeAlive = 60;
-                        }
-                        if(e instanceof ItemEntity items){
-                            if(ItemStack.isSameItem(items.getItem(), new ItemStack(ItemRegistry.STABILIZED_CORE_OF_ENDER.get()))){
-                                core.set(items);
+        this.age++;
+        if(this.age == this.delay){
+            shoot(fireDir);
+        }
+        if(this.age > this.delay) {
+            if (!level().isClientSide()) {
+                this.level().getEntitiesOfClass(ServerPlayer.class, this.getBoundingBox().inflate(3)).stream().forEach(e -> {
+                    this.level().playSeededSound(null, this.getX(), this.getY(), this.getZ(),
+                            SoundRegistry.BLACK_HOLE_LOOP.get(), SoundSource.PLAYERS, 3f, 1f, 1239831800);
+                });
+                AtomicReference<ItemEntity> core = new AtomicReference<>(null);
+                AtomicReference<ItemEntity> stone = new AtomicReference<>(null);
+                this.level().getEntitiesOfClass(Entity.class,
+                                this.getBoundingBox()
+                                        .inflate(1))
+                        .stream()
+                        .filter(proj -> proj.distanceTo(this) < 5)
+                        .forEach(e -> {
+                            if (e instanceof Projectile proj && Utils.shouldBreakHollowCrystal(proj)) {
+                                proj.discard();
+                                triggerBreakAnimation();
+                                this.setDeltaMovement(0, 0, 0);
+                                this.timeAlive = 60;
                             }
-                            if(ItemStack.isSameItem(items.getItem(), new ItemStack(Items.END_STONE))){
-                                stone.set(items);
+                            if (e instanceof ItemEntity items) {
+                                if (ItemStack.isSameItem(items.getItem(), new ItemStack(ItemRegistry.STABILIZED_CORE_OF_ENDER.get()))) {
+                                    core.set(items);
+                                }
+                                if (ItemStack.isSameItem(items.getItem(), new ItemStack(Items.END_STONE))) {
+                                    stone.set(items);
+                                }
                             }
-                        }
-                    });
-            if(core.get() != null && stone.get() != null && Config.allowCraftingCrystalHeart){
-                ItemStack result = new ItemStack(ItemRegistry.CRYSTAL_HEART.get(), 1);
-                ItemEntity entity = new ItemEntity(level(), core.get().position().x(), core.get().position().y(), core.get().position().z(), result);
-                level().addFreshEntity(entity);
-                core.get().discard();
-                stone.get().discard();
-            }
-        }
-        if(this.timeAlive == 0 || tickCount > 600){
-            //final move
-            this.level().getEntitiesOfClass(LivingEntity.class,
-                            this.getBoundingBox()
-                                    .inflate(15))
-                    .stream()
-                    .forEach(e -> {
-                        if(canHitEntity(e)){
-                            damageEntity(e);
-                        }
-                        if(Objects.equals(this.getOwner(), e)){
-                            damageOwner();
-                            //the method bloat is real :sob:
-                        }
-                    });
-            discardThis();
-        }
-        if(timeAlive > 0) {
-            timeAlive--;
-            for(int i = 0; i < 10; i++) {
-                this.level().addParticle(ParticleTypes.END_ROD, particleRangeX(0), particleRangeY(0), particleRangeZ(0), Math.random() -0.5, Math.random() -0.5, Math.random() - 0.5);
-            }
-        }else{
-            this.level().addParticle(ParticleHelper.PORTAL_FRAME, particleRangeX(5), particleRangeY(5), particleRangeZ(5), 0, 0, 0);
-        }
-
-        if (!this.level().isClientSide) {
-            HitResult hitresult = ProjectileUtil.getHitResultOnMoveVector(this, this::canHitEntity);
-            if (hitresult.getType() == HitResult.Type.BLOCK) {
-                onHitBlock((BlockHitResult) hitresult);
-                impactParticles(this.position().x,this.position().y,this.position().z);
-                this.level().playSound((Player)null, this.position().x, this.position().y, this.position().z, SoundRegistry.EARTHQUAKE_IMPACT, SoundSource.PLAYERS, 2.0F, 1.0F);
-            }
-            if(victims !=null) {
-                for (Entity entity : this.level().getEntities(this, this.getBoundingBox()).stream().filter(target -> canHitEntity(target) && !victims.contains(target)).collect(Collectors.toSet())) {
-                    damageEntity(entity);
+                        });
+                if (core.get() != null && stone.get() != null && Config.allowCraftingCrystalHeart) {
+                    ItemStack result = new ItemStack(ItemRegistry.CRYSTAL_HEART.get(), 1);
+                    ItemEntity entity = new ItemEntity(level(), core.get().position().x(), core.get().position().y(), core.get().position().z(), result);
+                    level().addFreshEntity(entity);
+                    core.get().discard();
+                    stone.get().discard();
                 }
             }
+            if (this.timeAlive == 0 || tickCount > 600) {
+                //final move
+                this.level().getEntitiesOfClass(LivingEntity.class,
+                                this.getBoundingBox()
+                                        .inflate(15))
+                        .stream()
+                        .forEach(e -> {
+                            if (canHitEntity(e)) {
+                                damageEntity(e);
+                            }
+                            if (Objects.equals(this.getOwner(), e)) {
+                                damageOwner();
+                                //the method bloat is real :sob:
+                            }
+                        });
+                discardThis();
+            }
+            if (timeAlive > 0) {
+                timeAlive--;
+                for (int i = 0; i < 10; i++) {
+                    this.level().addParticle(ParticleTypes.END_ROD, particleRangeX(0), particleRangeY(0), particleRangeZ(0), Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5);
+                }
+            } else {
+                this.level().addParticle(ParticleHelper.PORTAL_FRAME, particleRangeX(5), particleRangeY(5), particleRangeZ(5), 0, 0, 0);
+            }
+
+            if (!this.level().isClientSide) {
+                HitResult hitresult = ProjectileUtil.getHitResultOnMoveVector(this, this::canHitEntity);
+                if (hitresult.getType() == HitResult.Type.BLOCK) {
+                    onHitBlock((BlockHitResult) hitresult);
+                    impactParticles(this.position().x, this.position().y, this.position().z);
+                    this.level().playSound((Player) null, this.position().x, this.position().y, this.position().z, SoundRegistry.EARTHQUAKE_IMPACT, SoundSource.PLAYERS, 2.0F, 1.0F);
+                }
+                if (victims != null) {
+                    for (Entity entity : this.level().getEntities(this, this.getBoundingBox()).stream().filter(target -> canHitEntity(target) && !victims.contains(target)).collect(Collectors.toSet())) {
+                        damageEntity(entity);
+                    }
+                }
+            }
+            super.tick();
         }
-        super.tick();
+    }
+
+    public void setFireDir(Vec3 fireDir) {
+        this.fireDir = fireDir;
     }
 
     @Override
@@ -187,6 +200,14 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
     @Override
     public void impactParticles(double v, double v1, double v2) {
         MagicManager.spawnParticles(this.level(), ParticleHelper.COMET_FOG, v, v1, v2, 12, 0.08, 0.08, 0.08, 0.3, false);
+    }
+
+    public int getDelay() {
+        return delay;
+    }
+
+    public void setDelay(int delay) {
+        this.delay = delay;
     }
 
     @Override
@@ -242,7 +263,11 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
         if (!isPlayingBreakAnimation())
         {
             if (this.animationToPlay == null) {
-                event.getController().setAnimation(DefaultAnimations.IDLE);
+                if(this.age > this.delay) {
+                    event.getController().setAnimation(DefaultAnimations.IDLE);
+                }else{
+                    event.getController().setAnimation(DefaultAnimations.ATTACK_CAST);
+                }
                 return PlayState.CONTINUE;
             }
         }

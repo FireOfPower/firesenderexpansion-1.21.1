@@ -33,6 +33,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -121,56 +122,19 @@ public class HollowCrystalSpell extends AbstractSpell {
             //animation
             PacketDistributor.sendToPlayersTrackingEntityAndSelf(serverPlayer, new SyncFinalCastPacket(serverPlayer.getUUID(), SpellRegistries.HOLLOW_CRYSTAL.toString(), false));
 
-            //flash
-//                timer.schedule(new TimerTask() {
-//                    @Override
-//                    public void run() {
-//                        PacketDistributor.sendToPlayersTrackingEntityAndSelf(serverPlayer, new AddShaderEffectPacket(FiresEnderExpansion.MODID,"shaders/light_burst_shader.json"));
-//                    }
-//                },0);
-//                timer.schedule(new TimerTask() {
-//                    @Override
-//                    public void run() {
-//                        PacketDistributor.sendToPlayersTrackingEntityAndSelf(serverPlayer, new AddShaderEffectPacket(FiresEnderExpansion.MODID,"shaders/blue_shader.json"));
-//                    }
-//                },200);
-//                timer.schedule(new TimerTask() {
-//                    @Override
-//                    public void run() {
-//                        PacketDistributor.sendToPlayersTrackingEntityAndSelf(serverPlayer, new AddShaderEffectPacket(FiresEnderExpansion.MODID,"shaders/red_shader.json"));
-//                    }
-//                },250);
-//                timer.schedule(new TimerTask() {
-//                    @Override
-//                    public void run() {
-//                        PacketDistributor.sendToPlayersTrackingEntityAndSelf(serverPlayer, new AddShaderEffectPacket(FiresEnderExpansion.MODID,"shaders/light_burst_shader.json"));
-//                    }
-//                },300);
-//                timer.schedule(new TimerTask() {
-//                    @Override
-//                    public void run() {
-//                        PacketDistributor.sendToPlayersTrackingEntityAndSelf(serverPlayer, new AddShaderEffectPacket(FiresEnderExpansion.MODID,"shaders/pink_shader.json"));
-//                    }
-//                },400);
-
-
             //actual casting it
             Vec3 prevLookDir = serverPlayer.getLookAngle();
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    //PacketDistributor.sendToPlayer(serverPlayer, new RemoveShaderEffectPacket());
-                    HollowCrystal hollowCrystal = new HollowCrystal(serverPlayer.level(), serverPlayer);
-                    hollowCrystal.setPos(serverPlayer.position().add(0, serverPlayer.getEyeHeight() + hollowCrystal.getBoundingBox().getYsize() * .25f - 3, 0).add(serverPlayer.getForward().multiply(3, 3, 3)));
-                    hollowCrystal.setDamage(getDamage(serverPlayer));
-                    hollowCrystal.setDeltaMovement(hollowCrystal.getDeltaMovement().multiply(0.5,0.5,0.5));
-                    hollowCrystal.shoot(prevLookDir);
-                    CameraShakeManager.addCameraShake(new CameraShakeData(serverPlayer.level(),20, serverPlayer.position(), 20));
-                    serverPlayer.removeEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT);
-                    serverPlayer.level().addFreshEntity(hollowCrystal);
-                    serverPlayer.level().playLocalSound(serverPlayer, SoundRegistry.SONIC_BOOM.get(), SoundSource.PLAYERS, 3f, 1f);
-                }
-            }, 1000);
+            HollowCrystal hollowCrystal = new HollowCrystal(serverPlayer.level(), serverPlayer);
+            hollowCrystal.setPos(serverPlayer.position().add(0, serverPlayer.getEyeHeight() + hollowCrystal.getBoundingBox().getYsize() * .25f - 3, 0).add(serverPlayer.getForward().multiply(3, 3, 3)));
+            hollowCrystal.setDamage(getDamage(serverPlayer));
+            hollowCrystal.setDeltaMovement(hollowCrystal.getDeltaMovement().multiply(0.5,0.5,0.5));
+            hollowCrystal.setDelay(20);
+            hollowCrystal.setFireDir(prevLookDir);
+            CameraShakeManager.addCameraShake(new CameraShakeData(serverPlayer.level(),20, serverPlayer.position(), 20));
+            serverPlayer.removeEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT);
+            serverPlayer.addEffect(new MobEffectInstance(EffectRegistry.LOCKED_CAMERA_EFFECT,20,1));
+            serverPlayer.level().addFreshEntity(hollowCrystal);
+            serverPlayer.level().playLocalSound(serverPlayer, SoundRegistry.SONIC_BOOM.get(), SoundSource.PLAYERS, 3f, 1f);
         }
     }
 
