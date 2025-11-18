@@ -125,7 +125,7 @@ public class HollowCrystalSpell extends AbstractSpell {
             //actual casting it
             Vec3 prevLookDir = serverPlayer.getLookAngle();
             HollowCrystal hollowCrystal = new HollowCrystal(serverPlayer.level(), serverPlayer);
-            hollowCrystal.setPos(serverPlayer.position().add(0, serverPlayer.getEyeHeight() + hollowCrystal.getBoundingBox().getYsize() * .25f - 3, 0).add(serverPlayer.getForward().multiply(3, 3, 3)));
+            hollowCrystal.setPos(serverPlayer.position().add(0, serverPlayer.getEyeHeight() + hollowCrystal.getBoundingBox().getYsize() * .25f - 3, 0).add(serverPlayer.getForward().multiply(5, 4, 5)));
             hollowCrystal.setDamage(getDamage(serverPlayer));
             hollowCrystal.setDeltaMovement(hollowCrystal.getDeltaMovement().multiply(0.5,0.5,0.5));
             hollowCrystal.setDelay(20);

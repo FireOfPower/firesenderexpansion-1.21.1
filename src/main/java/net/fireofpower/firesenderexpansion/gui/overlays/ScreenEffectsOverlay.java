@@ -16,7 +16,7 @@ import net.minecraft.world.entity.player.Player;
 public class ScreenEffectsOverlay implements LayeredDraw.Layer {
     public static final ScreenEffectsOverlay instance = new ScreenEffectsOverlay();
 
-    public final static ResourceLocation HOLLOW_CRYSTAL_TEXTURE = ResourceLocation.fromNamespaceAndPath(IronsSpellbooks.MODID, "textures/gui/overlays/vignette.png");
+    public final static ResourceLocation VIGINETTE_TEXTURE = ResourceLocation.fromNamespaceAndPath(IronsSpellbooks.MODID, "textures/gui/overlays/vignette.png");
 
     public void render(GuiGraphics guiHelper, DeltaTracker deltaTracker) {
         if (Minecraft.getInstance().options.hideGui || Minecraft.getInstance().player.isSpectator()) {
@@ -35,7 +35,7 @@ public class ScreenEffectsOverlay implements LayeredDraw.Layer {
             return;
         }
         if (player.hasEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT)) {
-            renderOverlayAdditive(guiHelper, HOLLOW_CRYSTAL_TEXTURE, 0.25f * player.getEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT).getAmplifier(), 0, 0.25f * player.getEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT).getAmplifier(), .25f, screenWidth, screenHeight);
+            renderOverlayAdditive(guiHelper, VIGINETTE_TEXTURE, 0.25f * player.getEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT).getAmplifier(), 0, 0.25f * player.getEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT).getAmplifier(), .25f, screenWidth, screenHeight);
         }
     }
 
