@@ -4,11 +4,15 @@ import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
+import org.joml.Vector3f;
 
 @EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD, modid = FiresEnderExpansion.MODID)
 public class PayloadHandler {
@@ -20,6 +24,7 @@ public class PayloadHandler {
         payloadRegistrar.playToClient(SyncFinalCastPacket.TYPE, SyncFinalCastPacket.STREAM_CODEC, SyncFinalCastPacket::handle);
         payloadRegistrar.playToClient(AddShaderEffectPacket.TYPE, AddShaderEffectPacket.STREAM_CODEC, AddShaderEffectPacket::handle);
         payloadRegistrar.playToClient(RemoveShaderEffectPacket.TYPE, RemoveShaderEffectPacket.STREAM_CODEC, RemoveShaderEffectPacket::handle);
+        payloadRegistrar.playToClient(DoParticleBurstPacket.TYPE, DoParticleBurstPacket.STREAM_CODEC, DoParticleBurstPacket::handle);
 
     }
 
@@ -38,6 +43,30 @@ public class PayloadHandler {
         LocalPlayer clientPlayer = mc.player;
         if(clientPlayer != null) {
             render.shutdownEffect();
+        }
+    }
+
+    public static void doParticleBurst(double xPos, double yPos, double zPos, double xRot, double yRot){
+        Level world = Minecraft.getInstance().level;
+        if (world != null) {
+            double radius = 0.05;
+            double angleIncrement = 1.0 * Math.toRadians(0.5 / radius);
+            float speedFactor = 0.1f;
+
+            for (double angle = 0; angle < Math.PI * 2; angle += angleIncrement) {
+                double xOffset = Math.cos(angle) * radius;
+                double yOffset = Math.sin(angle) * radius;
+                double cosPsi = Math.cos(Math.toRadians(yRot));
+                double sinPsi = Math.sin(Math.toRadians(yRot));
+                double cosTheta = Math.cos(Math.toRadians(xRot));
+                double sinTheta = Math.sin(Math.toRadians(xRot));
+                Vec3 origin = new Vec3(xOffset * cosPsi - yOffset * sinTheta * sinPsi, yOffset * cosTheta, xOffset * sinPsi + yOffset * sinTheta * cosPsi).normalize();
+                Vec3 spots = new Vec3(xPos,yPos,zPos).add(origin);
+
+                world.addParticle(ParticleTypes.END_ROD,
+                        spots.x, spots.y, spots.z,
+                        origin.x * speedFactor, origin.y * speedFactor, origin.z * speedFactor);
+            }
         }
     }
 }

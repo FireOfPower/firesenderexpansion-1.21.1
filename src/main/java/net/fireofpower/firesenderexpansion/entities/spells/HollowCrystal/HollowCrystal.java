@@ -11,6 +11,7 @@ import io.redspace.ironsspellbooks.registries.ParticleRegistry;
 import io.redspace.ironsspellbooks.registries.SoundRegistry;
 import io.redspace.ironsspellbooks.util.ParticleHelper;
 import net.fireofpower.firesenderexpansion.Config;
+import net.fireofpower.firesenderexpansion.network.DoParticleBurstPacket;
 import net.fireofpower.firesenderexpansion.registries.EntityRegistry;
 import net.fireofpower.firesenderexpansion.registries.ItemRegistry;
 import net.fireofpower.firesenderexpansion.registries.SpellRegistries;
@@ -40,6 +41,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.*;
+import net.neoforged.neoforge.network.PacketDistributor;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.*;
@@ -176,41 +178,10 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
     protected void onHitEntity(EntityHitResult pResult) {
     }
 
-    private void handleSpiralParticles(int i){
-        if(!level().isClientSide) {
-            Vec3 spawnLoc = getOwner().position().add(getOwner().getForward().normalize().scale(2)).add(0, 1.5, 0);
-            for(int rep = 0; rep < 5; rep++) {
-                double degree = rep * 360f/5 + i / 5f;
-                double radius = i/10f;
-                double xOffset = Math.cos(degree) * radius;
-                double yOffset = Math.sin(degree) * radius;
-                double cosPsi = Math.cos(Math.toRadians(getOwner().getYRot()));
-                double sinPsi = Math.sin(Math.toRadians(getOwner().getYRot()));
-                double cosTheta = Math.cos(Math.toRadians(getOwner().getXRot()));
-                double sinTheta = Math.sin(Math.toRadians(getOwner().getXRot()));
-                Vec3 origin = new Vec3(xOffset * cosPsi - yOffset * sinTheta * sinPsi, yOffset * cosTheta, xOffset * sinPsi + yOffset * sinTheta * cosPsi).normalize();
-                Vec3 spots = spawnLoc.add(origin);
-                MagicManager.spawnParticles(level(), ParticleTypes.END_ROD, spots.x, spots.y, spots.z, 1, 0, 0, 0, 0, false);
-            }
-        }
-    }
-
     private void handleShootParticles(){
         if(!level().isClientSide) {
             Vec3 spawnLoc = getOwner().position().add(getOwner().getForward().normalize().scale(2)).add(0, 1.5, 0);
-            for (int i = 0; i < 36; i++) {
-                double degree = i * 10;
-                double radius = getBbHeight() / 2;
-                double xOffset = Math.cos(degree) * radius;
-                double yOffset = Math.sin(degree) * radius;
-                double cosPsi = Math.cos(Math.toRadians(getOwner().getYRot()));
-                double sinPsi = Math.sin(Math.toRadians(getOwner().getYRot()));
-                double cosTheta = Math.cos(Math.toRadians(getOwner().getXRot()));
-                double sinTheta = Math.sin(Math.toRadians(getOwner().getXRot()));
-                Vec3 origin = new Vec3(xOffset * cosPsi - yOffset * sinTheta * sinPsi, yOffset * cosTheta, xOffset * sinPsi + yOffset * sinTheta * cosPsi).normalize();
-                Vec3 spots = spawnLoc.add(origin);
-                MagicManager.spawnParticles(level(), ParticleTypes.END_ROD, spots.x, spots.y, spots.z, 1, 0, 0, 0, 0, false);
-            }
+            PacketDistributor.sendToPlayersTrackingEntityAndSelf(this, new DoParticleBurstPacket(spawnLoc.x,spawnLoc.y,spawnLoc.z, getOwner().getXRot(), getOwner().getYRot()));//MagicManager.spawnParticles(level(), ParticleTypes.END_ROD, spots.x, spots.y, spots.z, 1, 0, 0, 0, 0, false);
         }
     }
 
