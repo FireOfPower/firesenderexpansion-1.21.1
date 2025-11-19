@@ -20,6 +20,7 @@ public class Config
     public static final ModConfigSpec.BooleanValue ALLOW_FILLING_VOID_STAFF_WITH_BLACK_HOLE;
     public static final ModConfigSpec.BooleanValue ALLOW_CRAFTING_CRYSTAL_HEART;
     public static final ModConfigSpec.BooleanValue ALLOW_SWORD_HAIL;
+    public static final ModConfigSpec.BooleanValue HOLLOW_CRYSTAL_BREAK_PROJECTILES;
 
     static{
         {
@@ -29,6 +30,9 @@ public class Config
 
             BUILDER.comment("Should Gate of Ender have its sneak-cast variant? Default is false");
             ALLOW_SWORD_HAIL = BUILDER.worldRestart().define("allow_sword_hail",false);
+
+            BUILDER.comment("Should Hollow Crystal break any projectiles it touches? Default is true");
+            HOLLOW_CRYSTAL_BREAK_PROJECTILES = BUILDER.worldRestart().define("hollow_crystal_break_projectiles",true);
 
             BUILDER.pop();
         }
@@ -47,10 +51,5 @@ public class Config
         }
 
         SPEC = BUILDER.build();
-    }
-
-    private static boolean validateItemName(final Object obj)
-    {
-        return obj instanceof String itemName && BuiltInRegistries.ITEM.containsKey(ResourceLocation.parse(itemName));
     }
 }
