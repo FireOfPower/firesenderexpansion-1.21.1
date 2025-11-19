@@ -10,8 +10,12 @@ import io.redspace.ironsspellbooks.entity.spells.AbstractMagicProjectile;
 import io.redspace.ironsspellbooks.registries.ParticleRegistry;
 import io.redspace.ironsspellbooks.registries.SoundRegistry;
 import io.redspace.ironsspellbooks.util.ParticleHelper;
+import net.fireofpower.firesenderexpansion.ClientConfig;
 import net.fireofpower.firesenderexpansion.Config;
+import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
+import net.fireofpower.firesenderexpansion.network.AddShaderEffectPacket;
 import net.fireofpower.firesenderexpansion.network.DoParticleBurstPacket;
+import net.fireofpower.firesenderexpansion.network.RemoveShaderEffectPacket;
 import net.fireofpower.firesenderexpansion.registries.EntityRegistry;
 import net.fireofpower.firesenderexpansion.registries.ItemRegistry;
 import net.fireofpower.firesenderexpansion.registries.SpellRegistries;
@@ -54,8 +58,8 @@ import java.util.stream.Collectors;
 
 public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity, AntiMagicSusceptible {
     private int timeAlive = -1;
-    private int delay;
-    private int age;
+    private int delay = 0;
+    private int age = 0;
     private Vec3 fireDir;
     private RawAnimation animationToPlay = null;
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
@@ -82,13 +86,32 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
     @Override
     public void tick() {
         this.age++;
-        if(this.age < this.delay){
-            //handleSpiralParticles(this.delay-this.age);
-        }
         if(this.age == this.delay){
             shoot(fireDir);
             CameraShakeManager.addCameraShake(new CameraShakeData(level(),20, position(), 20));
             handleShootParticles();
+            if(getOwner() instanceof ServerPlayer owner && ClientConfig.HOLLOW_CRYSTAL_FLASH.get()) {
+                PacketDistributor.sendToPlayer(owner, new AddShaderEffectPacket(FiresEnderExpansion.MODID, "shaders/light_burst_shader.json"));
+                Timer timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        PacketDistributor.sendToPlayer(owner, new AddShaderEffectPacket(FiresEnderExpansion.MODID, "shaders/dark_burst_shader.json"));
+                    }
+                }, 100);
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        PacketDistributor.sendToPlayer(owner, new AddShaderEffectPacket(FiresEnderExpansion.MODID, "shaders/light_burst_shader.json"));
+                    }
+                }, 200);
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        PacketDistributor.sendToPlayer(owner, new RemoveShaderEffectPacket());
+                    }
+                }, 300);
+            }
         }
         if(this.age > this.delay) {
             if (!level().isClientSide()) {
@@ -119,7 +142,7 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
                                 }
                             }
                         });
-                if (core.get() != null && stone.get() != null && Config.allowCraftingCrystalHeart) {
+                if (core.get() != null && stone.get() != null && Config.ALLOW_CRAFTING_CRYSTAL_HEART.get()) {
                     ItemStack result = new ItemStack(ItemRegistry.CRYSTAL_HEART.get(), 1);
                     ItemEntity entity = new ItemEntity(level(), core.get().position().x(), core.get().position().y(), core.get().position().z(), result);
                     level().addFreshEntity(entity);

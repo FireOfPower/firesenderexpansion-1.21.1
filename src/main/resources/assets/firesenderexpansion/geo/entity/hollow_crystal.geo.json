@@ -13,7 +13,7 @@
 			"bones": [
 				{
 					"name": "Everything",
-					"pivot": [0, 0, 0]
+					"pivot": [1, 37, -1]
 				},
 				{
 					"name": "CenterHolder",
@@ -192,7 +192,7 @@
 				{
 					"name": "bone2",
 					"parent": "Everything",
-					"pivot": [1, 37, -1],
+					"pivot": [1, 37, -1.08333],
 					"cubes": [
 						{
 							"origin": [29, 9, 19],

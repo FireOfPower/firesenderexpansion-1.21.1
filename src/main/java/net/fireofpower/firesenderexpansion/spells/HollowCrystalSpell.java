@@ -118,7 +118,6 @@ public class HollowCrystalSpell extends AbstractSpell {
             recasts.syncAllToPlayer();
         }
         if (serverPlayer.hasEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT)) {
-            Timer timer = new Timer();
             //animation
             PacketDistributor.sendToPlayersTrackingEntityAndSelf(serverPlayer, new SyncFinalCastPacket(serverPlayer.getUUID(), SpellRegistries.HOLLOW_CRYSTAL.toString(), false));
 

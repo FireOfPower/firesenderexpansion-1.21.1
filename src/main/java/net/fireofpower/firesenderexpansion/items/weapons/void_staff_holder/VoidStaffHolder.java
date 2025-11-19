@@ -47,7 +47,7 @@ public class VoidStaffHolder extends Item implements GeoItem {
                         player.getBoundingBox()
                                 .inflate(10))
                 .forEach(e -> {
-                    if(e.getOwner().equals(player) && player.getMainHandItem().is(net.fireofpower.firesenderexpansion.registries.ItemRegistry.VOID_STAFF_HOLDER) && Config.allowFillingVoidStaffWithBlackHole){
+                    if(e.getOwner().equals(player) && player.getMainHandItem().is(net.fireofpower.firesenderexpansion.registries.ItemRegistry.VOID_STAFF_HOLDER) && Config.ALLOW_FILLING_VOID_STAFF_WITH_BLACK_HOLE.get()){
                         e.discard();
                         level.playSound(player, player.position().x, player.position().y, player.position().z, SoundRegistry.BLACK_HOLE_CAST, SoundSource.PLAYERS, 1.0F, 1.0F);
                         EarthquakeAoe aoe = new EarthquakeAoe(level);

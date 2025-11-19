@@ -62,7 +62,7 @@ public class ObsidianRod extends AbstractMagicProjectile implements GeoEntity {
     protected void onHitBlock(BlockHitResult blockHitResult) {
         BlockState hitBlock = level().getBlockState(blockHitResult.getBlockPos());
         Block block = hitBlock.getBlock();
-        if(block.equals(Blocks.ANCIENT_DEBRIS) && Config.allowInfusedObsidianFragments){
+        if(block.equals(Blocks.ANCIENT_DEBRIS) && Config.ALLOW_INFUSED_OBSIDIAN_FRAGMENTS.get()){
             ItemStack result = new ItemStack(ItemRegistry.INFUSED_OBSIDIAN_FRAGMENTS, 1);
             ItemEntity entity = new ItemEntity(level(), this.position().x(), this.position().y(), this.position().z(), result);
             level().addFreshEntity(entity);

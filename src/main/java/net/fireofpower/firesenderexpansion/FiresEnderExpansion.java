@@ -68,7 +68,8 @@ public class FiresEnderExpansion
         SoundRegistry.register(modEventBus);
 
         // Register our mod's ModConfigSpec so that FML can create and load the config file for us
-        modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+        modContainer.registerConfig(ModConfig.Type.SERVER, Config.SPEC, String.format("%s-server.toml", FiresEnderExpansion.MODID));
+        modContainer.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC, String.format("%s-client.toml", FiresEnderExpansion.MODID));
     }
 
     public static final Supplier<CreativeModeTab> FEE_TAB = CREATIVE_MODE_TABS.register("example", () -> CreativeModeTab.builder()

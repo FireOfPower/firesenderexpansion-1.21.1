@@ -102,7 +102,7 @@ public class GateOfEnderSpell extends AbstractSpell {
                     shootTargetedSword(level,spellLevel,entity,targeted);
                 }
             }else {
-                if(entity.isCrouching() && Config.allowSwordHail){
+                if(entity.isCrouching() && Config.ALLOW_SWORD_HAIL.get()){
                     //hail function
                     int swords = getNumSwords(spellLevel,entity);
                     for (int i = 0; i < swords; i++) {
