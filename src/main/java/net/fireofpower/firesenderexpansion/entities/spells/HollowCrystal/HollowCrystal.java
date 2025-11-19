@@ -127,7 +127,7 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
                         .stream()
                         .filter(proj -> proj.distanceTo(this) < 5)
                         .forEach(e -> {
-                            if (e instanceof Projectile proj) {
+                            if (e instanceof Projectile proj && !proj.equals(this)) {
                                 if(Config.HOLLOW_CRYSTAL_BREAK_PROJECTILES.get()) {
                                     proj.discard();
                                 }
