@@ -11,7 +11,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.LayeredDraw;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class ScreenEffectsOverlay implements LayeredDraw.Layer {
     public static final ScreenEffectsOverlay instance = new ScreenEffectsOverlay();
@@ -37,6 +42,10 @@ public class ScreenEffectsOverlay implements LayeredDraw.Layer {
         if (player.hasEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT)) {
             renderOverlayAdditive(guiHelper, VIGINETTE_TEXTURE, 0.25f * player.getEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT).getAmplifier(), 0, 0.25f * player.getEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT).getAmplifier(), .25f, screenWidth, screenHeight);
         }
+        if (player.hasEffect(EffectRegistry.LOCKED_CAMERA_EFFECT)) {
+            MobEffectInstance inst = player.getEffect(EffectRegistry.LOCKED_CAMERA_EFFECT);
+            renderOverlayAdditive(guiHelper, VIGINETTE_TEXTURE, 0.25f * inst.getAmplifier(), 0, 0.25f * inst.getAmplifier(), .25f, (int)(screenWidth / (inst.getDuration() / 10f - 1)), (int)(screenHeight / (inst.getDuration() / 10f - 1)));
+        }
     }
 
     private static void renderOverlayAdditive(GuiGraphics gui, ResourceLocation texture, float r, float g, float b, float a, int screenWidth, int screenHeight) {
@@ -47,7 +56,7 @@ public class ScreenEffectsOverlay implements LayeredDraw.Layer {
                 GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE
         );
         gui.setColor(r, g, b, a);
-        gui.blit(texture, 0, 0, -90, 0.0F, 0.0F, screenWidth, screenHeight, screenWidth, screenHeight);
+        gui.blit(texture, (gui.guiWidth() - screenWidth)/2, (gui.guiHeight()-screenHeight)/2, -90, 0.0F, 0.0F, screenWidth, screenHeight, screenWidth, screenHeight);
         gui.setColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.defaultBlendFunc();
         RenderSystem.disableBlend();

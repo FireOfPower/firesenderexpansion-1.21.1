@@ -130,8 +130,8 @@ public class HollowCrystalSpell extends AbstractSpell {
             hollowCrystal.setDelay(20);
             hollowCrystal.setFireDir(prevLookDir);
             CameraShakeManager.addCameraShake(new CameraShakeData(serverPlayer.level(),20, serverPlayer.position(), 20));
+            serverPlayer.addEffect(new MobEffectInstance(EffectRegistry.LOCKED_CAMERA_EFFECT,20,serverPlayer.getEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT).getAmplifier(),true, false));
             serverPlayer.removeEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT);
-            serverPlayer.addEffect(new MobEffectInstance(EffectRegistry.LOCKED_CAMERA_EFFECT,20,1));
             serverPlayer.level().addFreshEntity(hollowCrystal);
             serverPlayer.level().playLocalSound(serverPlayer, SoundRegistry.SONIC_BOOM.get(), SoundSource.PLAYERS, 3f, 1f);
         }
