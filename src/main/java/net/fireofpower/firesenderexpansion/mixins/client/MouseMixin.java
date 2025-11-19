@@ -21,8 +21,7 @@ public class MouseMixin {
     private void firesEnderExpansion$playerModifyTurnMovement(LocalPlayer player, double yRot, double xRot, Operation<Void> original)
     {
         HollowCrystalSpell blast = new HollowCrystalSpell();
-        if ((Objects.equals(ClientMagicData.getSyncedSpellData(player).getCastingSpellId(), blast.getSpellId())
-                && ClientMagicData.getSyncedSpellData(player).isCasting())  || player.hasEffect(EffectRegistry.LOCKED_CAMERA_EFFECT))
+        if (player.hasEffect(EffectRegistry.LOCKED_CAMERA_EFFECT))
         {
             // Fix camera movement to where the player is looking
             original.call(player, 0.0, 0.0);

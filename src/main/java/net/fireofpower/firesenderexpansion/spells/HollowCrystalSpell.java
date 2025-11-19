@@ -48,7 +48,7 @@ import java.util.TimerTask;
 @AutoSpellConfig
 public class HollowCrystalSpell extends AbstractSpell {
     private final ResourceLocation spellId = ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "hollow_crystal");
-    private final int ticksOfEffect = 200;
+    private final int ticksOfEffect = 400;
 
     @Override
     public List<MutableComponent> getUniqueInfo(int spellLevel, LivingEntity caster) {
@@ -155,8 +155,8 @@ public class HollowCrystalSpell extends AbstractSpell {
 
     private void spawnParticles(LivingEntity entity)
     {
-        ServerLevel level = (ServerLevel) entity.level();
-        level.sendParticles(ParticleRegistry.UNSTABLE_ENDER_PARTICLE.get(), entity.getX(), entity.getY() + 1, entity.getZ(), 20, 0, 0, 0, 1.0);
+        //ServerLevel level = (ServerLevel) entity.level();
+        //level.sendParticles(ParticleRegistry.UNSTABLE_ENDER_PARTICLE.get(), entity.getX(), entity.getY() + 1, entity.getZ(), 20, 0, 0, 0, 1.0);
     }
 
     @Override
