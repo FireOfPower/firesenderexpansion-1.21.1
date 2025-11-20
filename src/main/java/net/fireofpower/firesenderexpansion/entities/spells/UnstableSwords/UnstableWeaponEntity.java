@@ -169,6 +169,8 @@ public abstract class UnstableWeaponEntity extends AbstractMagicProjectile imple
         if(tickCount > 10){
             if(speed < 2) {
                 speed = 2;
+            }
+            if(getDeltaMovement().length() != speed){
                 setDeltaMovement(getDeltaMovement().normalize().scale(2));
             }
             if(tickCount > 20 && location != null && this.getOwner() != null ) {
@@ -179,6 +181,12 @@ public abstract class UnstableWeaponEntity extends AbstractMagicProjectile imple
                         serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("msg.firesenderexpansion.too_close")
                                 .withStyle(s -> s.withColor(TextColor.fromRgb(0xF35F5F)))));
                     }
+                }
+            }
+            var entities = level().getEntities(this, this.getBoundingBox());
+            for (Entity entity : entities) {
+                if(canHitEntity(entity)) {
+                    DamageSources.applyDamage(entity, damage, SpellRegistries.GATE_OF_ENDER.get().getDamageSource(this, getOwner()));
                 }
             }
         }
@@ -198,14 +206,6 @@ public abstract class UnstableWeaponEntity extends AbstractMagicProjectile imple
         if (!this.level().isClientSide) {
             impactParticles(xOld, yOld, zOld);
             getImpactSound().ifPresent(this::doImpactSound);
-            float explosionRadius = getExplosionRadius();
-            var entities = level().getEntities(this, this.getBoundingBox().inflate(explosionRadius));
-            for (Entity entity : entities) {
-                double distance = entity.distanceToSqr(hitResult.getLocation());
-                if (distance < explosionRadius * explosionRadius && canHitEntity(entity)) {
-                    DamageSources.applyDamage(entity, damage, SpellRegistries.GATE_OF_ENDER.get().getDamageSource(this, getOwner()));
-                }
-            }
         }
         //remove(RemovalReason.DISCARDED);
         //discard();

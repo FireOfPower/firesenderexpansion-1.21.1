@@ -44,7 +44,7 @@ public class ScreenEffectsOverlay implements LayeredDraw.Layer {
         }
         if (player.hasEffect(EffectRegistry.LOCKED_CAMERA_EFFECT)) {
             MobEffectInstance inst = player.getEffect(EffectRegistry.LOCKED_CAMERA_EFFECT);
-            renderOverlayAdditive(guiHelper, VIGINETTE_TEXTURE, 0.25f * inst.getAmplifier(), 0, 0.25f * inst.getAmplifier(), .25f, (int)(screenWidth / (inst.getDuration() / 10f - 1)), (int)(screenHeight / (inst.getDuration() / 10f - 1)));
+            renderOverlayAdditive(guiHelper, VIGINETTE_TEXTURE, 0.35f * inst.getAmplifier(), 0, 0.35f * inst.getAmplifier(), .25f, (int)(screenWidth / (inst.getDuration() / 10f - 1)), (int)(screenHeight / (inst.getDuration() / 10f - 1)));
         }
     }
 

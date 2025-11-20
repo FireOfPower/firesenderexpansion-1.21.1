@@ -76,13 +76,15 @@ public class HollowCrystalSpell extends AbstractSpell {
 
     @Override
     public void onCast(Level level, int spellLevel, LivingEntity entity, CastSource castSource, MagicData playerMagicData) {
-        //CameraShakeManager.addCameraShake(new CameraShakeData(5, entity.position(), 20));
         if (!playerMagicData.getPlayerRecasts().hasRecastForSpell(getSpellId())) {
             playerMagicData.getPlayerRecasts().addRecast(new RecastInstance(getSpellId(), spellLevel, getRecastCount(spellLevel, entity), ticksOfEffect, castSource, null), playerMagicData);
         }
         if(entity.hasEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT)){
             if(!entity.isCrouching()) {
                 entity.addEffect(new MobEffectInstance(EffectRegistry.HOLLOW_CRYSTAL_EFFECT, ticksOfEffect, entity.getEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT).getAmplifier() + 1, false, false, true));
+                if(playerMagicData.getPlayerRecasts().getRemainingRecastsForSpell(getSpellId()) != 1) {
+                    spawnParticles(entity);
+                }
             }else{
                 if(entity instanceof ServerPlayer serverPlayer  && net.fireofpower.firesenderexpansion.util.Utils.hasCurio(serverPlayer, ItemRegistry.CRYSTAL_HEART.get())) {
                     handleFiring(serverPlayer);
@@ -90,8 +92,6 @@ public class HollowCrystalSpell extends AbstractSpell {
             }
         }else{
             entity.addEffect(new MobEffectInstance(EffectRegistry.HOLLOW_CRYSTAL_EFFECT, ticksOfEffect, 1, false, false, true));
-        }
-        for(int i = 0; i < 20; i++){
             spawnParticles(entity);
         }
 
@@ -155,8 +155,10 @@ public class HollowCrystalSpell extends AbstractSpell {
 
     private void spawnParticles(LivingEntity entity)
     {
-        //ServerLevel level = (ServerLevel) entity.level();
-        //level.sendParticles(ParticleRegistry.UNSTABLE_ENDER_PARTICLE.get(), entity.getX(), entity.getY() + 1, entity.getZ(), 20, 0, 0, 0, 1.0);
+        ServerLevel level = (ServerLevel) entity.level();
+        for(int i = 0; i < 20; i++){
+            level.sendParticles(ParticleRegistry.UNSTABLE_ENDER_PARTICLE.get(), entity.getX(), entity.getY() + 1, entity.getZ(), 20, 0, 0, 0, 1.0);
+        }
     }
 
     @Override
