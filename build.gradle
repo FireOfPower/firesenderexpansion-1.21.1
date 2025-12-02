@@ -202,6 +202,9 @@ dependencies {
     // Spell Collector Lib
     implementation "curse.maven:spell-collector-lib-1149858:6174572"
 
+    //ACES SPELL UTILS
+    implementation "curse.maven:aces-spell-utils-1299492:7196103"
+
     // JSON ******************************************************************************************************
     implementation "com.google.code.gson:gson:${gson_version}"
 
