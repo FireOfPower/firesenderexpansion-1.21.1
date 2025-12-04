@@ -141,7 +141,7 @@ public class DragonsFurySpell extends AbstractSpell {
     }
 
     private float getForce(int spellLevel, LivingEntity entity) {
-        return getSpellPower(spellLevel, entity) * 0.1f;
+        return getSpellPower(spellLevel, entity) * 0.05f;
     }
 
     @Override
