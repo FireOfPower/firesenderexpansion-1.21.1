@@ -46,6 +46,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.*;
 import net.neoforged.neoforge.network.PacketDistributor;
+import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.*;
@@ -268,6 +269,19 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
         return Optional.of(SoundRegistry.EARTHQUAKE_LOOP);
     }
 
+    @Override
+    public void setOwner(@Nullable Entity owner) {
+        if(this.getOwner() == null) {
+            super.setOwner(owner);
+        }
+    }
+
+    @Override
+    public void shoot(double x, double y, double z, float velocity, float inaccuracy) {
+        if(this.getDeltaMovement().length() == 0) {
+            super.shoot(x, y, z, velocity, inaccuracy);
+        }
+    }
 
     private final AnimationController<HollowCrystal> animationController = new AnimationController<>(this, "controller", 0, this::predicate);
 
