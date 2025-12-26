@@ -37,8 +37,8 @@ import java.util.TimerTask;
 @AutoSpellConfig
 public class InfiniteVoidSpell extends AbstractSpell {
     private final ResourceLocation spellId = ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "infinite_void");
-    private final int duration = 20;
-    private final int range = 10;
+    private final int duration = 24;
+    private final int range = 20;
 
     @Override
     public List<MutableComponent> getUniqueInfo(int spellLevel, LivingEntity caster) {
@@ -66,10 +66,14 @@ public class InfiniteVoidSpell extends AbstractSpell {
     @Override
     public void onCast(Level level, int spellLevel, LivingEntity entity, CastSource castSource, MagicData playerMagicData) {
         //no domain clashes >:(
-        if(entity.level().getEntitiesOfClass(InfiniteVoid.class, entity.getBoundingBox().inflate(30)).isEmpty()) {
+        if(entity.level().getEntitiesOfClass(InfiniteVoid.class, entity.getBoundingBox().inflate(range * 2)).isEmpty()) {
             InfiniteVoid infiniteVoid = new InfiniteVoid(entity.level(), entity);
             infiniteVoid.setPos(entity.position().add(0, entity.getEyeHeight() - infiniteVoid.getBoundingBox().getYsize() * 0.5f, 0));
             infiniteVoid.setDeltaMovement(new Vec3(0, 0, 0));
+            infiniteVoid.setRefinement((int)(getSpellPower(spellLevel, entity) * 100));
+            infiniteVoid.setRadius(range);
+            infiniteVoid.setDuration(duration + 3);
+            infiniteVoid.setOpen(false);
             entity.level().addFreshEntity(infiniteVoid);
             CameraShakeManager.addCameraShake(new CameraShakeData(level,40, entity.position(), 20));
             Timer timer = new Timer();
@@ -78,17 +82,6 @@ public class InfiniteVoidSpell extends AbstractSpell {
             timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    for (int i = 0; i < targets.size(); i++) {
-                        entity.addEffect(new MobEffectInstance(EffectRegistry.ASCENDED_CASTER_EFFECT, (duration - 4) * 20, 0, false, false, true));
-                        entity.addEffect(new MobEffectInstance(EffectRegistry.ANCHORED_EFFECT, (duration - 4) * 20, 0, false, false, true));
-                        entity.addEffect(new MobEffectInstance(MobEffectRegistry.ANTIGRAVITY, (duration - 4) * 20, 0, false, false, true));
-                        entity.addEffect(new MobEffectInstance(EffectRegistry.INFINITE_VOID_EFFECT, (duration - 4) * 20, 0, false, false, true));
-                        if (targets.get(i) instanceof LivingEntity target) {
-                            target.addEffect(new MobEffectInstance(EffectRegistry.ANCHORED_EFFECT, (duration - 4) * 20, 0, false, false, true));
-                            target.addEffect(new MobEffectInstance(MobEffectRegistry.ANTIGRAVITY, (duration - 4) * 20, 0, false, false, true));
-                            target.addEffect(new MobEffectInstance(EffectRegistry.INFINITE_VOID_EFFECT, (duration - 4) * 20, 0, false, false, true));
-                        }
-                    }
                 }
             }, 2 * 1000);
         }

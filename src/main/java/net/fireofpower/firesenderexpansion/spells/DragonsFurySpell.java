@@ -107,7 +107,7 @@ public class DragonsFurySpell extends AbstractSpell {
         level.addFreshEntity(aoe);
 
         for (Entity targetEntity : entities) {
-            if (targetEntity.isAlive() && targetEntity.isPickable() && Utils.hasLineOfSight(entity.level(), smiteLocation.add(0, 1, 0), targetEntity.getBoundingBox().getCenter(), true)) {
+            if (targetEntity instanceof LivingEntity && targetEntity.isPickable() && Utils.hasLineOfSight(entity.level(), smiteLocation.add(0, 1, 0), targetEntity.getBoundingBox().getCenter(), true)) {
                 if (DamageSources.applyDamage(targetEntity, getDamage(spellLevel, entity), damageSource)) {
                     handleKnockback(entity,(LivingEntity) targetEntity,spellLevel);
                     EnchantmentHelper.doPostAttackEffects((ServerLevel) entity.level(), targetEntity, damageSource);
