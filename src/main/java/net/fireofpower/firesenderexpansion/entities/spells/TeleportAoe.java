@@ -5,18 +5,26 @@ import io.redspace.ironsspellbooks.api.magic.MagicData;
 import io.redspace.ironsspellbooks.api.util.Utils;
 import io.redspace.ironsspellbooks.entity.mobs.AntiMagicSusceptible;
 import io.redspace.ironsspellbooks.entity.spells.AoeEntity;
+import net.acetheeldritchking.aces_spell_utils.network.AddShaderEffectPacket;
+import net.acetheeldritchking.aces_spell_utils.network.RemoveShaderEffectPacket;
+import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
 import net.fireofpower.firesenderexpansion.registries.EntityRegistry;
 import net.fireofpower.firesenderexpansion.registries.SpellRegistries;
 import net.fireofpower.firesenderexpansion.util.ModTags;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.network.PacketDistributor;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -24,6 +32,8 @@ public class TeleportAoe extends AoeEntity implements AntiMagicSusceptible {
     private float radius;
     private int duration;
     private float tpRadius = 0.5f;
+    private List<ServerPlayer> trackedShaderTargets = new ArrayList<>();
+
     public TeleportAoe(EntityType<? extends Projectile> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
 
@@ -50,7 +60,33 @@ public class TeleportAoe extends AoeEntity implements AntiMagicSusceptible {
                         Utils.handleSpellTeleport(SpellRegistries.DISPLACEMENT_CAGE.get(), e, dest);
                     }
                 });
+
+        //get everyone sorta nearby (it's a square instead of a circle with radius dimensions)
+        List<ServerPlayer> targets = this.level().getEntitiesOfClass(ServerPlayer.class, new AABB(this.getX() - getRadius(), this.getY() - getRadius(), this.getZ() - getRadius(), this.getX() + getRadius(), this.getY() + getRadius(), this.getZ() + getRadius()));
+        for(int i = 0; i < targets.size(); i++) {
+            //if we're not already tracking them, then start tracking them and apply the shader
+            if(!trackedShaderTargets.contains(targets.get(i))){
+                trackedShaderTargets.add(targets.get(i));
+                if(distanceTo(targets.get(i)) < getRadius()){
+                    PacketDistributor.sendToPlayer(trackedShaderTargets.get(i), new AddShaderEffectPacket(FiresEnderExpansion.MODID, "shaders/pink_shader.json"));
+                }
+            }
+        }
+        //stop tracking people that leave our range
+        for(int i = 0; i < trackedShaderTargets.size(); i++){
+            if(distanceTo(trackedShaderTargets.get(i)) > getRadius()){
+                PacketDistributor.sendToPlayer(trackedShaderTargets.get(i), new RemoveShaderEffectPacket());
+                trackedShaderTargets.remove(i);
+                i--;
+            }
+        }
         if(tickCount > duration){
+            //when we are done, remove the shader from everyone who's being tracked
+            for(int i = 0; i < trackedShaderTargets.size(); i++){
+                PacketDistributor.sendToPlayer(trackedShaderTargets.get(i), new RemoveShaderEffectPacket());
+                trackedShaderTargets.remove(i);
+                i--;
+            }
             discard();
         }
         super.tick();
