@@ -43,7 +43,8 @@ public class InfiniteVoidSpell extends AbstractSpell {
     @Override
     public List<MutableComponent> getUniqueInfo(int spellLevel, LivingEntity caster) {
         return List.of(
-                Component.translatable("ui.irons_spellbooks.effect_length", Utils.timeFromTicks((duration-4) * 20, 1))
+                Component.translatable("ui.irons_spellbooks.effect_length", Utils.timeFromTicks((duration-4) * 20, 1)),
+                Component.translatable("ui.aces_spell_utils.refinement", Utils.stringTruncation(getRefinement(spellLevel,caster), 0))
         );
     }
 
@@ -65,26 +66,16 @@ public class InfiniteVoidSpell extends AbstractSpell {
     
     @Override
     public void onCast(Level level, int spellLevel, LivingEntity entity, CastSource castSource, MagicData playerMagicData) {
-        //no domain clashes >:(
-        if(entity.level().getEntitiesOfClass(InfiniteVoid.class, entity.getBoundingBox().inflate(range * 2)).isEmpty()) {
-            InfiniteVoid infiniteVoid = new InfiniteVoid(entity.level(), entity);
-            infiniteVoid.setPos(entity.position().add(0, entity.getEyeHeight() - infiniteVoid.getBoundingBox().getYsize() * 0.5f, 0));
-            infiniteVoid.setDeltaMovement(new Vec3(0, 0, 0));
-            infiniteVoid.setRefinement((int)(getSpellPower(spellLevel, entity) * 100));
-            infiniteVoid.setRadius(range);
-            infiniteVoid.setDuration(duration + 3);
-            infiniteVoid.setOpen(false);
-            entity.level().addFreshEntity(infiniteVoid);
-            CameraShakeManager.addCameraShake(new CameraShakeData(level,40, entity.position(), 20));
-            Timer timer = new Timer();
-            entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 40, 10, false, false, false));
-            List<Entity> targets = entity.level().getEntities(entity, new AABB(entity.getX() - range, entity.getY() - range, entity.getZ() - range, entity.getX() + range, entity.getY() + range, entity.getZ() + range));
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                }
-            }, 2 * 1000);
-        }
+        InfiniteVoid infiniteVoid = new InfiniteVoid(entity.level(), entity);
+        infiniteVoid.setPos(entity.position().add(0, entity.getEyeHeight() - infiniteVoid.getBoundingBox().getYsize() * 0.5f, 0));
+        infiniteVoid.setDeltaMovement(new Vec3(0, 0, 0));
+        infiniteVoid.setRefinement((int)(getRefinement(spellLevel, entity)));
+        infiniteVoid.setRadius(range);
+        infiniteVoid.setDuration(duration + 3);
+        infiniteVoid.setOpen(false);
+        entity.level().addFreshEntity(infiniteVoid);
+        CameraShakeManager.addCameraShake(new CameraShakeData(level,40, entity.position(), 20));
+        entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 40, 10, false, false, false));
         super.onCast(level, spellLevel, entity, castSource, playerMagicData);
     }
 
@@ -123,6 +114,10 @@ public class InfiniteVoidSpell extends AbstractSpell {
     @Override
     public CastType getCastType() {
         return CastType.LONG;
+    }
+
+    public float getRefinement(int spellLevel, LivingEntity caster){
+        return getSpellPower(spellLevel, caster) * 100;
     }
 
     @Override

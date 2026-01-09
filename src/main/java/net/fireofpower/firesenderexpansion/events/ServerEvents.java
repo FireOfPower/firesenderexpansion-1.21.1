@@ -128,16 +128,6 @@ public class ServerEvents {
     }
 
     @SubscribeEvent
-    public static void preventInfiniteVoidOverlap(SpellPreCastEvent event){
-        Player entity = event.getEntity();
-        if(Objects.equals(event.getSpellId(), SpellRegistries.INFINITE_VOID.get().getSpellId())){
-            if(!entity.level().getEntitiesOfClass(InfiniteVoid.class, entity.getBoundingBox().inflate(30)).isEmpty()){
-                event.setCanceled(true);
-            }
-        }
-    }
-
-    @SubscribeEvent
     public static void preventAnchoredTeleportation(EntityTeleportEvent event) {
         if (event.getEntity().level() instanceof ServerLevel && event.getEntity() instanceof LivingEntity living && living.hasEffect(EffectRegistry.ANCHORED_EFFECT) && !(event instanceof EntityTeleportEvent.TeleportCommand)) {
             event.setCanceled(true);

@@ -13,9 +13,13 @@ import net.fireofpower.firesenderexpansion.registries.SpellRegistries;
 import net.fireofpower.firesenderexpansion.util.ModTags;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
@@ -69,6 +73,7 @@ public class TeleportAoe extends AoeEntity implements AntiMagicSusceptible {
                 trackedShaderTargets.add(targets.get(i));
                 if(distanceTo(targets.get(i)) < getRadius()){
                     PacketDistributor.sendToPlayer(trackedShaderTargets.get(i), new AddShaderEffectPacket(FiresEnderExpansion.MODID, "shaders/pink_shader.json"));
+                    level().playSound((Player) null, targets.get(i).position().x, targets.get(i).position().y, targets.get(i).position().z, SoundEvents.ENDERMAN_TELEPORT, SoundSource.PLAYERS, 2.0F, 1.0F);
                 }
             }
         }

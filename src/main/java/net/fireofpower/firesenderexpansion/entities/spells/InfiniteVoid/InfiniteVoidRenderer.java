@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
@@ -20,8 +21,13 @@ public class InfiniteVoidRenderer extends GeoEntityRenderer<InfiniteVoid> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(InfiniteVoid infiniteVoid) {
+    public @NotNull ResourceLocation getTextureLocation(@NotNull InfiniteVoid infiniteVoid) {
         return ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "textures/entity/infinite_void.png");
+    }
+
+    @Override
+    public void render(InfiniteVoid entity, float entityYaw, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
+        super.render(entity, entityYaw, partialTick, poseStack, bufferSource, packedLight);
     }
 
     @Override
@@ -31,7 +37,6 @@ public class InfiniteVoidRenderer extends GeoEntityRenderer<InfiniteVoid> {
         float yRot = -((float) (Mth.atan2(motion.z, motion.x) * (double) (180F / (float) Math.PI)) + 90.0F);
         poseStack.mulPose(Axis.YP.rotationDegrees(yRot));
         poseStack.mulPose(Axis.XP.rotationDegrees(xRot));
-
         super.preRender(poseStack, animatable, model, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, colour);
     }
 }

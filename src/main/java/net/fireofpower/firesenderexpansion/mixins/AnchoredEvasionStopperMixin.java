@@ -2,6 +2,7 @@ package net.fireofpower.firesenderexpansion.mixins;
 
 import io.redspace.ironsspellbooks.effect.EvasionEffect;
 import net.fireofpower.firesenderexpansion.registries.EffectRegistry;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket;

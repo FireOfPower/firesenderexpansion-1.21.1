@@ -214,7 +214,7 @@ dependencies {
     implementation "curse.maven:spell-collector-lib-1149858:6174572"
 
     //ACES SPELL UTILS
-    implementation "curse.maven:aces-spell-utils-1299492:7382269"
+    implementation "curse.maven:aces-spell-utils-1299492:7435761"
 
     // JSON ******************************************************************************************************
     implementation "com.google.code.gson:gson:${gson_version}"
