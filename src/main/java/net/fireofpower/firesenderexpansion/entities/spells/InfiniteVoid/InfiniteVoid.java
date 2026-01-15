@@ -29,11 +29,13 @@ public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity, Ant
     private final int deathAnimLength = 60; //in ticks, should be time UNTIL YOU WANT THEM TO TRANSPORT BACK
 
 
-    public InfiniteVoid(Level level, LivingEntity shooter) {
+    public InfiniteVoid(Level level, Entity shooter) {
         this((EntityType) EntityRegistry.INFINITE_VOID.get(), level);
-        SummonManager.setOwner(this,shooter);
         this.setNoGravity(true);
         this.canUsePortal(false);
+        this.setFinishedSpawnAnim(false);
+        this.setOwner(shooter);
+        this.setOpen(false);
     }
 
     public InfiniteVoid(EntityType<InfiniteVoid> infiniteVoidEntityType, Level level) {

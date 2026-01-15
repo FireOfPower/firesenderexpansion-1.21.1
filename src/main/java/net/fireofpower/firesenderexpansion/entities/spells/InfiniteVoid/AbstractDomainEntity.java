@@ -28,22 +28,13 @@ import net.minecraft.world.phys.AABB;
 import java.util.*;
 
 public abstract class AbstractDomainEntity extends Entity implements AntiMagicSusceptible{
-    private static final EntityDataAccessor<Integer> RADIUS;
-    private static final EntityDataAccessor<Integer> REFINEMENT;
-    private static final EntityDataAccessor<Boolean> OPEN;
-    private static final EntityDataAccessor<Boolean> TRANSPORTED;
-    private static final EntityDataAccessor<Boolean> FINISHED_SPAWN_ANIM;
+    private static final EntityDataAccessor<Integer> RADIUS = SynchedEntityData.defineId(AbstractDomainEntity.class, EntityDataSerializers.INT);;
+    private static final EntityDataAccessor<Integer> REFINEMENT = SynchedEntityData.defineId(AbstractDomainEntity.class, EntityDataSerializers.INT);;
+    private static final EntityDataAccessor<Boolean> OPEN  = SynchedEntityData.defineId(AbstractDomainEntity.class, EntityDataSerializers.BOOLEAN);;
+    private static final EntityDataAccessor<Boolean> TRANSPORTED = SynchedEntityData.defineId(AbstractDomainEntity.class, EntityDataSerializers.BOOLEAN);;
+    private static final EntityDataAccessor<Boolean> FINISHED_SPAWN_ANIM = SynchedEntityData.defineId(AbstractDomainEntity.class, EntityDataSerializers.BOOLEAN);;
     private static final Map<AbstractDomainEntity,ArrayList<AbstractDomainEntity>> clashingWithMap = new HashMap<>();
     private static final Map<AbstractDomainEntity, Entity> ownerMap = new HashMap<>();
-
-
-    static {
-        OPEN = SynchedEntityData.defineId(AbstractDomainEntity.class, EntityDataSerializers.BOOLEAN);
-        TRANSPORTED = SynchedEntityData.defineId(AbstractDomainEntity.class, EntityDataSerializers.BOOLEAN);
-        FINISHED_SPAWN_ANIM = SynchedEntityData.defineId(AbstractDomainEntity.class, EntityDataSerializers.BOOLEAN);
-        RADIUS = SynchedEntityData.defineId(AbstractDomainEntity.class, EntityDataSerializers.INT);
-        REFINEMENT = SynchedEntityData.defineId(AbstractDomainEntity.class, EntityDataSerializers.INT);
-    }
 
     public AbstractDomainEntity(EntityType<? extends Entity> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
