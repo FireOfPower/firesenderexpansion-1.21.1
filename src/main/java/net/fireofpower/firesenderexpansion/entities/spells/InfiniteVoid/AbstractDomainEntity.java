@@ -2,25 +2,18 @@ package net.fireofpower.firesenderexpansion.entities.spells.InfiniteVoid;
 
 import io.redspace.ironsspellbooks.api.magic.MagicData;
 import io.redspace.ironsspellbooks.entity.mobs.AntiMagicSusceptible;
-import io.redspace.ironsspellbooks.entity.mobs.IMagicSummon;
-import io.redspace.ironsspellbooks.entity.spells.AbstractMagicProjectile;
-import net.fireofpower.firesenderexpansion.effects.InfiniteVoidEffect;
 import net.fireofpower.firesenderexpansion.util.Utils;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.TicketType;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.TamableAnimal;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
@@ -28,11 +21,11 @@ import net.minecraft.world.phys.AABB;
 import java.util.*;
 
 public abstract class AbstractDomainEntity extends Entity implements AntiMagicSusceptible{
-    private static final EntityDataAccessor<Integer> RADIUS = SynchedEntityData.defineId(AbstractDomainEntity.class, EntityDataSerializers.INT);;
-    private static final EntityDataAccessor<Integer> REFINEMENT = SynchedEntityData.defineId(AbstractDomainEntity.class, EntityDataSerializers.INT);;
-    private static final EntityDataAccessor<Boolean> OPEN  = SynchedEntityData.defineId(AbstractDomainEntity.class, EntityDataSerializers.BOOLEAN);;
-    private static final EntityDataAccessor<Boolean> TRANSPORTED = SynchedEntityData.defineId(AbstractDomainEntity.class, EntityDataSerializers.BOOLEAN);;
-    private static final EntityDataAccessor<Boolean> FINISHED_SPAWN_ANIM = SynchedEntityData.defineId(AbstractDomainEntity.class, EntityDataSerializers.BOOLEAN);;
+    private static final EntityDataAccessor<Integer> RADIUS = SynchedEntityData.defineId(AbstractDomainEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> REFINEMENT = SynchedEntityData.defineId(AbstractDomainEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Boolean> OPEN  = SynchedEntityData.defineId(AbstractDomainEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> TRANSPORTED = SynchedEntityData.defineId(AbstractDomainEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> FINISHED_SPAWN_ANIM = SynchedEntityData.defineId(AbstractDomainEntity.class, EntityDataSerializers.BOOLEAN);
     private static final Map<AbstractDomainEntity,ArrayList<AbstractDomainEntity>> clashingWithMap = new HashMap<>();
     private static final Map<AbstractDomainEntity, Entity> ownerMap = new HashMap<>();
 
@@ -217,5 +210,14 @@ public abstract class AbstractDomainEntity extends Entity implements AntiMagicSu
         tag.putBoolean("Open",this.isOpen());
         tag.putBoolean("Transported",this.getTransported());
         tag.putBoolean("Finished Spawn Anim",this.getFinishedSpawnAnim());
+    }
+
+    @Override
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        builder.define(RADIUS, 0);
+        builder.define(REFINEMENT,0);
+        builder.define(OPEN,false);
+        builder.define(TRANSPORTED,false);
+        builder.define(FINISHED_SPAWN_ANIM,false);
     }
 }

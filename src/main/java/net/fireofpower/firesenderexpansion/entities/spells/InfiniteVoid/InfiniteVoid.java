@@ -39,12 +39,7 @@ public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity, Ant
     }
 
     public InfiniteVoid(EntityType<InfiniteVoid> infiniteVoidEntityType, Level level) {
-        super(infiniteVoidEntityType,level);
-    }
-
-    @Override
-    protected void defineSynchedData(SynchedEntityData.Builder builder) {
-
+        super(infiniteVoidEntityType, level);
     }
 
     @Override
