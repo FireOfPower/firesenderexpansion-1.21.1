@@ -46,14 +46,15 @@ public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity, Ant
     public void tick() {
         super.tick();
         if(tickCount > getDuration() * 20){
-            System.out.println("Time expired (said time being " + getDuration() * 20 + ")");
             destroyDomain();
         }
     }
 
     @Override
     public void handleTransportation() {
+        System.out.println("Transporting, value of getTransported for " + this + " is " + getTransported());
         super.handleTransportation();
+        System.out.println("Transporting2, value of getTransported for " + this + " is " + getTransported());
         Entity entity = getOwner();
         if(entity instanceof LivingEntity living){
             living.addEffect(new MobEffectInstance(EffectRegistry.ASCENDED_CASTER_EFFECT, (duration - 4) * 20, 0, false, false, true));
