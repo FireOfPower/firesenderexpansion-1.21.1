@@ -24,19 +24,4 @@ public class InfiniteVoidRenderer extends GeoEntityRenderer<InfiniteVoid> {
     public @NotNull ResourceLocation getTextureLocation(@NotNull InfiniteVoid infiniteVoid) {
         return ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "textures/entity/infinite_void.png");
     }
-
-    @Override
-    public void render(InfiniteVoid entity, float entityYaw, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight) {
-        super.render(entity, entityYaw, partialTick, poseStack, bufferSource, packedLight);
-    }
-
-    @Override
-    public void preRender(PoseStack poseStack, InfiniteVoid animatable, BakedGeoModel model, @Nullable MultiBufferSource bufferSource, @Nullable VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, int colour) {
-        Vec3 motion = animatable.getDeltaMovement();
-        float xRot = -((float) (Mth.atan2(motion.horizontalDistance(), motion.y) * (double) (180F / (float) Math.PI)) - 90.0F);
-        float yRot = -((float) (Mth.atan2(motion.z, motion.x) * (double) (180F / (float) Math.PI)) + 90.0F);
-        poseStack.mulPose(Axis.YP.rotationDegrees(yRot));
-        poseStack.mulPose(Axis.XP.rotationDegrees(xRot));
-        super.preRender(poseStack, animatable, model, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, colour);
-    }
 }

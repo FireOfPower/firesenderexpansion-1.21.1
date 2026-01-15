@@ -1,31 +1,19 @@
 package net.fireofpower.firesenderexpansion.entities.spells.InfiniteVoid;
 
-import io.redspace.ironsspellbooks.api.magic.MagicData;
+import io.redspace.ironsspellbooks.capabilities.magic.SummonManager;
 import io.redspace.ironsspellbooks.entity.mobs.AntiMagicSusceptible;
 
-import io.redspace.ironsspellbooks.api.util.Utils;
-import io.redspace.ironsspellbooks.capabilities.magic.MagicManager;
-import io.redspace.ironsspellbooks.entity.spells.AbstractMagicProjectile;
 import io.redspace.ironsspellbooks.registries.MobEffectRegistry;
-import io.redspace.ironsspellbooks.util.ParticleHelper;
-import net.acetheeldritchking.aces_spell_utils.entity.spells.AbstractDomainEntity;
-import net.acetheeldritchking.aces_spell_utils.network.AddShaderEffectPacket;
-import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
-import net.fireofpower.firesenderexpansion.network.SyncFinalCastPacket;
 import net.fireofpower.firesenderexpansion.registries.EffectRegistry;
 import net.fireofpower.firesenderexpansion.registries.EntityRegistry;
-import net.fireofpower.firesenderexpansion.registries.SpellRegistries;
-import net.minecraft.core.Holder;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvent;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.network.PacketDistributor;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.*;
@@ -33,20 +21,19 @@ import software.bernie.geckolib.constant.DefaultAnimations;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.List;
-import java.util.Optional;
 
 
 public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity, AntiMagicSusceptible {
-    private int duration; //in seconds
+    private int duration = 27; //in seconds
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private final int deathAnimLength = 60; //in ticks, should be time UNTIL YOU WANT THEM TO TRANSPORT BACK
-    private boolean shouldPlayCloseAnim = false;
 
 
     public InfiniteVoid(Level level, LivingEntity shooter) {
         this((EntityType) EntityRegistry.INFINITE_VOID.get(), level);
-        this.setOwner(shooter);
+        SummonManager.setOwner(this,shooter);
         this.setNoGravity(true);
+        this.canUsePortal(false);
     }
 
     public InfiniteVoid(EntityType<InfiniteVoid> infiniteVoidEntityType, Level level) {
@@ -54,12 +41,15 @@ public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity, Ant
     }
 
     @Override
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+
+    }
+
+    @Override
     public void tick() {
         super.tick();
-        if(tickCount > getDuration() * 20 - deathAnimLength){
-            shouldPlayCloseAnim = true;
-        }
-        if(tickCount > getDuration() * 20 /* duration is measured in seconds, not ticks */){
+        if(tickCount > getDuration() * 20){
+            System.out.println("Time expired (said time being " + getDuration() * 20 + ")");
             destroyDomain();
         }
     }
@@ -105,12 +95,13 @@ public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity, Ant
     }
 
     private PlayState predicate(AnimationState<InfiniteVoid> event){
-        if(tickCount < 20){
+        if(tickCount < 80){
             event.getController().setAnimation(RawAnimation.begin().thenPlayAndHold("misc.open"));
-        } else if (!shouldPlayCloseAnim) {
-            if(tickCount == 20){
+            if(tickCount == 40){
                 setFinishedSpawnAnim(true);
+                //this is when we want people to transport
             }
+        } else if (tickCount < getDuration() * 20 - deathAnimLength){
             event.getController().setAnimation(DefaultAnimations.IDLE);
         }else{
             int beginDeathTime = tickCount;

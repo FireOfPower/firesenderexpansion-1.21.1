@@ -37,8 +37,10 @@ public class InfiniteVoidEffect extends MagicMobEffect implements AntiMagicSusce
         if(!pLivingEntity.getType().is(ModTags.INFINITE_VOID_IMMUNE)) {
             recordPosition(pLivingEntity);
             Vec3 newPos = pLivingEntity.position().add(0,500,0);
-            if(pLivingEntity.getServer().getLevel(VoidDimensionManager.VOID_DIMENSION) != null){
-                pLivingEntity.changeDimension(new DimensionTransition(Objects.requireNonNull(pLivingEntity.getServer()).getLevel(VoidDimensionManager.VOID_DIMENSION),newPos,Vec3.ZERO,pLivingEntity.getXRot(),pLivingEntity.getYRot(),DimensionTransition.DO_NOTHING));
+            if(pLivingEntity.getServer() != null) {
+                if (pLivingEntity.getServer().getLevel(VoidDimensionManager.VOID_DIMENSION) != null) {
+                    pLivingEntity.changeDimension(new DimensionTransition(Objects.requireNonNull(pLivingEntity.getServer()).getLevel(VoidDimensionManager.VOID_DIMENSION), newPos, Vec3.ZERO, pLivingEntity.getXRot(), pLivingEntity.getYRot(), DimensionTransition.DO_NOTHING));
+                }
             }
         }
     }
