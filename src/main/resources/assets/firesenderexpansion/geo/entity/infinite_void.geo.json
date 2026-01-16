@@ -6,8 +6,8 @@
 				"identifier": "geometry.infinite_void",
 				"texture_width": 16,
 				"texture_height": 16,
-				"visible_bounds_width": 5,
-				"visible_bounds_height": 3,
+				"visible_bounds_width": 76,
+				"visible_bounds_height": 41,
 				"visible_bounds_offset": [0, 0.5, 0]
 			},
 			"bones": [

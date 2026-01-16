@@ -13,6 +13,7 @@ import io.redspace.ironsspellbooks.util.ParticleHelper;
 import net.fireofpower.firesenderexpansion.ClientConfig;
 import net.fireofpower.firesenderexpansion.Config;
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
+import net.fireofpower.firesenderexpansion.entities.spells.InfiniteVoid.AbstractDomainEntity;
 import net.fireofpower.firesenderexpansion.network.AddShaderEffectPacket;
 import net.fireofpower.firesenderexpansion.network.DoParticleBurstPacket;
 import net.fireofpower.firesenderexpansion.network.RemoveShaderEffectPacket;
@@ -58,13 +59,10 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity, AntiMagicSusceptible {
-    private int timeAlive = -1;
-    private int delay = 0;
-    private int age = 0;
-    private Vec3 fireDir;
-    private RawAnimation animationToPlay = null;
+    private static final EntityDataAccessor<Integer> TIME_ALIVE = SynchedEntityData.defineId(HollowCrystal.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> DELAY = SynchedEntityData.defineId(HollowCrystal.class, EntityDataSerializers.INT);
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
-    private List<Entity> victims;
+    private Map<HollowCrystal,List<Entity>> victims = new HashMap<>();
     private static final EntityDataAccessor<Boolean> DATA_IS_PLAYING_BREAK_ANIM = SynchedEntityData.defineId(HollowCrystal.class, EntityDataSerializers.BOOLEAN);
 
 
@@ -73,7 +71,7 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
         this((EntityType) EntityRegistry.HOLLOW_CRYSTAL.get(), level);
         this.setOwner(shooter);
         this.setNoGravity(true);
-        victims = new ArrayList<>();
+        victims.put(this,new ArrayList<>());
     }
 
     public HollowCrystal(EntityType<HollowCrystal> hollowCrystalEntityType, Level level) {
@@ -86,9 +84,8 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
 
     @Override
     public void tick() {
-        this.age++;
-        if(this.age == this.delay){
-            shoot(fireDir);
+        if(tickCount == getDelay()){
+            shoot(getOwner().getLookAngle());
             CameraShakeManager.addCameraShake(new CameraShakeData(level(),20, position(), 20));
             handleShootParticles();
             if(getOwner() instanceof ServerPlayer owner && ClientConfig.HOLLOW_CRYSTAL_FLASH.get()) {
@@ -114,7 +111,7 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
                 }, 300);
             }
         }
-        if(this.age > this.delay) {
+        if(tickCount > getDelay()) {
             if (!level().isClientSide()) {
                 this.level().getEntitiesOfClass(ServerPlayer.class, this.getBoundingBox().inflate(3)).stream().forEach(e -> {
                     this.level().playSeededSound(null, this.getX(), this.getY(), this.getZ(),
@@ -135,7 +132,7 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
                                 if(Utils.shouldBreakHollowCrystal(proj)) {
                                     triggerBreakAnimation();
                                     this.setDeltaMovement(0, 0, 0);
-                                    this.timeAlive = 60;
+                                    setTimeAlive(60);
                                 }
                             }
                             if (e instanceof ItemEntity items) {
@@ -155,7 +152,7 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
                     stone.get().discard();
                 }
             }
-            if (this.timeAlive == 0 || tickCount > 600) {
+            if (getTimeAlive() == 0 || tickCount > 600) {
                 //final move
                 this.level().getEntitiesOfClass(LivingEntity.class,
                                 this.getBoundingBox()
@@ -172,8 +169,8 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
                         });
                 discardThis();
             }
-            if (timeAlive > 0) {
-                timeAlive--;
+            if (getTimeAlive() > 0) {
+                setTimeAlive(getTimeAlive() - 1);
                 for (int i = 0; i < 10; i++) {
                     this.level().addParticle(ParticleTypes.END_ROD, particleRangeX(0), particleRangeY(0), particleRangeZ(0), Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5);
                 }
@@ -189,17 +186,13 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
                     this.level().playSound((Player) null, this.position().x, this.position().y, this.position().z, SoundRegistry.EARTHQUAKE_IMPACT, SoundSource.PLAYERS, 2.0F, 1.0F);
                 }
                 if (victims != null) {
-                    for (Entity entity : this.level().getEntities(this, this.getBoundingBox()).stream().filter(target -> canHitEntity(target) && !victims.contains(target)).collect(Collectors.toSet())) {
+                    for (Entity entity : this.level().getEntities(this, this.getBoundingBox()).stream().filter(target -> canHitEntity(target) && !victims.get(this).contains(target)).collect(Collectors.toSet())) {
                         damageEntity(entity);
                     }
                 }
             }
             super.tick();
         }
-    }
-
-    public void setFireDir(Vec3 fireDir) {
-        this.fireDir = fireDir;
     }
 
     @Override
@@ -214,9 +207,9 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
     }
 
     private void damageEntity(Entity entity) {
-        if (!victims.contains(entity)) {
+        if (!victims.get(this).contains(entity)) {
             DamageSources.applyDamage(entity, damage, SpellRegistries.HOLLOW_CRYSTAL.get().getDamageSource(this, getOwner()));
-            victims.add(entity);
+            victims.get(this).add(entity);
         }
     }
 
@@ -248,11 +241,19 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
     }
 
     public int getDelay() {
-        return delay;
+        return this.entityData.get(DELAY);
     }
 
     public void setDelay(int delay) {
-        this.delay = delay;
+        this.entityData.set(DELAY,delay);
+    }
+
+    public int getTimeAlive() {
+        return this.entityData.get(TIME_ALIVE);
+    }
+
+    public void setTimeAlive(int newTimeAlive){
+        this.entityData.set(TIME_ALIVE,newTimeAlive);
     }
 
     @Override
@@ -320,23 +321,17 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
     private PlayState predicate(AnimationState<HollowCrystal> event) {
         if (!isPlayingBreakAnimation())
         {
-            if (this.animationToPlay == null || this.age > this.delay) {
-                //System.out.println(this.age + " and " + this.delay);
-                if(this.age > this.delay) {
-                    event.getController().setAnimation(DefaultAnimations.IDLE);
-                }else{
-                    //System.out.println("Switched animation to spawn anim");
-                    event.getController().setAnimation(DefaultAnimations.ATTACK_CAST);
-                }
-                return PlayState.CONTINUE;
+            if (tickCount < 20) {
+                event.getController().setAnimation(DefaultAnimations.ATTACK_CAST);
+            }else{
+                event.getController().setAnimation(DefaultAnimations.IDLE);
             }
         }
         else
         {
             event.getController().setAnimation(DefaultAnimations.DIE);
-            return PlayState.CONTINUE;
         }
-        return PlayState.STOP;
+        return PlayState.CONTINUE;
     }
 
     public boolean isPlayingBreakAnimation()
@@ -358,5 +353,7 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
         builder.define(DATA_IS_PLAYING_BREAK_ANIM, false);
+        builder.define(TIME_ALIVE,-1);
+        builder.define(DELAY,20);
     }
 }

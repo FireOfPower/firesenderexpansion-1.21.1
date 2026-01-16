@@ -2,9 +2,13 @@ package net.fireofpower.firesenderexpansion.entities.spells.InfiniteVoid;
 
 import io.redspace.ironsspellbooks.api.magic.MagicData;
 import io.redspace.ironsspellbooks.entity.mobs.AntiMagicSusceptible;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import it.unimi.dsi.fastutil.objects.ObjectIterator;
 import net.fireofpower.firesenderexpansion.util.Utils;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -17,17 +21,20 @@ import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
+import net.neoforged.neoforge.common.util.INBTSerializable;
+import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.*;
 
-public abstract class AbstractDomainEntity extends Entity implements AntiMagicSusceptible{
+public abstract class AbstractDomainEntity extends Entity implements AntiMagicSusceptible, INBTSerializable<CompoundTag> {
     private static final EntityDataAccessor<Integer> RADIUS = SynchedEntityData.defineId(AbstractDomainEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> REFINEMENT = SynchedEntityData.defineId(AbstractDomainEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> OPEN  = SynchedEntityData.defineId(AbstractDomainEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> TRANSPORTED = SynchedEntityData.defineId(AbstractDomainEntity.class, EntityDataSerializers.BOOLEAN);
-    private static final EntityDataAccessor<Boolean> FINISHED_SPAWN_ANIM = SynchedEntityData.defineId(AbstractDomainEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Long> SPAWN_TIME = SynchedEntityData.defineId(AbstractDomainEntity.class, EntityDataSerializers.LONG);
     private static final Map<AbstractDomainEntity,ArrayList<AbstractDomainEntity>> clashingWithMap = new HashMap<>();
     private static final Map<AbstractDomainEntity, Entity> ownerMap = new HashMap<>();
+    private int spawnAnimTime = Integer.MAX_VALUE; //please update this in your own code with setSpawnAnimTime()
 
     public AbstractDomainEntity(EntityType<? extends Entity> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
@@ -35,15 +42,21 @@ public abstract class AbstractDomainEntity extends Entity implements AntiMagicSu
     }
 
     public void onActivation(){
+        if(!level().isClientSide) {
+            setSpawnTime(level().getGameTime());
+        }
         clashingWithMap.put(this,new ArrayList<>());
         level().getEntitiesOfClass(AbstractDomainEntity.class, new AABB(position().subtract(getRadius() / 2.0, getRadius() / 2.0, getRadius() / 2.0), this.position().add(getRadius() / 2.0, getRadius() / 2.0, getRadius() / 2.0))).stream()
                 .forEach(e -> {
                             if(e.distanceTo(this) < getRadius() && !Objects.equals(e,this)){
                                 if(e.getRefinement() > getRefinement()){
+                                    System.out.println("REFINEMENT DIFFERENCE - NO CLASH");
                                     destroyDomain();
                                 }else if (e.getRefinement() < getRefinement()){
+                                    System.out.println("REFINEMENT DIFFERENCE - NO CLASH");
                                     e.destroyDomain();
                                 }else{
+                                    System.out.println("DOMAIN CLASH DETECTED");
                                     if(!getClashingWith().contains(e)) {
                                         clashingWithMap.get(this).add(e);
                                     }
@@ -62,7 +75,7 @@ public abstract class AbstractDomainEntity extends Entity implements AntiMagicSu
     }
 
     private boolean canTransport(){
-        return !isOpen() && !getTransported() && !isClashing() && getFinishedSpawnAnim();
+        return !isOpen() && !getTransported() && !isClashing() && tickCount > this.getSpawnAnimTime();
     }
 
     public void handleDomainClash(AbstractDomainEntity opposingDomain){}
@@ -107,7 +120,7 @@ public abstract class AbstractDomainEntity extends Entity implements AntiMagicSu
         }
         if(!level().isClientSide) {
             ServerChunkCache cache = getServer().getLevel(this.level().dimension()).getChunkSource();
-            cache.addRegionTicket(TicketType.FORCED, Utils.getChunkPos(new BlockPos((int) this.position().x, (int) this.position().y, (int) this.position().z)), 9, Utils.getChunkPos(new BlockPos((int) this.position().x, (int) this.position().y, (int) this.position().z)), true);
+            cache.addRegionTicket(TicketType.FORCED, Utils.getChunkPos(new BlockPos((int) this.position().x, (int) this.position().y, (int) this.position().z)), 20, Utils.getChunkPos(new BlockPos((int) this.position().x, (int) this.position().y, (int) this.position().z)), true);
         }
         if(getOwner() instanceof LivingEntity living && living.isDeadOrDying()){
             destroyDomain();
@@ -176,16 +189,6 @@ public abstract class AbstractDomainEntity extends Entity implements AntiMagicSu
         this.entityData.set(AbstractDomainEntity.TRANSPORTED, transported);
     }
 
-    public boolean getFinishedSpawnAnim()
-    {
-        return this.entityData.get(FINISHED_SPAWN_ANIM);
-    }
-
-    public void setFinishedSpawnAnim(boolean finishedSpawnAnim)
-    {
-        this.entityData.set(AbstractDomainEntity.FINISHED_SPAWN_ANIM, finishedSpawnAnim);
-    }
-
     public void setOwner(Entity owner){
         ownerMap.put(this,owner);
     }
@@ -194,13 +197,29 @@ public abstract class AbstractDomainEntity extends Entity implements AntiMagicSu
         return ownerMap.get(this);
     }
 
+    public void setSpawnAnimTime(int spawnAnimTime) {
+        this.spawnAnimTime = spawnAnimTime;
+    }
+
+    public int getSpawnAnimTime() {
+        return spawnAnimTime;
+    }
+
+    public Long getSpawnTime() {
+        return this.entityData.get(SPAWN_TIME);
+    }
+
+    public void setSpawnTime(long spawnTime){
+        this.entityData.set(SPAWN_TIME,spawnTime);
+    }
+
     @Override
     protected void readAdditionalSaveData(CompoundTag tag) {
         this.setRadius(tag.getInt("Radius"));
         this.setRefinement(tag.getInt("Refinement"));
         this.setOpen(tag.getBoolean("Open"));
         this.setTransported(tag.getBoolean("Transported"));
-        this.setFinishedSpawnAnim(tag.getBoolean("Finished Spawn Anim"));
+        this.setSpawnTime(tag.getLong("Spawn Time"));
     }
 
     @Override
@@ -209,7 +228,7 @@ public abstract class AbstractDomainEntity extends Entity implements AntiMagicSu
         tag.putInt("Refinement",this.getRefinement());
         tag.putBoolean("Open",this.isOpen());
         tag.putBoolean("Transported",this.getTransported());
-        tag.putBoolean("Finished Spawn Anim",this.getFinishedSpawnAnim());
+        tag.putLong("Spawn Time",this.getSpawnTime());
     }
 
     @Override
@@ -218,6 +237,17 @@ public abstract class AbstractDomainEntity extends Entity implements AntiMagicSu
         builder.define(REFINEMENT,0);
         builder.define(OPEN,false);
         builder.define(TRANSPORTED,false);
-        builder.define(FINISHED_SPAWN_ANIM,false);
+        builder.define(SPAWN_TIME,Long.MIN_VALUE);
+    }
+
+    public @UnknownNullability CompoundTag serializeNBT(HolderLookup.Provider provider) {
+        CompoundTag compoundTag = new CompoundTag();
+        compoundTag.putLong("Spawn Time",getSpawnTime());
+        return compoundTag;
+    }
+
+    @Override
+    public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
+        setSpawnTime(nbt.getLong("Spawn Time"));
     }
 }

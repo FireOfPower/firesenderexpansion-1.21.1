@@ -12,8 +12,10 @@ import net.fireofpower.firesenderexpansion.registries.EntityRegistry;
 import net.fireofpower.firesenderexpansion.registries.SpellRegistries;
 import net.fireofpower.firesenderexpansion.util.ModTags;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
@@ -33,8 +35,8 @@ import java.util.Objects;
 import java.util.Optional;
 
 public class TeleportAoe extends AoeEntity implements AntiMagicSusceptible {
-    private float radius;
-    private int duration;
+    private static final EntityDataAccessor<Float> RADIUS = SynchedEntityData.defineId(TeleportAoe.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Integer> DURATION = SynchedEntityData.defineId(TeleportAoe.class, EntityDataSerializers.INT);
     private float tpRadius = 0.5f;
     private List<ServerPlayer> trackedShaderTargets = new ArrayList<>();
 
@@ -129,20 +131,20 @@ public class TeleportAoe extends AoeEntity implements AntiMagicSusceptible {
 
     @Override
     public float getRadius() {
-        return radius;
+        return this.entityData.get(RADIUS);
     }
 
     @Override
     public void setRadius(float radius) {
-        this.radius = radius;
+        this.entityData.set(RADIUS,radius);
     }
 
     @Override
     public int getDuration() {
-        return duration;
+        return this.entityData.get(DURATION).intValue();
     }
 
     public void setDuration(int duration) {
-        this.duration = duration;
+        this.entityData.set(DURATION,duration);
     }
 }

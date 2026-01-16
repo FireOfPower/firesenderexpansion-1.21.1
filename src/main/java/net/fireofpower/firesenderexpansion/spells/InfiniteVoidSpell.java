@@ -37,13 +37,13 @@ import java.util.TimerTask;
 @AutoSpellConfig
 public class InfiniteVoidSpell extends AbstractSpell {
     private final ResourceLocation spellId = ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "infinite_void");
-    private final int duration = 24;
+    private final int duration = 15;
     private final int range = 20;
 
     @Override
     public List<MutableComponent> getUniqueInfo(int spellLevel, LivingEntity caster) {
         return List.of(
-                Component.translatable("ui.irons_spellbooks.effect_length", Utils.timeFromTicks((duration-4) * 20, 1)),
+                Component.translatable("ui.irons_spellbooks.effect_length", Utils.timeFromTicks(duration * 20, 1)),
                 Component.translatable("ui.aces_spell_utils.refinement", Utils.stringTruncation(getRefinement(spellLevel,caster), 0))
         );
     }

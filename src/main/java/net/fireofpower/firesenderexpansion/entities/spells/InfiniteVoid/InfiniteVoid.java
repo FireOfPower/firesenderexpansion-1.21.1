@@ -6,6 +6,7 @@ import io.redspace.ironsspellbooks.entity.mobs.AntiMagicSusceptible;
 import io.redspace.ironsspellbooks.registries.MobEffectRegistry;
 import net.fireofpower.firesenderexpansion.registries.EffectRegistry;
 import net.fireofpower.firesenderexpansion.registries.EntityRegistry;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -14,6 +15,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
+import net.neoforged.neoforge.common.util.INBTSerializable;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.*;
@@ -23,17 +25,16 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 import java.util.List;
 
 
-public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity, AntiMagicSusceptible {
-    private int duration = 27; //in seconds
+public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity, AntiMagicSusceptible, INBTSerializable<CompoundTag> {
+    private int duration = 20; //in seconds
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
-    private final int deathAnimLength = 60; //in ticks, should be time UNTIL YOU WANT THEM TO TRANSPORT BACK
 
 
     public InfiniteVoid(Level level, Entity shooter) {
         this((EntityType) EntityRegistry.INFINITE_VOID.get(), level);
         this.setNoGravity(true);
         this.canUsePortal(false);
-        this.setFinishedSpawnAnim(false);
+        this.setSpawnAnimTime(40);
         this.setOwner(shooter);
         this.setOpen(false);
     }
@@ -45,6 +46,7 @@ public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity, Ant
     @Override
     public void tick() {
         super.tick();
+        //System.out.println("for entity " + this + " we have a tickCount of " + tickCount);
         if(tickCount > getDuration() * 20){
             destroyDomain();
         }
@@ -52,9 +54,7 @@ public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity, Ant
 
     @Override
     public void handleTransportation() {
-        System.out.println("Transporting, value of getTransported for " + this + " is " + getTransported());
         super.handleTransportation();
-        System.out.println("Transporting2, value of getTransported for " + this + " is " + getTransported());
         Entity entity = getOwner();
         if(entity instanceof LivingEntity living){
             living.addEffect(new MobEffectInstance(EffectRegistry.ASCENDED_CASTER_EFFECT, (duration - 4) * 20, 0, false, false, true));
@@ -93,23 +93,13 @@ public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity, Ant
     }
 
     private PlayState predicate(AnimationState<InfiniteVoid> event){
-        if(tickCount < 80){
+        long time = level().getGameTime() - getSpawnTime();
+        if(time < 80){
             event.getController().setAnimation(RawAnimation.begin().thenPlayAndHold("misc.open"));
-            if(tickCount == 40){
-                setFinishedSpawnAnim(true);
-                //this is when we want people to transport
-            }
-        } else if (tickCount < getDuration() * 20 - deathAnimLength){
+        } else if (time < getDuration() * 20L){
             event.getController().setAnimation(DefaultAnimations.IDLE);
         }else{
-            int beginDeathTime = tickCount;
-            if(tickCount < beginDeathTime + 20) {
-                event.getController().setAnimation(RawAnimation.begin().thenPlayAndHold("misc.close"));
-            } else if (tickCount < beginDeathTime + 100) {
-                event.getController().setAnimation(RawAnimation.begin().thenPlayAndHold("misc.open"));
-            } else if (tickCount < beginDeathTime + 120) {
-                event.getController().setAnimation(RawAnimation.begin().thenPlayAndHold("misc.close"));
-            }
+            event.getController().setAnimation(RawAnimation.begin().thenPlayAndHold("misc.close"));
         }
 
         return PlayState.CONTINUE;

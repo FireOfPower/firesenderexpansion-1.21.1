@@ -6,11 +6,16 @@ import io.redspace.ironsspellbooks.damage.DamageSources;
 import io.redspace.ironsspellbooks.entity.spells.AbstractMagicProjectile;
 import io.redspace.ironsspellbooks.util.ParticleHelper;
 import net.fireofpower.firesenderexpansion.Config;
+import net.fireofpower.firesenderexpansion.entities.spells.InfiniteVoid.AbstractDomainEntity;
 import net.fireofpower.firesenderexpansion.registries.EntityRegistry;
 import net.fireofpower.firesenderexpansion.registries.ItemRegistry;
 import net.fireofpower.firesenderexpansion.registries.EffectRegistry;
 import net.fireofpower.firesenderexpansion.registries.SpellRegistries;
 import net.minecraft.core.Holder;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -39,13 +44,13 @@ import java.util.Optional;
 
 public class ObsidianRod extends AbstractMagicProjectile implements GeoEntity {
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
-    private int effectLength;
+    private static final EntityDataAccessor<Integer> EFFECT_LENGTH = SynchedEntityData.defineId(ObsidianRod.class, EntityDataSerializers.INT);
 
 
     public ObsidianRod(Level level, LivingEntity shooter, int effectLength) {
         this((EntityType) EntityRegistry.OBSIDIAN_ROD.get(), level);
         this.setOwner(shooter);
-        this.effectLength = effectLength;
+        setEffectLength(effectLength);
     }
 
     public ObsidianRod(EntityType<ObsidianRod> obsidianRodEntityType, Level level) {
@@ -79,11 +84,18 @@ public class ObsidianRod extends AbstractMagicProjectile implements GeoEntity {
                 SpellRegistries.OBSIDIAN_ROD.get().getDamageSource(this, getOwner()));
         if (target instanceof LivingEntity livingTarget)
         {
-            livingTarget.addEffect(new MobEffectInstance(EffectRegistry.ANCHORED_EFFECT, effectLength, 0));
+            livingTarget.addEffect(new MobEffectInstance(EffectRegistry.ANCHORED_EFFECT, getEffectLength(), 0));
         }
         discard();
     }
 
+    public void setEffectLength(int duration){
+        this.entityData.set(EFFECT_LENGTH,duration);
+    }
+
+    public int getEffectLength() {
+        return this.entityData.get(EFFECT_LENGTH);
+    }
 
     @Override
     public void trailParticles() {
@@ -121,6 +133,21 @@ public class ObsidianRod extends AbstractMagicProjectile implements GeoEntity {
     private PlayState predicate(AnimationState<ObsidianRod> event){
         event.getController().setAnimation(DefaultAnimations.IDLE);
         return PlayState.CONTINUE;
+    }
+
+    @Override
+    protected void readAdditionalSaveData(CompoundTag tag) {
+        this.setEffectLength(tag.getInt("Effect Length"));
+    }
+
+    @Override
+    protected void addAdditionalSaveData(CompoundTag tag) {
+        tag.putInt("Effect Length",this.getEffectLength());
+    }
+
+    @Override
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        builder.define(EFFECT_LENGTH, 0);
     }
 }
 
