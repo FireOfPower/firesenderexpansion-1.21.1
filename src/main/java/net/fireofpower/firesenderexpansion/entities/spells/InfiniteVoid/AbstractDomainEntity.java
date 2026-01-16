@@ -31,6 +31,7 @@ public abstract class AbstractDomainEntity extends Entity implements AntiMagicSu
     private static final EntityDataAccessor<Integer> REFINEMENT = SynchedEntityData.defineId(AbstractDomainEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> OPEN  = SynchedEntityData.defineId(AbstractDomainEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> TRANSPORTED = SynchedEntityData.defineId(AbstractDomainEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> CLASHABLE  = SynchedEntityData.defineId(AbstractDomainEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Long> SPAWN_TIME = SynchedEntityData.defineId(AbstractDomainEntity.class, EntityDataSerializers.LONG);
     private static final Map<AbstractDomainEntity,ArrayList<AbstractDomainEntity>> clashingWithMap = new HashMap<>();
     private static final Map<AbstractDomainEntity, Entity> ownerMap = new HashMap<>();
@@ -49,19 +50,26 @@ public abstract class AbstractDomainEntity extends Entity implements AntiMagicSu
         level().getEntitiesOfClass(AbstractDomainEntity.class, new AABB(position().subtract(getRadius() / 2.0, getRadius() / 2.0, getRadius() / 2.0), this.position().add(getRadius() / 2.0, getRadius() / 2.0, getRadius() / 2.0))).stream()
                 .forEach(e -> {
                             if(e.distanceTo(this) < getRadius() && !Objects.equals(e,this)){
-                                if(e.getRefinement() > getRefinement()){
-                                    System.out.println("REFINEMENT DIFFERENCE - NO CLASH");
+                                //clash checks!
+                                if(!e.getClashable()){
+                                    //do nothing
+                                }else if(e.getOwner() != null && getOwner() != null && e.getOwner().equals(getOwner())){
+                                    System.out.println("SAME OWNER - NO CLASH");
+                                }else if((double) e.getRefinement() / getRefinement() >= 1.5){
+                                    System.out.println("REFINEMENT DIFFERENCE TOO GREAT - NO CLASH");
                                     destroyDomain();
-                                }else if (e.getRefinement() < getRefinement()){
-                                    System.out.println("REFINEMENT DIFFERENCE - NO CLASH");
+                                }else if ((double) getRefinement() / e.getRefinement() >= 1.5){
+                                    System.out.println("REFINEMENT DIFFERENCE TOO GREAT - NO CLASH");
                                     e.destroyDomain();
                                 }else{
-                                    System.out.println("DOMAIN CLASH DETECTED");
-                                    if(!getClashingWith().contains(e)) {
-                                        clashingWithMap.get(this).add(e);
-                                    }
-                                    if(!e.getClashingWith().contains(this)) {
-                                        e.getClashingWith().add(this);
+                                    System.out.println("DOMAIN CLASH DETECTED - Our Domain has Refinement of " + getRefinement());
+                                    if(getClashingWith() != null && e.getClashingWith() != null) {
+                                        if (!getClashingWith().contains(e)) {
+                                            clashingWithMap.get(this).add(e);
+                                        }
+                                        if (!e.getClashingWith().contains(this)) {
+                                            e.getClashingWith().add(this);
+                                        }
                                     }
                                 }
                             }
@@ -78,7 +86,8 @@ public abstract class AbstractDomainEntity extends Entity implements AntiMagicSu
         return !isOpen() && !getTransported() && !isClashing() && tickCount > this.getSpawnAnimTime();
     }
 
-    public void handleDomainClash(AbstractDomainEntity opposingDomain){}
+    public void handleDomainClash(ArrayList<AbstractDomainEntity> opposingDomains){
+    }
 
     public void targetSureHit(){
         level().getEntitiesOfClass(Entity.class, new AABB(position().subtract(getRadius() / 2.0, getRadius() / 2.0, getRadius() / 2.0), position().add(getRadius() / 2.0, getRadius() / 2.0, getRadius() / 2.0))).stream()
@@ -128,7 +137,7 @@ public abstract class AbstractDomainEntity extends Entity implements AntiMagicSu
         if(!getClashingWith().isEmpty()) {
             for (AbstractDomainEntity e : clashingWithMap.get(this)) {
                 if (e != null) {
-                    handleDomainClash(e);
+                    handleDomainClash(clashingWithMap.get(this));
                 } else {
                     clashingWithMap.get(this).remove(e);
                 }
@@ -213,6 +222,14 @@ public abstract class AbstractDomainEntity extends Entity implements AntiMagicSu
         this.entityData.set(SPAWN_TIME,spawnTime);
     }
 
+    public void setClashable(boolean clashable){
+        this.entityData.set(CLASHABLE,clashable);
+    }
+
+    public boolean getClashable(){
+        return this.entityData.get(CLASHABLE);
+    }
+
     @Override
     protected void readAdditionalSaveData(CompoundTag tag) {
         this.setRadius(tag.getInt("Radius"));
@@ -220,6 +237,7 @@ public abstract class AbstractDomainEntity extends Entity implements AntiMagicSu
         this.setOpen(tag.getBoolean("Open"));
         this.setTransported(tag.getBoolean("Transported"));
         this.setSpawnTime(tag.getLong("Spawn Time"));
+        this.setClashable(tag.getBoolean("Clashable"));
     }
 
     @Override
@@ -229,6 +247,7 @@ public abstract class AbstractDomainEntity extends Entity implements AntiMagicSu
         tag.putBoolean("Open",this.isOpen());
         tag.putBoolean("Transported",this.getTransported());
         tag.putLong("Spawn Time",this.getSpawnTime());
+        tag.putBoolean("Clashable",this.getClashable());
     }
 
     @Override
@@ -238,6 +257,7 @@ public abstract class AbstractDomainEntity extends Entity implements AntiMagicSu
         builder.define(OPEN,false);
         builder.define(TRANSPORTED,false);
         builder.define(SPAWN_TIME,Long.MIN_VALUE);
+        builder.define(CLASHABLE,true);
     }
 
     public @UnknownNullability CompoundTag serializeNBT(HolderLookup.Provider provider) {

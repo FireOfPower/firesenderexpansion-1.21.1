@@ -20,31 +20,36 @@ import java.util.UUID;
 
 @EventBusSubscriber
 public class AspectOfTheShulkerEffect extends MagicMobEffect {
-    private Map<UUID,Integer> internalCooldowns = new HashMap<>();
+    private static Map<UUID,Integer> internalCooldowns = new HashMap<>();
 
     public AspectOfTheShulkerEffect() {
         super(MobEffectCategory.BENEFICIAL, Utils.rgbToInt(231,234,211));
     }
 
     @SubscribeEvent
-    public void handleAbility(LivingIncomingDamageEvent event) {
-        if(!internalCooldowns.containsKey(event.getSource().getEntity().getUUID())){
-            internalCooldowns.put(event.getSource().getEntity().getUUID(),0);
-        }
-        if (event.getSource().getEntity() instanceof LivingEntity living && living.hasEffect(EffectRegistry.ASPECT_OF_THE_SHULKER_EFFECT)) {
-            if(event.getSource() instanceof SpellDamageSource && internalCooldowns.get(event.getSource().getEntity().getUUID()) == 0){
-                LivingEntity victimPlayer = event.getEntity();
-                Level world = living.level();
-                MagicShulkerBullet bullet = new MagicShulkerBullet(living.level(), living, victimPlayer, Direction.Axis.X);
-                bullet.setPos(living.getBoundingBox().getCenter().add((double)0.0F, (double)(bullet.getBbHeight() * 3F), (double)0.0F));
-                world.addFreshEntity(bullet);
-                internalCooldowns.replace(living.getUUID(),1);
+    public static void handleAbility(LivingIncomingDamageEvent event) {
+        if(event.getSource().getEntity() != null) {
+            if (!internalCooldowns.containsKey(event.getSource().getEntity().getUUID())) {
+                internalCooldowns.put(event.getSource().getEntity().getUUID(), 0);
+            }
+            if (event.getSource().getEntity() instanceof LivingEntity living && living.hasEffect(EffectRegistry.ASPECT_OF_THE_SHULKER_EFFECT)) {
+                if (event.getSource() instanceof SpellDamageSource && internalCooldowns.get(event.getSource().getEntity().getUUID()) == 0) {
+                    LivingEntity victimPlayer = event.getEntity();
+                    Level world = living.level();
+                    MagicShulkerBullet bullet = new MagicShulkerBullet(living.level(), living, victimPlayer, Direction.Axis.X);
+                    bullet.setPos(living.getBoundingBox().getCenter().add((double) 0.0F, (double) (bullet.getBbHeight() * 3F), (double) 0.0F));
+                    world.addFreshEntity(bullet);
+                    internalCooldowns.replace(living.getUUID(), 5);
+                }
             }
         }
     }
 
     @Override
     public boolean applyEffectTick(LivingEntity entity, int amplifier) {
+        if (!internalCooldowns.containsKey(entity.getUUID())) {
+            internalCooldowns.put(entity.getUUID(), 0);
+        }
         if(internalCooldowns.get(entity.getUUID()) > 0){
             internalCooldowns.replace(entity.getUUID(),internalCooldowns.get(entity.getUUID()) - 1);
         }

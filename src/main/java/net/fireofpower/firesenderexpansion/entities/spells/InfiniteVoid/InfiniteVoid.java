@@ -22,6 +22,7 @@ import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.constant.DefaultAnimations;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -55,20 +56,40 @@ public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity, Ant
     @Override
     public void handleTransportation() {
         super.handleTransportation();
+        setClashable(false);
         Entity entity = getOwner();
-        if(entity instanceof LivingEntity living){
-            living.addEffect(new MobEffectInstance(EffectRegistry.ASCENDED_CASTER_EFFECT, (duration - 4) * 20, 0, false, false, true));
-            living.addEffect(new MobEffectInstance(EffectRegistry.ANCHORED_EFFECT, (duration - 4) * 20, 0, false, false, true));
-            living.addEffect(new MobEffectInstance(MobEffectRegistry.ANTIGRAVITY, (duration - 4) * 20, 0, false, false, true));
-            living.addEffect(new MobEffectInstance(EffectRegistry.INFINITE_VOID_EFFECT, (duration - 4) * 20, 0, false, false, true));
-        }
         List<Entity> targets = entity.level().getEntities(entity, new AABB(entity.getX() - getRadius(), entity.getY() - getRadius(), entity.getZ() - getRadius(), entity.getX() + getRadius(), entity.getY() + getRadius(), entity.getZ() + getRadius()));
+        if(targets.contains(getOwner())){
+            targets.remove(getOwner());
+        }
         for (int i = 0; i < targets.size(); i++) {
             if (targets.get(i) instanceof LivingEntity target && !target.getType().equals(EntityRegistry.INFINITE_VOID.get())) {
                 target.addEffect(new MobEffectInstance(EffectRegistry.ANCHORED_EFFECT, (duration - 4) * 20, 0, false, false, true));
                 target.addEffect(new MobEffectInstance(MobEffectRegistry.ANTIGRAVITY, (duration - 4) * 20, 0, false, false, true));
                 target.addEffect(new MobEffectInstance(EffectRegistry.INFINITE_VOID_EFFECT, (duration - 4) * 20, 0, false, false, true));
             }
+        }
+        if(entity instanceof LivingEntity living){
+            living.addEffect(new MobEffectInstance(EffectRegistry.ASCENDED_CASTER_EFFECT, (duration - 4) * 20, 0, false, false, true));
+            living.addEffect(new MobEffectInstance(EffectRegistry.ANCHORED_EFFECT, (duration - 4) * 20, 0, false, false, true));
+            living.addEffect(new MobEffectInstance(MobEffectRegistry.ANTIGRAVITY, (duration - 4) * 20, 0, false, false, true));
+            living.addEffect(new MobEffectInstance(EffectRegistry.INFINITE_VOID_EFFECT, (duration - 4) * 20, 0, false, false, true));
+        }
+    }
+
+    @Override
+    public void handleDomainClash(ArrayList<AbstractDomainEntity> opposingDomains) {
+        int totalRefinement = 0;
+        for(int i = 0; i < opposingDomains.size(); i++){
+            totalRefinement += opposingDomains.get(i).getRefinement();
+        }
+        if(getOwner() instanceof LivingEntity living) {
+            double ownerHealthPercentage = living.getHealth() / living.getMaxHealth();
+            if (ownerHealthPercentage < (double) (totalRefinement - getRefinement()) / totalRefinement){
+                destroyDomain();
+            }
+        }else{
+            destroyDomain();
         }
     }
 

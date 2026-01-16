@@ -7,8 +7,7 @@
   "mixins": [
     "AnchoredEvasionStopperMixin",
     "AnchoredPortalStopperMixin",
-    "HollowCrystalEffectEyeGlowMixin",
-    "VoidDimensionTickingMixin"
+    "HollowCrystalEffectEyeGlowMixin"
   ],
   "client": [
     "client.MouseMixin"
