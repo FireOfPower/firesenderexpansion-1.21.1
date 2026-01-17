@@ -21,6 +21,7 @@ public class EffectRegistry {
     public static final DeferredHolder<MobEffect, MobEffect> ECLIPSED_EFFECT = MOB_EFFECTS.register("eclipsed_effect", () -> new EclipsedEffect());
     public static final DeferredHolder<MobEffect, MobEffect> STRIDING_EFFECT = MOB_EFFECTS.register("striding_effect", () -> new StridingEffect());
     public static final DeferredHolder<MobEffect, MobEffect> LOCKED_CAMERA_EFFECT = MOB_EFFECTS.register("locked_camera_effect", () -> new TurnLockedEffect());
+    public static final DeferredHolder<MobEffect, MobEffect> VOIDTORN_EFFECT = MOB_EFFECTS.register("voidtorn_effect", () -> new VoidtornEffect());
 
     public static void register(IEventBus eventBus)
     {

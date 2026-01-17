@@ -111,22 +111,8 @@ public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity, Ant
         if(level() instanceof ServerLevel serverLevel && tickCount % 10 == 0) {
             ServerLevel voidLevel = serverLevel.getServer().getLevel(VoidDimensionManager.VOID_DIMENSION);
             voidLevel.getAllEntities().forEach(e -> {
-                if(e instanceof LivingEntity livingEntity && !livingEntity.hasEffect(EffectRegistry.ASCENDED_CASTER_EFFECT)){
-                    float yHeadRot = e.getYHeadRot();
-                    yHeadRot += 90 * (int)(Math.random() * 5);
-                    for (int i = -5; i <= 5; i++) {
-                        Vec3 particlePos = e.position();
-                        particlePos = particlePos.add(0, livingEntity.getBbHeight() / 2, 0);
-                        particlePos = particlePos.add(new Vec3(Math.cos(yHeadRot) * 0.3, 0.3, -Math.sin(yHeadRot) * 0.3).scale(i));
-                        if (i % 2 == 0) {
-                            MagicManager.spawnParticles(voidLevel, ParticleTypes.SQUID_INK, particlePos.x, particlePos.y - 0.5, particlePos.z, 1, 0, 0, 0, 0, false);
-                        } else {
-                            MagicManager.spawnParticles(voidLevel, ParticleTypes.SQUID_INK, particlePos.x, particlePos.y + 0.5, particlePos.z, 1, 0, 0, 0, 0, false);
-                        }
-                        MagicManager.spawnParticles(voidLevel, ParticleRegistry.UNSTABLE_ENDER_PARTICLE.get(), particlePos.x, particlePos.y, particlePos.z, 1, 0, 0, 0, 0, false);
-                    }
-                    voidLevel.playSound(null, livingEntity.blockPosition(), SoundRegistry.DEVOUR_BITE.get(), SoundSource.PLAYERS, 5, 10);
-                    DamageSources.applyDamage(livingEntity, 1f, SpellDamageSource.source(getOwner(), SpellRegistries.INFINITE_VOID.get()));
+                if(canTarget(e)){
+                    handleSureHit(e);
                 }
             });
         }
@@ -151,6 +137,7 @@ public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity, Ant
                     }
                     voidLevel.playSound(null, livingEntity.blockPosition(), SoundRegistry.DEVOUR_BITE.get(), SoundSource.PLAYERS, 5, 10);
                     DamageSources.applyDamage(livingEntity, 0.1f, SpellDamageSource.source(getOwner(), SpellRegistries.INFINITE_VOID.get()));
+                    livingEntity.addEffect(new MobEffectInstance(EffectRegistry.VOIDTORN_EFFECT,100,0));
                 }
     }
 
