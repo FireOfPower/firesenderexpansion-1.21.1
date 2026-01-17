@@ -30,11 +30,6 @@ public class ScreenEffectsOverlay implements LayeredDraw.Layer {
         var screenWidth = guiHelper.guiWidth();
         var screenHeight = guiHelper.guiHeight();
 
-//        if(!FMLLoader.isProduction()){
-//            guiHelper.drawString(Minecraft.getInstance().font, String.format("ice:   %s", Minecraft.getInstance().player.getAttributeValue(AttributeRegistry.ICE_SPELL_POWER)), 10, 10, 0xFFFFFF);
-//            guiHelper.drawString(Minecraft.getInstance().font, String.format("blood: %s", Minecraft.getInstance().player.getAttributeValue(AttributeRegistry.BLOOD_SPELL_POWER)), 10, 20, 0xFFFFFF);
-//        }
-
         Player player = Minecraft.getInstance().player;
         if (player == null) {
             return;

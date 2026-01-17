@@ -40,7 +40,7 @@ import java.util.List;
 
 
 public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity, AntiMagicSusceptible, INBTSerializable<CompoundTag> {
-    private int duration = 20; //in seconds
+    private int duration = 15; //in seconds
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
 
@@ -60,8 +60,7 @@ public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity, Ant
     @Override
     public void tick() {
         super.tick();
-        //System.out.println("for entity " + this + " we have a tickCount of " + tickCount);
-        if(tickCount > getDuration() * 20){
+        if(tickCount > getDuration() * 20 + getTimeSpentClashing()){
             destroyDomain();
         }
     }
@@ -77,16 +76,16 @@ public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity, Ant
         }
         for (int i = 0; i < targets.size(); i++) {
             if (targets.get(i) instanceof LivingEntity target && !target.getType().equals(EntityRegistry.INFINITE_VOID.get())) {
-                target.addEffect(new MobEffectInstance(EffectRegistry.ANCHORED_EFFECT, (duration - 4) * 20, 0, false, false, true));
-                target.addEffect(new MobEffectInstance(MobEffectRegistry.ANTIGRAVITY, (duration - 4) * 20, 0, false, false, true));
-                target.addEffect(new MobEffectInstance(EffectRegistry.INFINITE_VOID_EFFECT, (duration - 4) * 20, 0, false, false, true));
+                target.addEffect(new MobEffectInstance(EffectRegistry.ANCHORED_EFFECT, (duration) * 20, 0, false, false, true));
+                target.addEffect(new MobEffectInstance(MobEffectRegistry.ANTIGRAVITY, (duration) * 20, 0, false, false, true));
+                target.addEffect(new MobEffectInstance(EffectRegistry.INFINITE_VOID_EFFECT, (duration) * 20, 0, false, false, true));
             }
         }
         if(entity instanceof LivingEntity living){
-            living.addEffect(new MobEffectInstance(EffectRegistry.ASCENDED_CASTER_EFFECT, (duration - 4) * 20, 0, false, false, true));
-            living.addEffect(new MobEffectInstance(EffectRegistry.ANCHORED_EFFECT, (duration - 4) * 20, 0, false, false, true));
-            living.addEffect(new MobEffectInstance(MobEffectRegistry.ANTIGRAVITY, (duration - 4) * 20, 0, false, false, true));
-            living.addEffect(new MobEffectInstance(EffectRegistry.INFINITE_VOID_EFFECT, (duration - 4) * 20, 0, false, false, true));
+            living.addEffect(new MobEffectInstance(EffectRegistry.ASCENDED_CASTER_EFFECT, (duration) * 20, 0, false, false, true));
+            living.addEffect(new MobEffectInstance(EffectRegistry.ANCHORED_EFFECT, (duration) * 20, 0, false, false, true));
+            living.addEffect(new MobEffectInstance(MobEffectRegistry.ANTIGRAVITY, (duration) * 20, 0, false, false, true));
+            living.addEffect(new MobEffectInstance(EffectRegistry.INFINITE_VOID_EFFECT, (duration) * 20, 0, false, false, true));
         }
     }
 
@@ -163,9 +162,13 @@ public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity, Ant
 
     private PlayState predicate(AnimationState<InfiniteVoid> event){
         long time = level().getGameTime() - getSpawnTime();
-        if(time < 80){
-            event.getController().setAnimation(RawAnimation.begin().thenPlayAndHold("misc.open"));
-        } else if (time < getDuration() * 20L){
+        if(time < 40) {
+            event.getController().setAnimation(RawAnimation.begin().thenPlayAndHold("misc.open_grow"));
+        }else if(time < 80 && !isClashing()) {
+            event.getController().setAnimation(RawAnimation.begin().thenPlayAndHold("misc.open_shrink"));
+        }else if(isClashing()) {
+            event.getController().setAnimation(RawAnimation.begin().thenPlayAndHold("misc.idle_large"));
+        } else if (time < getDuration() * 20L - 20){
             event.getController().setAnimation(DefaultAnimations.IDLE);
         }else{
             event.getController().setAnimation(RawAnimation.begin().thenPlayAndHold("misc.close"));

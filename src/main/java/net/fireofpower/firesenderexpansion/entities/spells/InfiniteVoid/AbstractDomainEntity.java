@@ -33,6 +33,7 @@ public abstract class AbstractDomainEntity extends Entity implements AntiMagicSu
     private static final EntityDataAccessor<Boolean> TRANSPORTED = SynchedEntityData.defineId(AbstractDomainEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> CLASHABLE  = SynchedEntityData.defineId(AbstractDomainEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Long> SPAWN_TIME = SynchedEntityData.defineId(AbstractDomainEntity.class, EntityDataSerializers.LONG);
+    private static final EntityDataAccessor<Integer> TIME_SPENT_CLASHING = SynchedEntityData.defineId(AbstractDomainEntity.class, EntityDataSerializers.INT);
     private static final Map<AbstractDomainEntity,ArrayList<AbstractDomainEntity>> clashingWithMap = new HashMap<>();
     private static final Map<AbstractDomainEntity, Entity> ownerMap = new HashMap<>();
     private int spawnAnimTime = Integer.MAX_VALUE; //please update this in your own code with setSpawnAnimTime()
@@ -136,6 +137,7 @@ public abstract class AbstractDomainEntity extends Entity implements AntiMagicSu
             destroyDomain();
         }
         if(!getClashingWith().isEmpty()) {
+            incrementTimeSpentClashing();
             for (AbstractDomainEntity e : clashingWithMap.get(this)) {
                 if (e != null) {
                     handleDomainClash(clashingWithMap.get(this));
@@ -233,6 +235,18 @@ public abstract class AbstractDomainEntity extends Entity implements AntiMagicSu
         return this.entityData.get(CLASHABLE);
     }
 
+    public int getTimeSpentClashing(){
+        return this.entityData.get(TIME_SPENT_CLASHING);
+    }
+
+    public void setTimeSpentClashing(int timeSpentClashing){
+        this.entityData.set(TIME_SPENT_CLASHING,timeSpentClashing);
+    }
+
+    public void incrementTimeSpentClashing(){
+        this.entityData.set(TIME_SPENT_CLASHING,getTimeSpentClashing() + 1);
+    }
+
     @Override
     protected void readAdditionalSaveData(CompoundTag tag) {
         this.setRadius(tag.getInt("Radius"));
@@ -241,6 +255,7 @@ public abstract class AbstractDomainEntity extends Entity implements AntiMagicSu
         this.setTransported(tag.getBoolean("Transported"));
         this.setSpawnTime(tag.getLong("Spawn Time"));
         this.setClashable(tag.getBoolean("Clashable"));
+        this.setTimeSpentClashing(tag.getInt("Time Spent Clashing"));
     }
 
     @Override
@@ -251,6 +266,7 @@ public abstract class AbstractDomainEntity extends Entity implements AntiMagicSu
         tag.putBoolean("Transported",this.getTransported());
         tag.putLong("Spawn Time",this.getSpawnTime());
         tag.putBoolean("Clashable",this.getClashable());
+        tag.putInt("Time Spent Clashing", this.getTimeSpentClashing());
     }
 
     @Override
@@ -261,16 +277,19 @@ public abstract class AbstractDomainEntity extends Entity implements AntiMagicSu
         builder.define(TRANSPORTED,false);
         builder.define(SPAWN_TIME,Long.MIN_VALUE);
         builder.define(CLASHABLE,true);
+        builder.define(TIME_SPENT_CLASHING,0);
     }
 
     public @UnknownNullability CompoundTag serializeNBT(HolderLookup.Provider provider) {
         CompoundTag compoundTag = new CompoundTag();
         compoundTag.putLong("Spawn Time",getSpawnTime());
+        compoundTag.putInt("Time Spent Clashing",getTimeSpentClashing());
         return compoundTag;
     }
 
     @Override
     public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
         setSpawnTime(nbt.getLong("Spawn Time"));
+        setTimeSpentClashing(nbt.getInt("Time Spent Clashing"));
     }
 }
