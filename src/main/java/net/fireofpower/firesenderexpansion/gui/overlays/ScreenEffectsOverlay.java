@@ -22,7 +22,6 @@ public class ScreenEffectsOverlay implements LayeredDraw.Layer {
     public static final ScreenEffectsOverlay instance = new ScreenEffectsOverlay();
 
     public final static ResourceLocation VIGINETTE_TEXTURE = ResourceLocation.fromNamespaceAndPath(IronsSpellbooks.MODID, "textures/gui/overlays/vignette.png");
-    public final static ResourceLocation TENTACLE_BORDER_TEXTURE = ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "textures/overlay/tentacle_border.png");
 
     public void render(GuiGraphics guiHelper, DeltaTracker deltaTracker) {
         if (Minecraft.getInstance().options.hideGui || Minecraft.getInstance().player.isSpectator()) {
@@ -46,9 +45,6 @@ public class ScreenEffectsOverlay implements LayeredDraw.Layer {
         if (player.hasEffect(EffectRegistry.LOCKED_CAMERA_EFFECT)) {
             MobEffectInstance inst = player.getEffect(EffectRegistry.LOCKED_CAMERA_EFFECT);
             renderOverlayAdditive(guiHelper, VIGINETTE_TEXTURE, 0.35f * inst.getAmplifier(), 0, 0.35f * inst.getAmplifier(), .25f, (int)(screenWidth / (inst.getDuration() / 10f - 1)), (int)(screenHeight / (inst.getDuration() / 10f - 1)));
-        }
-        if(player.hasEffect(EffectRegistry.VOIDTORN_EFFECT)){
-            renderOverlayAdditive(guiHelper,TENTACLE_BORDER_TEXTURE, 0.15f, 0.15f, 0.15f, 0.75f, screenWidth, screenHeight);
         }
     }
 
