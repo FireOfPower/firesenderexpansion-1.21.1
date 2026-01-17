@@ -1,20 +1,33 @@
 package net.fireofpower.firesenderexpansion.entities.spells.InfiniteVoid;
 
+import io.redspace.ironsspellbooks.capabilities.magic.MagicManager;
 import io.redspace.ironsspellbooks.capabilities.magic.SummonManager;
+import io.redspace.ironsspellbooks.damage.DamageSources;
+import io.redspace.ironsspellbooks.damage.SpellDamageSource;
 import io.redspace.ironsspellbooks.entity.mobs.AntiMagicSusceptible;
 
 import io.redspace.ironsspellbooks.registries.MobEffectRegistry;
+import io.redspace.ironsspellbooks.registries.ParticleRegistry;
+import io.redspace.ironsspellbooks.registries.SoundRegistry;
+import net.fireofpower.firesenderexpansion.capabilities.magic.VoidDimensionManager;
 import net.fireofpower.firesenderexpansion.registries.EffectRegistry;
 import net.fireofpower.firesenderexpansion.registries.EntityRegistry;
+import net.fireofpower.firesenderexpansion.registries.SpellRegistries;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.util.INBTSerializable;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
@@ -91,6 +104,54 @@ public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity, Ant
         }else{
             destroyDomain();
         }
+    }
+
+    @Override
+    public void targetSureHit() {
+        if(level() instanceof ServerLevel serverLevel && tickCount % 10 == 0) {
+            ServerLevel voidLevel = serverLevel.getServer().getLevel(VoidDimensionManager.VOID_DIMENSION);
+            voidLevel.getAllEntities().forEach(e -> {
+                if(e instanceof LivingEntity livingEntity && !livingEntity.hasEffect(EffectRegistry.ASCENDED_CASTER_EFFECT)){
+                    float yHeadRot = e.getYHeadRot();
+                    yHeadRot += 90 * (int)(Math.random() * 5);
+                    for (int i = -5; i <= 5; i++) {
+                        Vec3 particlePos = e.position();
+                        particlePos = particlePos.add(0, livingEntity.getBbHeight() / 2, 0);
+                        particlePos = particlePos.add(new Vec3(Math.cos(yHeadRot) * 0.3, 0.3, -Math.sin(yHeadRot) * 0.3).scale(i));
+                        if (i % 2 == 0) {
+                            MagicManager.spawnParticles(voidLevel, ParticleTypes.SQUID_INK, particlePos.x, particlePos.y - 0.5, particlePos.z, 1, 0, 0, 0, 0, false);
+                        } else {
+                            MagicManager.spawnParticles(voidLevel, ParticleTypes.SQUID_INK, particlePos.x, particlePos.y + 0.5, particlePos.z, 1, 0, 0, 0, 0, false);
+                        }
+                        MagicManager.spawnParticles(voidLevel, ParticleRegistry.UNSTABLE_ENDER_PARTICLE.get(), particlePos.x, particlePos.y, particlePos.z, 1, 0, 0, 0, 0, false);
+                    }
+                    voidLevel.playSound(null, livingEntity.blockPosition(), SoundRegistry.DEVOUR_BITE.get(), SoundSource.PLAYERS, 5, 10);
+                    DamageSources.applyDamage(livingEntity, 1f, SpellDamageSource.source(getOwner(), SpellRegistries.INFINITE_VOID.get()));
+                }
+            });
+        }
+    }
+
+    @Override
+    public void handleSureHit(Entity e) {
+                if(e instanceof LivingEntity livingEntity && !livingEntity.hasEffect(EffectRegistry.ASCENDED_CASTER_EFFECT)){
+                    float yHeadRot = e.getYHeadRot();
+                    yHeadRot += 90 * (int)(Math.random() * 5);
+                    Level voidLevel = getServer().getLevel(VoidDimensionManager.VOID_DIMENSION);
+                    for (int i = -5; i <= 5; i++) {
+                        Vec3 particlePos = e.position();
+                        particlePos = particlePos.add(0, livingEntity.getBbHeight() / 2, 0);
+                        particlePos = particlePos.add(new Vec3(Math.cos(yHeadRot) * 0.3, 0.3, -Math.sin(yHeadRot) * 0.3).scale(i));
+                        if (i % 2 == 0) {
+                            MagicManager.spawnParticles(voidLevel, ParticleTypes.SQUID_INK, particlePos.x, particlePos.y - 0.5, particlePos.z, 1, 0, 0, 0, 0, false);
+                        } else {
+                            MagicManager.spawnParticles(voidLevel, ParticleTypes.SQUID_INK, particlePos.x, particlePos.y + 0.5, particlePos.z, 1, 0, 0, 0, 0, false);
+                        }
+                        MagicManager.spawnParticles(voidLevel, ParticleRegistry.UNSTABLE_ENDER_PARTICLE.get(), particlePos.x, particlePos.y, particlePos.z, 1, 0, 0, 0, 0, false);
+                    }
+                    voidLevel.playSound(null, livingEntity.blockPosition(), SoundRegistry.DEVOUR_BITE.get(), SoundSource.PLAYERS, 5, 10);
+                    DamageSources.applyDamage(livingEntity, 0.1f, SpellDamageSource.source(getOwner(), SpellRegistries.INFINITE_VOID.get()));
+                }
     }
 
     public void setDuration(int duration) {

@@ -89,6 +89,7 @@ public abstract class AbstractDomainEntity extends Entity implements AntiMagicSu
     public void handleDomainClash(ArrayList<AbstractDomainEntity> opposingDomains){
     }
 
+    //THIS ONLY WORKS FOR OPEN DOMAINS
     public void targetSureHit(){
         level().getEntitiesOfClass(Entity.class, new AABB(position().subtract(getRadius() / 2.0, getRadius() / 2.0, getRadius() / 2.0), position().add(getRadius() / 2.0, getRadius() / 2.0, getRadius() / 2.0))).stream()
                 .forEach(e -> {
@@ -146,7 +147,9 @@ public abstract class AbstractDomainEntity extends Entity implements AntiMagicSu
         if(canTransport()){
             handleTransportation();
         }
-        targetSureHit();
+        if(!isClashing() && (isOpen() || getTransported())) {
+            targetSureHit();
+        }
         super.tick();
     }
 

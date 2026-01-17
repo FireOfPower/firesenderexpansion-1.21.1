@@ -80,6 +80,7 @@
 
   "spell.firesenderexpansion.infinite_void": "Manifest Domain: Void",
   "spell.firesenderexpansion.infinite_void.guide": "Manifest a small vacuum in the world, drawing everyone nearby into an existence where all is void. The space will collapse shortly after existing, but while active you will also gain significant strength.",
+  "death.attack.firesenderexpansion.infinite_void": "%1$s was consumed by the void",
 
   "ui.firesenderexpansion.charge_count": "%d Charges",
   "ui.firesenderexpansion.hollow_crystal_damage": "Maxmimum of %d Damage",
