@@ -91,13 +91,14 @@ public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity, Ant
 
     @Override
     public void handleDomainClash(ArrayList<AbstractDomainEntity> opposingDomains) {
-        int totalRefinement = 0;
+        int totalRefinement = getRefinement();
         for(int i = 0; i < opposingDomains.size(); i++){
             totalRefinement += opposingDomains.get(i).getRefinement();
         }
         if(getOwner() instanceof LivingEntity living) {
             double ownerHealthPercentage = living.getHealth() / living.getMaxHealth();
-            if (ownerHealthPercentage < (double) (totalRefinement - getRefinement()) / totalRefinement){
+            if (!opposingDomains.isEmpty() && ownerHealthPercentage < (double) (totalRefinement - getRefinement()) / totalRefinement){
+                //System.out.println("Health Threshold reached, breaking " +getOwner() + "'s domain because their health percentage: " + ownerHealthPercentage + " was less than " + (double) (totalRefinement - getRefinement()) / totalRefinement + " total refinement was " + totalRefinement + " with domains: " + opposingDomains.get(0).getRefinement() + " and " + this.getRefinement() + " REMINDER: THIS ONLY WORKS FOR 1v1 CLASHES");
                 destroyDomain();
             }
         }else{
@@ -107,13 +108,15 @@ public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity, Ant
 
     @Override
     public void targetSureHit() {
-        if(level() instanceof ServerLevel serverLevel && tickCount % 10 == 0) {
+        if(level() instanceof ServerLevel serverLevel && tickCount % 100 == 0) {
             ServerLevel voidLevel = serverLevel.getServer().getLevel(VoidDimensionManager.VOID_DIMENSION);
-            voidLevel.getAllEntities().forEach(e -> {
-                if(canTarget(e)){
-                    handleSureHit(e);
-                }
-            });
+            if(voidLevel != null) {
+                voidLevel.getAllEntities().forEach(e -> {
+                    if (canTarget(e)) {
+                        handleSureHit(e);
+                    }
+                });
+            }
         }
     }
 

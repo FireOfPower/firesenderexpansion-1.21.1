@@ -84,6 +84,9 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
 
     @Override
     public void tick() {
+        if(victims.get(this) == null){
+            victims.put(this,new ArrayList<>());
+        }
         if(tickCount == getDelay()){
             shoot(getOwner().getLookAngle());
             CameraShakeManager.addCameraShake(new CameraShakeData(level(),20, position(), 20));

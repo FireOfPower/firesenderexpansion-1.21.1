@@ -80,6 +80,11 @@ public abstract class AbstractDomainEntity extends Entity implements AntiMagicSu
 
     //TODO: Is there a nice way to get this method to be used instead of discard() so that people can have breaking domain animations?
     public void destroyDomain(){
+        for (AbstractDomainEntity e : clashingWithMap.get(this)) {
+            if(e.getClashingWith().contains(this)){
+                e.getClashingWith().remove(this);
+            }
+        }
         discard();
     }
 
@@ -138,19 +143,14 @@ public abstract class AbstractDomainEntity extends Entity implements AntiMagicSu
         }
         if(!getClashingWith().isEmpty()) {
             incrementTimeSpentClashing();
-            for (AbstractDomainEntity e : clashingWithMap.get(this)) {
-                if (e != null) {
-                    handleDomainClash(clashingWithMap.get(this));
-                } else {
-                    clashingWithMap.get(this).remove(e);
-                }
-            }
+            handleDomainClash(clashingWithMap.get(this));
         }
         if(canTransport()){
             handleTransportation();
         }
         if(!isClashing() && (isOpen() || getTransported())) {
             targetSureHit();
+
         }
         super.tick();
     }
