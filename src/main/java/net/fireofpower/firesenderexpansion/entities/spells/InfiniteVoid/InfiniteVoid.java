@@ -13,6 +13,7 @@ import net.fireofpower.firesenderexpansion.capabilities.magic.VoidDimensionManag
 import net.fireofpower.firesenderexpansion.registries.EffectRegistry;
 import net.fireofpower.firesenderexpansion.registries.EntityRegistry;
 import net.fireofpower.firesenderexpansion.registries.SpellRegistries;
+import net.fireofpower.firesenderexpansion.util.ModTags;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.ParticleTypes;
@@ -40,7 +41,7 @@ import java.util.List;
 
 
 public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity, AntiMagicSusceptible, INBTSerializable<CompoundTag> {
-    private int duration = 15 + 2; //in seconds, 15 for actual time + 2 for spawn anim
+    private int duration = 15; //in seconds, 15 for actual time
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
 
@@ -59,8 +60,10 @@ public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity, Ant
 
     @Override
     public void tick() {
+        long time = level().getGameTime() - getSpawnTime();
         super.tick();
-        if(tickCount > getDuration() * 20 + getTimeSpentClashing()){
+        if(time > (getDuration() + 2) * 20L + getTimeSpentClashing()){
+            //System.out.println("Deleting because " + time + " is more than " + (getDuration() * 20L + getTimeSpentClashing()) + " clash length is " + getTimeSpentClashing() + " duration is " + getDuration());
             destroyDomain();
         }
     }
@@ -75,7 +78,7 @@ public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity, Ant
             targets.remove(getOwner());
         }
         for (int i = 0; i < targets.size(); i++) {
-            if (targets.get(i) instanceof LivingEntity target && !target.getType().equals(EntityRegistry.INFINITE_VOID.get())) {
+            if (targets.get(i) instanceof LivingEntity target && !target.getType().equals(EntityRegistry.INFINITE_VOID.get()) && !target.getType().is(ModTags.INFINITE_VOID_IMMUNE)) {
                 target.addEffect(new MobEffectInstance(EffectRegistry.ANCHORED_EFFECT, (duration) * 20, 0, false, false, true));
                 target.addEffect(new MobEffectInstance(MobEffectRegistry.ANTIGRAVITY, (duration) * 20, 0, false, false, true));
                 target.addEffect(new MobEffectInstance(EffectRegistry.INFINITE_VOID_EFFECT, (duration) * 20, 0, false, false, true));
@@ -168,13 +171,17 @@ public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity, Ant
         if(time < 40) {
             event.getController().setAnimation(RawAnimation.begin().thenPlayAndHold("misc.open_grow"));
         }else if(time < 80 && !isClashing()) {
+            //System.out.println(this + " is playing the shrink anim");
             event.getController().setAnimation(RawAnimation.begin().thenPlayAndHold("misc.open_shrink"));
         }else if(isClashing()) {
+            //System.out.println(this + " is playing the clash anim");
             event.getController().setAnimation(RawAnimation.begin().thenPlayAndHold("misc.idle_large"));
-        } else if (time < getDuration() * 20L - 20){
+        } else if (time < (getDuration() + 2) * 20L + getTimeSpentClashing() - 20){
+            //System.out.println("time: " + time + " is less than " + ((getDuration() + 2) * 20L + getTimeSpentClashing() - 20) + " which is a duration of " + (getDuration() + 2) + " and a clash length of " + getTimeSpentClashing());
             event.getController().setAnimation(DefaultAnimations.IDLE);
         }else{
             event.getController().setAnimation(RawAnimation.begin().thenPlayAndHold("misc.close"));
+            //System.out.println(this + " is playing the close anim");
         }
 
         return PlayState.CONTINUE;

@@ -33,6 +33,7 @@ public abstract class AbstractDomainEntity extends Entity implements AntiMagicSu
     private static final EntityDataAccessor<Boolean> OPEN  = SynchedEntityData.defineId(AbstractDomainEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> TRANSPORTED = SynchedEntityData.defineId(AbstractDomainEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> CLASHABLE  = SynchedEntityData.defineId(AbstractDomainEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> CLASHING = SynchedEntityData.defineId(AbstractDomainEntity.class,EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Long> SPAWN_TIME = SynchedEntityData.defineId(AbstractDomainEntity.class, EntityDataSerializers.LONG);
     private static final EntityDataAccessor<Integer> TIME_SPENT_CLASHING = SynchedEntityData.defineId(AbstractDomainEntity.class, EntityDataSerializers.INT);
     private static final Map<AbstractDomainEntity,ArrayList<AbstractDomainEntity>> clashingWithMap = new HashMap<>();
@@ -41,6 +42,7 @@ public abstract class AbstractDomainEntity extends Entity implements AntiMagicSu
 
     public AbstractDomainEntity(EntityType<? extends Entity> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
+        clashingWithMap.put(this,new ArrayList<>());
         this.setNoGravity(true);
     }
 
@@ -56,15 +58,15 @@ public abstract class AbstractDomainEntity extends Entity implements AntiMagicSu
                                 if(!e.getClashable()){
                                     //do nothing
                                 }else if(e.getOwner() != null && getOwner() != null && e.getOwner().equals(getOwner())){
-                                    System.out.println("SAME OWNER - NO CLASH");
+                                    //System.out.println("SAME OWNER - NO CLASH");
                                 }else if((double) e.getRefinement() / getRefinement() >= 1.5){
-                                    System.out.println("REFINEMENT DIFFERENCE TOO GREAT - NO CLASH");
+                                    //System.out.println("REFINEMENT DIFFERENCE TOO GREAT - NO CLASH");
                                     destroyDomain();
                                 }else if ((double) getRefinement() / e.getRefinement() >= 1.5){
-                                    System.out.println("REFINEMENT DIFFERENCE TOO GREAT - NO CLASH");
+                                    //System.out.println("REFINEMENT DIFFERENCE TOO GREAT - NO CLASH");
                                     e.destroyDomain();
                                 }else{
-                                    System.out.println("DOMAIN CLASH DETECTED - Our Domain has Refinement of " + getRefinement());
+                                    //System.out.println("DOMAIN CLASH DETECTED - Our Domain has Refinement of " + getRefinement());
                                     if(getClashingWith() != null && e.getClashingWith() != null) {
                                         if (!getClashingWith().contains(e)) {
                                             clashingWithMap.get(this).add(e);
@@ -72,6 +74,8 @@ public abstract class AbstractDomainEntity extends Entity implements AntiMagicSu
                                         if (!e.getClashingWith().contains(this)) {
                                             e.getClashingWith().add(this);
                                         }
+                                        setClashing(true);
+                                        e.setClashing(true);
                                     }
                                 }
                             }
@@ -81,17 +85,19 @@ public abstract class AbstractDomainEntity extends Entity implements AntiMagicSu
 
     //TODO: Is there a nice way to get this method to be used instead of discard() so that people can have breaking domain animations?
     public void destroyDomain(){
-        for (AbstractDomainEntity e : clashingWithMap.get(this)) {
-            if(e.getClashingWith().contains(this)){
-                e.getClashingWith().remove(this);
+        discard();
+        if(clashingWithMap.get(this) != null) {
+            for (AbstractDomainEntity e : clashingWithMap.get(this)) {
+                if (e.getClashingWith().contains(this)) {
+                    e.getClashingWith().remove(this);
+                }
             }
         }
         clashingWithMap.remove(this);
-        discard();
     }
 
     private boolean canTransport(){
-        return !isOpen() && !getTransported() && !isClashing() && tickCount > this.getSpawnAnimTime();
+        return !isOpen() && !getTransported() && !isClashing() && tickCount > this.getSpawnAnimTime() && !this.isRemoved();
     }
 
     public void handleDomainClash(ArrayList<AbstractDomainEntity> opposingDomains){
@@ -113,12 +119,11 @@ public abstract class AbstractDomainEntity extends Entity implements AntiMagicSu
     }
 
     public boolean isClashing(){
-        if(clashingWithMap.get(this) != null) {
-            return !clashingWithMap.get(this).isEmpty();
-        }else{
-            clashingWithMap.put(this,new ArrayList<>());
-            return false;
-        }
+        return this.entityData.get(CLASHING);
+    }
+
+    public void setClashing(boolean clashing){
+        this.entityData.set(CLASHING,clashing);
     }
 
     public boolean canTarget(Entity e){
@@ -133,11 +138,18 @@ public abstract class AbstractDomainEntity extends Entity implements AntiMagicSu
     }
 
     public ArrayList<AbstractDomainEntity> getClashingWith() {
-        return clashingWithMap.get(this);
+        if(clashingWithMap.get(this) != null) {
+            return clashingWithMap.get(this);
+        }else{
+            return new ArrayList<>();
+        }
     }
 
     @Override
     public void tick() {
+        if(clashingWithMap.get(this) == null){
+            clashingWithMap.put(this,new ArrayList<>());
+        }
         if(tickCount == 1) {
             onActivation();
         }
@@ -147,6 +159,9 @@ public abstract class AbstractDomainEntity extends Entity implements AntiMagicSu
         }
         if(getOwner() instanceof LivingEntity living && living.isDeadOrDying()){
             destroyDomain();
+        }
+        if(getClashingWith().isEmpty() && isClashing()){
+            setClashing(false);
         }
         if(!getClashingWith().isEmpty()) {
             incrementTimeSpentClashing();
@@ -263,6 +278,7 @@ public abstract class AbstractDomainEntity extends Entity implements AntiMagicSu
         this.setSpawnTime(tag.getLong("Spawn Time"));
         this.setClashable(tag.getBoolean("Clashable"));
         this.setTimeSpentClashing(tag.getInt("Time Spent Clashing"));
+        this.setClashing(tag.getBoolean("Clashing"));
     }
 
     @Override
@@ -274,6 +290,7 @@ public abstract class AbstractDomainEntity extends Entity implements AntiMagicSu
         tag.putLong("Spawn Time",this.getSpawnTime());
         tag.putBoolean("Clashable",this.getClashable());
         tag.putInt("Time Spent Clashing", this.getTimeSpentClashing());
+        tag.putBoolean("Clashing",this.isClashing());
     }
 
     @Override
@@ -284,6 +301,7 @@ public abstract class AbstractDomainEntity extends Entity implements AntiMagicSu
         builder.define(TRANSPORTED,false);
         builder.define(SPAWN_TIME,Long.MIN_VALUE);
         builder.define(CLASHABLE,true);
+        builder.define(CLASHING,false);
         builder.define(TIME_SPENT_CLASHING,0);
     }
 
@@ -291,6 +309,7 @@ public abstract class AbstractDomainEntity extends Entity implements AntiMagicSu
         CompoundTag compoundTag = new CompoundTag();
         compoundTag.putLong("Spawn Time",getSpawnTime());
         compoundTag.putInt("Time Spent Clashing",getTimeSpentClashing());
+        compoundTag.putBoolean("Clashing",isClashing());
         return compoundTag;
     }
 
@@ -298,5 +317,6 @@ public abstract class AbstractDomainEntity extends Entity implements AntiMagicSu
     public void deserializeNBT(HolderLookup.Provider provider, CompoundTag nbt) {
         setSpawnTime(nbt.getLong("Spawn Time"));
         setTimeSpentClashing(nbt.getInt("Time Spent Clashing"));
+        setClashing(nbt.getBoolean("Clashing"));
     }
 }
