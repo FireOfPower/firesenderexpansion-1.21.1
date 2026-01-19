@@ -22,6 +22,7 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.common.util.INBTSerializable;
+import org.checkerframework.checker.units.qual.A;
 import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.*;
@@ -85,6 +86,7 @@ public abstract class AbstractDomainEntity extends Entity implements AntiMagicSu
                 e.getClashingWith().remove(this);
             }
         }
+        clashingWithMap.remove(this);
         discard();
     }
 
@@ -111,7 +113,12 @@ public abstract class AbstractDomainEntity extends Entity implements AntiMagicSu
     }
 
     public boolean isClashing(){
-        return !clashingWithMap.get(this).isEmpty();
+        if(clashingWithMap.get(this) != null) {
+            return !clashingWithMap.get(this).isEmpty();
+        }else{
+            clashingWithMap.put(this,new ArrayList<>());
+            return false;
+        }
     }
 
     public boolean canTarget(Entity e){

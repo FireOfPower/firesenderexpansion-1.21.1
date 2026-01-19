@@ -40,7 +40,7 @@ import java.util.List;
 
 
 public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity, AntiMagicSusceptible, INBTSerializable<CompoundTag> {
-    private int duration = 15; //in seconds
+    private int duration = 15 + 2; //in seconds, 15 for actual time + 2 for spawn anim
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
 
@@ -108,7 +108,7 @@ public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity, Ant
 
     @Override
     public void targetSureHit() {
-        if(level() instanceof ServerLevel serverLevel && tickCount % 100 == 0) {
+        if(level() instanceof ServerLevel serverLevel && tickCount % 60 == 0) {
             ServerLevel voidLevel = serverLevel.getServer().getLevel(VoidDimensionManager.VOID_DIMENSION);
             if(voidLevel != null) {
                 voidLevel.getAllEntities().forEach(e -> {
