@@ -63,10 +63,10 @@ public abstract class AbstractDomainEntity extends Entity implements AntiMagicSu
                                 }else if(e.getOwner() != null && getOwner() != null && e.getOwner().equals(getOwner())){
                                     //System.out.println("SAME OWNER - NO CLASH");
                                     //this would just be really messy
-                                }else if((double) e.getRefinement() / getRefinement() >= 1.5){
+                                }else if((double) e.getRefinement() / getRefinement() >= 1.5 /*TODO: ADD A CONFIG VARIABLE FOR OVERWHELMING REFINEMENT DIFFERENCES*/){
                                     //System.out.println("REFINEMENT DIFFERENCE TOO GREAT - NO CLASH");
                                     destroyDomain();
-                                }else if ((double) getRefinement() / e.getRefinement() >= 1.5){
+                                }else if ((double) getRefinement() / e.getRefinement() >= 1.5 /* see above note */){
                                     //System.out.println("REFINEMENT DIFFERENCE TOO GREAT - NO CLASH");
                                     e.destroyDomain();
                                 }else{
