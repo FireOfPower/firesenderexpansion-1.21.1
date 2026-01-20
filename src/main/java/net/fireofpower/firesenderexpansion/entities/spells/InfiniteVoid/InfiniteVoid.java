@@ -1,10 +1,8 @@
 package net.fireofpower.firesenderexpansion.entities.spells.InfiniteVoid;
 
 import io.redspace.ironsspellbooks.capabilities.magic.MagicManager;
-import io.redspace.ironsspellbooks.capabilities.magic.SummonManager;
 import io.redspace.ironsspellbooks.damage.DamageSources;
 import io.redspace.ironsspellbooks.damage.SpellDamageSource;
-import io.redspace.ironsspellbooks.entity.mobs.AntiMagicSusceptible;
 
 import io.redspace.ironsspellbooks.registries.MobEffectRegistry;
 import io.redspace.ironsspellbooks.registries.ParticleRegistry;
@@ -14,14 +12,9 @@ import net.fireofpower.firesenderexpansion.registries.EffectRegistry;
 import net.fireofpower.firesenderexpansion.registries.EntityRegistry;
 import net.fireofpower.firesenderexpansion.registries.SpellRegistries;
 import net.fireofpower.firesenderexpansion.util.ModTags;
-import net.minecraft.client.Minecraft;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -29,7 +22,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.common.util.INBTSerializable;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.*;
@@ -40,18 +32,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity, AntiMagicSusceptible, INBTSerializable<CompoundTag> {
-    private int duration = 15; //in seconds, 15 for actual time
-    private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity {
+    private int duration = 15; //in seconds
 
 
-    public InfiniteVoid(Level level, Entity shooter) {
+    public InfiniteVoid(Level level, Entity shooter, int radius, int refinement, int duration) {
         this((EntityType) EntityRegistry.INFINITE_VOID.get(), level);
-        this.setNoGravity(true);
-        this.canUsePortal(false);
+        //the parts that won't change per-cast
         this.setSpawnAnimTime(40);
-        this.setOwner(shooter);
         this.setOpen(false);
+        setDuration(15);
+
+        //the parts that will
+        this.setOwner(shooter);
+        this.setRadius(radius);
+        this.setRefinement(refinement);
+        this.setDuration(duration);
     }
 
     public InfiniteVoid(EntityType<InfiniteVoid> infiniteVoidEntityType, Level level) {
@@ -60,10 +56,10 @@ public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity, Ant
 
     @Override
     public void tick() {
-        long time = level().getGameTime() - getSpawnTime();
         super.tick();
-        if(time > (getDuration() + 2) * 20L + getTimeSpentClashing()){
-            //System.out.println("Deleting because " + time + " is more than " + (getDuration() * 20L + getTimeSpentClashing()) + " clash length is " + getTimeSpentClashing() + " duration is " + getDuration());
+        //again tickCount is unreliable with the cross-dimensional travel
+        long time = level().getGameTime() - getSpawnTime();
+        if(time > (getDuration() + 2 /* plus two for the spawn animation */) * 20L /* to because it's stored in seconds, but needs to be in ticks */ + getTimeSpentClashing() /* it'd be annoying if you lost all your duration while clashing :( */){
             destroyDomain();
         }
     }
@@ -71,20 +67,28 @@ public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity, Ant
     @Override
     public void handleTransportation() {
         super.handleTransportation();
+        //can't clash when in the small form since that'd wreak havoc with the effect management
         setClashable(false);
         Entity entity = getOwner();
+        //target everyone within the hitbox who is within a sphere of radius
         List<Entity> targets = entity.level().getEntities(entity, new AABB(entity.getX() - getRadius(), entity.getY() - getRadius(), entity.getZ() - getRadius(), entity.getX() + getRadius(), entity.getY() + getRadius(), entity.getZ() + getRadius()));
+        targets.removeIf(e -> e.distanceTo(this) > getRadius());
         if(targets.contains(getOwner())){
+            //the owner is handled separately
             targets.remove(getOwner());
         }
         for (int i = 0; i < targets.size(); i++) {
             if (targets.get(i) instanceof LivingEntity target && !target.getType().equals(EntityRegistry.INFINITE_VOID.get()) && !target.getType().is(ModTags.INFINITE_VOID_IMMUNE)) {
+                //teleportation bad here since ppl can easily run away forever
                 target.addEffect(new MobEffectInstance(EffectRegistry.ANCHORED_EFFECT, (duration) * 20, 0, false, false, true));
+                //lets people float
                 target.addEffect(new MobEffectInstance(MobEffectRegistry.ANTIGRAVITY, (duration) * 20, 0, false, false, true));
+                //the transportation is handled by the InfiniteVoidEffect
                 target.addEffect(new MobEffectInstance(EffectRegistry.INFINITE_VOID_EFFECT, (duration) * 20, 0, false, false, true));
             }
         }
         if(entity instanceof LivingEntity living){
+            //all of the above plus the "beneficial" caster effect that gives big buffs and prevents the surehit
             living.addEffect(new MobEffectInstance(EffectRegistry.ASCENDED_CASTER_EFFECT, (duration) * 20, 0, false, false, true));
             living.addEffect(new MobEffectInstance(EffectRegistry.ANCHORED_EFFECT, (duration) * 20, 0, false, false, true));
             living.addEffect(new MobEffectInstance(MobEffectRegistry.ANTIGRAVITY, (duration) * 20, 0, false, false, true));
@@ -98,19 +102,23 @@ public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity, Ant
         for(int i = 0; i < opposingDomains.size(); i++){
             totalRefinement += opposingDomains.get(i).getRefinement();
         }
+        //basically what this does is the higher someone's refinement is, the lower they can get before they lose the clash
+        //If two equally refined people clash, this threshold is 50% health
+        //The more people that are in the clash, the easier it is for a domain to break
         if(getOwner() instanceof LivingEntity living) {
             double ownerHealthPercentage = living.getHealth() / living.getMaxHealth();
             if (!opposingDomains.isEmpty() && ownerHealthPercentage < (double) (totalRefinement - getRefinement()) / totalRefinement){
-                //System.out.println("Health Threshold reached, breaking " +getOwner() + "'s domain because their health percentage: " + ownerHealthPercentage + " was less than " + (double) (totalRefinement - getRefinement()) / totalRefinement + " total refinement was " + totalRefinement + " with domains: " + opposingDomains.get(0).getRefinement() + " and " + this.getRefinement() + " REMINDER: THIS ONLY WORKS FOR 1v1 CLASHES");
                 destroyDomain();
             }
         }else{
+            //if the clasher is not alive then just dont even try to clash
             destroyDomain();
         }
     }
 
     @Override
     public void targetSureHit() {
+        //only attack every 3 seconds
         if(level() instanceof ServerLevel serverLevel && tickCount % 60 == 0) {
             ServerLevel voidLevel = serverLevel.getServer().getLevel(VoidDimensionManager.VOID_DIMENSION);
             if(voidLevel != null) {
@@ -125,10 +133,13 @@ public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity, Ant
 
     @Override
     public void handleSureHit(Entity e) {
+        //only attack living entities, and not any that have the caster effect
                 if(e instanceof LivingEntity livingEntity && !livingEntity.hasEffect(EffectRegistry.ASCENDED_CASTER_EFFECT)){
+                    //I tried to do something cool
                     float yHeadRot = e.getYHeadRot();
                     yHeadRot += 90 * (int)(Math.random() * 5);
                     Level voidLevel = getServer().getLevel(VoidDimensionManager.VOID_DIMENSION);
+                    //slash particle effect
                     for (int i = -5; i <= 5; i++) {
                         Vec3 particlePos = e.position();
                         particlePos = particlePos.add(0, livingEntity.getBbHeight() / 2, 0);
@@ -140,11 +151,16 @@ public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity, Ant
                         }
                         MagicManager.spawnParticles(voidLevel, ParticleRegistry.UNSTABLE_ENDER_PARTICLE.get(), particlePos.x, particlePos.y, particlePos.z, 1, 0, 0, 0, 0, false);
                     }
+                    //sound
                     voidLevel.playSound(null, livingEntity.blockPosition(), SoundRegistry.DEVOUR_BITE.get(), SoundSource.PLAYERS, 5, 10);
-                    DamageSources.applyDamage(livingEntity, 0.1f, SpellDamageSource.source(getOwner(), SpellRegistries.INFINITE_VOID.get()));
+                    //damage
+                    DamageSources.applyDamage(livingEntity, 5f, SpellDamageSource.source(getOwner(), SpellRegistries.INFINITE_VOID.get()));
+                    //apply effect
                     livingEntity.addEffect(new MobEffectInstance(EffectRegistry.VOIDTORN_EFFECT,100,0));
                 }
     }
+
+    //getters/setters
 
     public void setDuration(int duration) {
         this.duration = duration;
@@ -154,7 +170,10 @@ public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity, Ant
         return duration;
     }
 
+    //geckolibbing it
+
     private final AnimationController<InfiniteVoid> animationController = new AnimationController<>(this, "controller", 0, this::predicate);
+    private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
@@ -171,19 +190,14 @@ public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity, Ant
         if(time < 40) {
             event.getController().setAnimation(RawAnimation.begin().thenPlayAndHold("misc.open_grow"));
         }else if(time < 80 && !isClashing()) {
-            //System.out.println(this + " is playing the shrink anim");
             event.getController().setAnimation(RawAnimation.begin().thenPlayAndHold("misc.open_shrink"));
         }else if(isClashing()) {
-            //System.out.println(this + " is playing the clash anim");
             event.getController().setAnimation(RawAnimation.begin().thenPlayAndHold("misc.idle_large"));
         } else if (time < (getDuration() + 2) * 20L + getTimeSpentClashing() - 20){
-            //System.out.println("time: " + time + " is less than " + ((getDuration() + 2) * 20L + getTimeSpentClashing() - 20) + " which is a duration of " + (getDuration() + 2) + " and a clash length of " + getTimeSpentClashing());
             event.getController().setAnimation(DefaultAnimations.IDLE);
         }else{
             event.getController().setAnimation(RawAnimation.begin().thenPlayAndHold("misc.close"));
-            //System.out.println(this + " is playing the close anim");
         }
-
         return PlayState.CONTINUE;
     }
 }

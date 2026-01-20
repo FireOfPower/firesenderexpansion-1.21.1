@@ -66,12 +66,9 @@ public class InfiniteVoidSpell extends AbstractSpell {
     
     @Override
     public void onCast(Level level, int spellLevel, LivingEntity entity, CastSource castSource, MagicData playerMagicData) {
-        InfiniteVoid infiniteVoid = new InfiniteVoid(entity.level(), entity);
+        int refinement = (int)(getRefinement(spellLevel, entity));
+        InfiniteVoid infiniteVoid = new InfiniteVoid(entity.level(), entity, range, refinement, duration);
         infiniteVoid.setPos(entity.position().add(0, entity.getEyeHeight() - infiniteVoid.getBoundingBox().getYsize() * 0.5f, 0));
-        //infiniteVoid.setDeltaMovement(new Vec3(0, 0, 0));
-        infiniteVoid.setRefinement((int)(getRefinement(spellLevel, entity)));
-        infiniteVoid.setRadius(range);
-        infiniteVoid.setDuration(duration);
         entity.level().addFreshEntity(infiniteVoid);
         CameraShakeManager.addCameraShake(new CameraShakeData(level,40, entity.position(), 20));
         entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 40, 10, false, false, false));

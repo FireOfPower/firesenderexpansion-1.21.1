@@ -2,13 +2,10 @@ package net.fireofpower.firesenderexpansion.entities.spells.InfiniteVoid;
 
 import io.redspace.ironsspellbooks.api.magic.MagicData;
 import io.redspace.ironsspellbooks.entity.mobs.AntiMagicSusceptible;
-import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import it.unimi.dsi.fastutil.objects.ObjectIterator;
 import net.fireofpower.firesenderexpansion.util.Utils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -22,15 +19,15 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.common.util.INBTSerializable;
-import org.checkerframework.checker.units.qual.A;
 import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.*;
 
 public abstract class AbstractDomainEntity extends Entity implements AntiMagicSusceptible, INBTSerializable<CompoundTag> {
-    private static final EntityDataAccessor<Integer> RADIUS = SynchedEntityData.defineId(AbstractDomainEntity.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Integer> REFINEMENT = SynchedEntityData.defineId(AbstractDomainEntity.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Boolean> OPEN  = SynchedEntityData.defineId(AbstractDomainEntity.class, EntityDataSerializers.BOOLEAN);
+    //ALL OF THESE SHOULD ONLY BE INTERACTED WITH USING THE GETTERS/SETTERS
+    private static final EntityDataAccessor<Integer> RADIUS = SynchedEntityData.defineId(AbstractDomainEntity.class, EntityDataSerializers.INT); //How far does it reach?
+    private static final EntityDataAccessor<Integer> REFINEMENT = SynchedEntityData.defineId(AbstractDomainEntity.class, EntityDataSerializers.INT); //How good is it in clashes?
+    private static final EntityDataAccessor<Boolean> OPEN  = SynchedEntityData.defineId(AbstractDomainEntity.class, EntityDataSerializers.BOOLEAN); //Will it impose itself into the world (open) or make use of a separate dimension (closed)?
     private static final EntityDataAccessor<Boolean> TRANSPORTED = SynchedEntityData.defineId(AbstractDomainEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> CLASHABLE  = SynchedEntityData.defineId(AbstractDomainEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> CLASHING = SynchedEntityData.defineId(AbstractDomainEntity.class,EntityDataSerializers.BOOLEAN);
@@ -42,23 +39,30 @@ public abstract class AbstractDomainEntity extends Entity implements AntiMagicSu
 
     public AbstractDomainEntity(EntityType<? extends Entity> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
-        clashingWithMap.put(this,new ArrayList<>());
+        addClashingMapIfNecessary();
         this.setNoGravity(true);
+        this.canUsePortal(false);
     }
 
     public void onActivation(){
         if(!level().isClientSide) {
+            //tickCount gets weird with cross dimensional travel and chunkloading so this is easier
             setSpawnTime(level().getGameTime());
         }
-        clashingWithMap.put(this,new ArrayList<>());
+        //forceload the chunk
+        ServerChunkCache cache = getServer().getLevel(this.level().dimension()).getChunkSource();
+        cache.addRegionTicket(TicketType.FORCED, Utils.getChunkPos(new BlockPos((int) this.position().x, (int) this.position().y, (int) this.position().z)), 20, Utils.getChunkPos(new BlockPos((int) this.position().x, (int) this.position().y, (int) this.position().z)), true);
+        //I know this method shows up a lot but its necessary i promise
+        addClashingMapIfNecessary();
         level().getEntitiesOfClass(AbstractDomainEntity.class, new AABB(position().subtract(getRadius() / 2.0, getRadius() / 2.0, getRadius() / 2.0), this.position().add(getRadius() / 2.0, getRadius() / 2.0, getRadius() / 2.0))).stream()
                 .forEach(e -> {
                             if(e.distanceTo(this) < getRadius() && !Objects.equals(e,this)){
                                 //clash checks!
                                 if(!e.getClashable()){
-                                    //do nothing
+                                    //do nothing if the other domain isn't in a clashable state
                                 }else if(e.getOwner() != null && getOwner() != null && e.getOwner().equals(getOwner())){
                                     //System.out.println("SAME OWNER - NO CLASH");
+                                    //this would just be really messy
                                 }else if((double) e.getRefinement() / getRefinement() >= 1.5){
                                     //System.out.println("REFINEMENT DIFFERENCE TOO GREAT - NO CLASH");
                                     destroyDomain();
@@ -83,9 +87,10 @@ public abstract class AbstractDomainEntity extends Entity implements AntiMagicSu
                 );
     }
 
-    //TODO: Is there a nice way to get this method to be used instead of discard() so that people can have breaking domain animations?
+    //Is there a nice way to get this method to be used instead of discard()?
     public void destroyDomain(){
         discard();
+        //this is just useful to avoid clogging stuff up but it shouldn't crash the game if not respected
         if(clashingWithMap.get(this) != null) {
             for (AbstractDomainEntity e : clashingWithMap.get(this)) {
                 if (e.getClashingWith().contains(this)) {
@@ -97,13 +102,15 @@ public abstract class AbstractDomainEntity extends Entity implements AntiMagicSu
     }
 
     private boolean canTransport(){
+        //I have this as its own method to make it really easy to override, though this case should be perfectly fine
         return !isOpen() && !getTransported() && !isClashing() && tickCount > this.getSpawnAnimTime() && !this.isRemoved();
     }
 
+    //how a domain clash works is entirely up to the addon devs
     public void handleDomainClash(ArrayList<AbstractDomainEntity> opposingDomains){
     }
 
-    //THIS ONLY WORKS FOR OPEN DOMAINS
+    //THIS ONLY WORKS FOR OPEN DOMAINS, YOU WILL NEED TO OVERRIDE IT FOR CLOSED ONES
     public void targetSureHit(){
         level().getEntitiesOfClass(Entity.class, new AABB(position().subtract(getRadius() / 2.0, getRadius() / 2.0, getRadius() / 2.0), position().add(getRadius() / 2.0, getRadius() / 2.0, getRadius() / 2.0))).stream()
                 .forEach(e -> {
@@ -114,16 +121,15 @@ public abstract class AbstractDomainEntity extends Entity implements AntiMagicSu
                 );
     }
 
+    //Again, the specific sure hit applied by the domain is entirely made by addon devs
     public void handleSureHit(Entity e){
 
     }
 
-    public boolean isClashing(){
-        return this.entityData.get(CLASHING);
-    }
-
-    public void setClashing(boolean clashing){
-        this.entityData.set(CLASHING,clashing);
+    public void addClashingMapIfNecessary(){
+        if(clashingWithMap.get(this) == null){
+            clashingWithMap.put(this,new ArrayList<>());
+        }
     }
 
     public boolean canTarget(Entity e){
@@ -137,6 +143,49 @@ public abstract class AbstractDomainEntity extends Entity implements AntiMagicSu
         return !(Objects.equals(e, this) || Objects.equals(e,getOwner()) || shareOwner);
     }
 
+    @Override
+    public void tick() {
+        addClashingMapIfNecessary();
+        if(tickCount == 1) {
+            //check for clashes immediately on spawning in
+            onActivation();
+        }
+        if(getOwner() instanceof LivingEntity living && living.isDeadOrDying()){
+            //if the owner is dead then destroy the domain
+            destroyDomain();
+        }
+        if(getClashingWith().isEmpty() && isClashing()){
+            //If you're not actually clashing but you think you are, then update the isClashing() return value
+            setClashing(false);
+        }
+        if(isClashing()) {
+            //if you're clashing, then increment the timeSpentClashing variable and perform the domain clashing behavior
+            incrementTimeSpentClashing();
+            handleDomainClash(clashingWithMap.get(this));
+        }
+        if(canTransport()){
+            //if you can transport, then do so
+            handleTransportation();
+        }
+        if(!isClashing() && (isOpen() || getTransported())) {
+            //if you're not clashing and you're either open or you've transported, then perform the sure hit
+            targetSureHit();
+        }
+        super.tick();
+    }
+
+    //up to the addon devs to do
+    public void handleTransportation() {
+        setTransported(true);
+    }
+
+    //domains can't be vanishing with a standard counterspell that'd be lame
+    @Override
+    public void onAntiMagic(MagicData playerMagicData) {
+    }
+
+    //GETTERS AND SETTERS FOR ENTITY DATA VALUES
+
     public ArrayList<AbstractDomainEntity> getClashingWith() {
         if(clashingWithMap.get(this) != null) {
             return clashingWithMap.get(this);
@@ -145,44 +194,12 @@ public abstract class AbstractDomainEntity extends Entity implements AntiMagicSu
         }
     }
 
-    @Override
-    public void tick() {
-        if(clashingWithMap.get(this) == null){
-            clashingWithMap.put(this,new ArrayList<>());
-        }
-        if(tickCount == 1) {
-            onActivation();
-        }
-        if(!level().isClientSide) {
-            ServerChunkCache cache = getServer().getLevel(this.level().dimension()).getChunkSource();
-            cache.addRegionTicket(TicketType.FORCED, Utils.getChunkPos(new BlockPos((int) this.position().x, (int) this.position().y, (int) this.position().z)), 20, Utils.getChunkPos(new BlockPos((int) this.position().x, (int) this.position().y, (int) this.position().z)), true);
-        }
-        if(getOwner() instanceof LivingEntity living && living.isDeadOrDying()){
-            destroyDomain();
-        }
-        if(getClashingWith().isEmpty() && isClashing()){
-            setClashing(false);
-        }
-        if(!getClashingWith().isEmpty()) {
-            incrementTimeSpentClashing();
-            handleDomainClash(clashingWithMap.get(this));
-        }
-        if(canTransport()){
-            handleTransportation();
-        }
-        if(!isClashing() && (isOpen() || getTransported())) {
-            targetSureHit();
-
-        }
-        super.tick();
+    public boolean isClashing(){
+        return this.entityData.get(CLASHING);
     }
 
-    public void handleTransportation() {
-        setTransported(true);
-    }
-
-    @Override
-    public void onAntiMagic(MagicData playerMagicData) {
+    public void setClashing(boolean clashing){
+        this.entityData.set(CLASHING,clashing);
     }
 
     public int getRefinement()
@@ -269,6 +286,8 @@ public abstract class AbstractDomainEntity extends Entity implements AntiMagicSu
         this.entityData.set(TIME_SPENT_CLASHING,getTimeSpentClashing() + 1);
     }
 
+    //ENTITY DATA DEFINING
+
     @Override
     protected void readAdditionalSaveData(CompoundTag tag) {
         this.setRadius(tag.getInt("Radius"));
@@ -304,6 +323,8 @@ public abstract class AbstractDomainEntity extends Entity implements AntiMagicSu
         builder.define(CLASHING,false);
         builder.define(TIME_SPENT_CLASHING,0);
     }
+
+    //NBT HANDLING
 
     public @UnknownNullability CompoundTag serializeNBT(HolderLookup.Provider provider) {
         CompoundTag compoundTag = new CompoundTag();
