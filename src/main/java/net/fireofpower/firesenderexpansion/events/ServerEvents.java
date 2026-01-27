@@ -1,12 +1,16 @@
 package net.fireofpower.firesenderexpansion.events;
 
 import com.mojang.blaze3d.shaders.Shader;
+import io.redspace.ironsspellbooks.api.config.IronConfigParameters;
 import io.redspace.ironsspellbooks.api.config.ModifyDefaultConfigValuesEvent;
+import io.redspace.ironsspellbooks.api.config.SpellConfigParameter;
 import io.redspace.ironsspellbooks.api.events.SpellOnCastEvent;
 import io.redspace.ironsspellbooks.api.events.SpellPreCastEvent;
 import io.redspace.ironsspellbooks.api.events.SpellTeleportEvent;
 import io.redspace.ironsspellbooks.api.registry.AttributeRegistry;
+import io.redspace.ironsspellbooks.api.registry.SchoolRegistry;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
+import io.redspace.ironsspellbooks.api.spells.SchoolType;
 import io.redspace.ironsspellbooks.config.SpellConfigParameters;
 import io.redspace.ironsspellbooks.damage.DamageSources;
 import io.redspace.ironsspellbooks.item.curios.CurioBaseItem;
@@ -199,6 +203,13 @@ public class ServerEvents {
                             new AttributeContainer(AttributeRegistry.ENDER_SPELL_POWER, 0.25f, AttributeModifier.Operation.ADD_VALUE),
                             new AttributeContainer(AttributeRegistry.MAX_MANA,200, AttributeModifier.Operation.ADD_VALUE));
                 }
+            }
+        }
+
+        @SubscribeEvent
+        public static void modifyTelekinesisSchool(ModifyDefaultConfigValuesEvent event){
+            if(event.getSpell() instanceof TelekinesisSpell){
+                event.setDefaultValue(IronConfigParameters.SCHOOL, SchoolRegistry.ENDER.get());
             }
         }
     }
