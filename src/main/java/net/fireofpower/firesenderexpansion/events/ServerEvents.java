@@ -62,6 +62,7 @@ public class ServerEvents {
     @SubscribeEvent
     public static void onPlayerCastEvent(SpellPreCastEvent event)
     {
+        event.getSchoolType();
         var entity = event.getEntity();
         boolean hasAnchoredEffect = entity.hasEffect(EffectRegistry.ANCHORED_EFFECT);
         if (entity instanceof ServerPlayer player && !player.level().isClientSide())

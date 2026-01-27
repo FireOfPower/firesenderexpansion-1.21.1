@@ -41,7 +41,7 @@ public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity {
         //the parts that won't change per-cast
         this.setSpawnAnimTime(40);
         this.setOpen(false);
-        setDuration(15);
+        setDuration(15); //no this isnt necessary but its good practice imo
 
         //the parts that will
         this.setOwner(shooter);
