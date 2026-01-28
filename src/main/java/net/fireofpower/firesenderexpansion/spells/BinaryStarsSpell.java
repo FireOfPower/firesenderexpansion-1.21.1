@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@AutoSpellConfig
+
 public class BinaryStarsSpell extends AbstractSpell {
     private final ResourceLocation spellId = ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "binary_stars");
 

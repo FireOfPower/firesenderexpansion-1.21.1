@@ -45,7 +45,7 @@ import java.util.Optional;
 import java.util.Timer;
 import java.util.TimerTask;
 
-@AutoSpellConfig
+
 public class HollowCrystalSpell extends AbstractSpell {
     private final ResourceLocation spellId = ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "hollow_crystal");
     private final int ticksOfEffect = 400;
@@ -87,7 +87,7 @@ public class HollowCrystalSpell extends AbstractSpell {
                 }
             }else{
                 if(entity instanceof ServerPlayer serverPlayer  && net.fireofpower.firesenderexpansion.util.Utils.hasCurio(serverPlayer, ItemRegistry.CRYSTAL_HEART.get())) {
-                    handleFiring(serverPlayer);
+                    handleFiring(serverPlayer, spellLevel);
                 }
             }
         }else{
@@ -107,11 +107,11 @@ public class HollowCrystalSpell extends AbstractSpell {
     public void onRecastFinished(ServerPlayer serverPlayer, RecastInstance recastInstance, RecastResult recastResult, ICastDataSerializable castDataSerializable) {
         super.onRecastFinished(serverPlayer, recastInstance, recastResult, castDataSerializable);
         if(recastResult.isSuccess() && !serverPlayer.level().isClientSide()) {
-            handleFiring(serverPlayer);
+            handleFiring(serverPlayer, recastInstance.getSpellLevel());
         }
     }
 
-    private void handleFiring(ServerPlayer serverPlayer){
+    private void handleFiring(ServerPlayer serverPlayer, int spellLevel){
         PlayerRecasts recasts = MagicData.getPlayerMagicData(serverPlayer).getPlayerRecasts();
         if(recasts.hasRecastForSpell(SpellRegistries.HOLLOW_CRYSTAL.get().getSpellId())){
             recasts.removeRecast(SpellRegistries.HOLLOW_CRYSTAL.get().getSpellId());
@@ -125,7 +125,7 @@ public class HollowCrystalSpell extends AbstractSpell {
             serverPlayer.addEffect(new MobEffectInstance(EffectRegistry.LOCKED_CAMERA_EFFECT,20,serverPlayer.getEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT).getAmplifier(),true, false));
             HollowCrystal hollowCrystal = new HollowCrystal(serverPlayer.level(), serverPlayer);
             hollowCrystal.setPos(serverPlayer.position().add(0, serverPlayer.getEyeHeight() + hollowCrystal.getBoundingBox().getYsize() * .25f - 3, 0).add(serverPlayer.getForward().multiply(8, 8, 8)));
-            hollowCrystal.setDamage(getDamage(serverPlayer));
+            hollowCrystal.setDamage(getDamage(serverPlayer, spellLevel));
             hollowCrystal.setDeltaMovement(hollowCrystal.getDeltaMovement().multiply(0.5,0.5,0.5));
             hollowCrystal.setDelay(20);
             CameraShakeManager.addCameraShake(new CameraShakeData(serverPlayer.level(),20, serverPlayer.position(), 20));
@@ -141,7 +141,7 @@ public class HollowCrystalSpell extends AbstractSpell {
         entity.setYBodyRot(entity.getYRot());
     }
 
-    public float getDamage(LivingEntity entity){
+    public float getDamage(LivingEntity entity, int spellLevel){
         float damagePerCharge = (float) 15;
         if(entity.getEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT) != null) {
             return entity.getEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT).getAmplifier() * damagePerCharge * getSpellPower(1 /* the spell power doesn't change per level */,entity)/50;

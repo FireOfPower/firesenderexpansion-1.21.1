@@ -34,7 +34,6 @@ import java.util.Optional;
 import java.util.Timer;
 import java.util.TimerTask;
 
-@AutoSpellConfig
 public class InfiniteVoidSpell extends AbstractSpell {
     private final ResourceLocation spellId = ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "infinite_void");
     private final int duration = 15;

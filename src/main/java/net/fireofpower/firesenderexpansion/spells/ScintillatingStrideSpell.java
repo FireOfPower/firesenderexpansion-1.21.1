@@ -40,7 +40,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@AutoSpellConfig
 public class ScintillatingStrideSpell extends AbstractSpell {
     private final ResourceLocation spellId = ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "scintillating_stride");
 

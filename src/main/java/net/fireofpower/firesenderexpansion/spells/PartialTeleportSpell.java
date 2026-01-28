@@ -25,7 +25,6 @@ import net.minecraft.world.level.block.SoundType;
 import java.util.List;
 import java.util.Optional;
 
-@AutoSpellConfig
 public class PartialTeleportSpell extends AbstractSpell {
     private final ResourceLocation spellId = ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "partial_teleport");
 
