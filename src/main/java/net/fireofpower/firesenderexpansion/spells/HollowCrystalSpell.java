@@ -63,14 +63,14 @@ public class HollowCrystalSpell extends AbstractSpell {
             .setMinRarity(SpellRarity.LEGENDARY)
             .setSchoolResource(SchoolRegistry.ENDER_RESOURCE)
             .setMaxLevel(5)
-            .setCooldownSeconds(60)
+            .setCooldownSeconds(30)
             .build();
 
     public HollowCrystalSpell()
     {
         this.manaCostPerLevel = 25;
-        this.baseSpellPower = 25;
-        this.spellPowerPerLevel = 10;
+        this.baseSpellPower = 20;
+        this.spellPowerPerLevel = 5;
         this.castTime = 40;
         this.baseManaCost = 55;
     }
