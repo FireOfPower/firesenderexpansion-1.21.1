@@ -13,6 +13,7 @@ import io.redspace.ironsspellbooks.capabilities.magic.RecastInstance;
 import io.redspace.ironsspellbooks.capabilities.magic.RecastResult;
 import io.redspace.ironsspellbooks.registries.ParticleRegistry;
 import io.redspace.ironsspellbooks.registries.SoundRegistry;
+import io.redspace.ironsspellbooks.spells.fire.FireballSpell;
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
 import net.fireofpower.firesenderexpansion.entities.spells.HollowCrystal.HollowCrystal;
 //import net.fireofpower.firesenderexpansion.network.SyncFinalCastPacket;
@@ -53,7 +54,7 @@ public class HollowCrystalSpell extends AbstractSpell {
     @Override
     public List<MutableComponent> getUniqueInfo(int spellLevel, LivingEntity caster) {
         return List.of(
-                Component.translatable("ui.firesenderexpansion.hollow_crystal_damage", Utils.stringTruncation(getRecastCount(spellLevel,caster) * 15 * getSpellPower(1 /* the spell power doesn't change per level */,caster)/50,1)),
+                Component.translatable("ui.firesenderexpansion.hollow_crystal_damage", Utils.stringTruncation(getRecastCount(spellLevel,caster) * 15 * getSpellPower(spellLevel,caster)/50,1)),
                 Component.translatable("ui.firesenderexpansion.charge_count", getRecastCount(spellLevel,caster))
         );
     }
@@ -68,8 +69,8 @@ public class HollowCrystalSpell extends AbstractSpell {
     public HollowCrystalSpell()
     {
         this.manaCostPerLevel = 25;
-        this.baseSpellPower = 50;
-        this.spellPowerPerLevel = 0;
+        this.baseSpellPower = 25;
+        this.spellPowerPerLevel = 10;
         this.castTime = 40;
         this.baseManaCost = 55;
     }
@@ -91,8 +92,15 @@ public class HollowCrystalSpell extends AbstractSpell {
                 }
             }
         }else{
-            entity.addEffect(new MobEffectInstance(EffectRegistry.HOLLOW_CRYSTAL_EFFECT, ticksOfEffect, 1, false, false, true));
-            spawnParticles(entity);
+            if(spellLevel > 1) {
+                entity.addEffect(new MobEffectInstance(EffectRegistry.HOLLOW_CRYSTAL_EFFECT, ticksOfEffect, 1, false, false, true));
+                spawnParticles(entity);
+            }else{
+                if(entity instanceof ServerPlayer serverPlayer){
+                    entity.addEffect(new MobEffectInstance(EffectRegistry.HOLLOW_CRYSTAL_EFFECT, ticksOfEffect, 1, false, false, true));
+                    handleFiring(serverPlayer,spellLevel);
+                }
+            }
         }
 
         super.onCast(level, spellLevel, entity, castSource, playerMagicData);
@@ -144,9 +152,9 @@ public class HollowCrystalSpell extends AbstractSpell {
     public float getDamage(LivingEntity entity, int spellLevel){
         float damagePerCharge = (float) 15;
         if(entity.getEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT) != null) {
-            return entity.getEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT).getAmplifier() * damagePerCharge * getSpellPower(1 /* the spell power doesn't change per level */,entity)/50;
+            return entity.getEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT).getAmplifier() * damagePerCharge * getSpellPower(spellLevel,entity)/50;
         }else{
-            return damagePerCharge * getSpellPower(1 /* the spell power doesn't change per level */,entity)/50;
+            return damagePerCharge * getSpellPower(spellLevel,entity)/50;
         }
     }
 
