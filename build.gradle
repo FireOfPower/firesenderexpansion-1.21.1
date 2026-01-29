@@ -166,55 +166,22 @@ dependencies {
 
     // GECKOLIB ***************************************************************************************************
     implementation "software.bernie.geckolib:geckolib-neoforge-${minecraft_version}:${geckolib_version}"
-
-    // CAELUS *****************************************************************************************************
-//    compileOnly "com.illusivesoulworks.caelus:caelus-neoforge:${caelus_version}:api"
-//    localRuntime "com.illusivesoulworks.caelus:caelus-neoforge:${caelus_version}"
-
     // PLAYER ANIMATOR ********************************************************************************************
-    //compileOnly "dev.kosmx.player-anim:player-animation-lib-forge:${player_animator_version}"
     implementation "dev.kosmx.player-anim:player-animation-lib-forge:${player_animator_version}"
-    //jarJar(group: "dev.kosmx.player-anim", name: "player-animation-lib-forge", version: "[${player_animator_version},${player_animator_version}]")
-
-    // TETRA ******************************************************************************************************
-    //compileOnly "se.mickelus.mutil:mutil:${mutil_version}"
-//    compileOnly "curse.maven:tetra-${tetra_version}"
-//    compileOnly "se.mickelus.mutil:mutil:${mutil_version}"
-
-    // If you want to run with tetra in dev comment the above line and uncomment the following 2 lines
-    //localRuntime "curse.maven:tetra-${tetra_version}"
-    //localRuntime "se.mickelus.mutil:mutil:${mutil_version}"
-    //localRuntime "curse.maven:better-combat-by-daedelus-639842:5723092"
-    //localRuntime "curse.maven:cloth-config-348521:5623420"
 
     // JEI ********************************************************************************************************
     compileOnly "mezz.jei:jei-${jei_mc_version}-common-api:${jei_version}"
     compileOnly "mezz.jei:jei-${jei_mc_version}-neoforge-api:${jei_version}"
     runtimeOnly "mezz.jei:jei-${jei_mc_version}-neoforge:${jei_version}"
-    //localRuntime "curse.maven:just-enough-effect-descriptions-jeed-532286:4599099")
 
     // CURIOS *****************************************************************************************************
     implementation "curse.maven:curios-309927:6529130"
-
-    // BETTER COMBAT **********************************************************************************************
-    //localRuntime "curse.maven:better-combat-by-daedelus-${better_combat_version}"
-    //localRuntime "curse.maven:cloth-config-348521:4633416"
-
-    // PATCHOULI **************************************************************************************************
-    //compileOnly "vazkii.patchouli:Patchouli:${patchouli_version}:api"
-    //localRuntime "vazkii.patchouli:Patchouli:${patchouli_version}"
-
-    // APOTHEOSIS
-    //compileOnly "curse.maven:apotheosis-${apotheosis_version}"
-    //localRuntime "curse.maven:apotheosis-${apotheosis_version}"
-    //localRuntime "curse.maven:placebo-${placebo_version}"
-    //localRuntime "curse.maven:apothic-curios-950712:5108911"
 
     // Spell Collector Lib
     implementation "curse.maven:spell-collector-lib-1149858:6174572"
 
     //ACES SPELL UTILS
-    implementation "curse.maven:aces-spell-utils-1299492:7435761"
+    implementation "curse.maven:aces-spell-utils-1299492:7547015"
 
     // JSON ******************************************************************************************************
     implementation "com.google.code.gson:gson:${gson_version}"
@@ -224,7 +191,7 @@ dependencies {
     implementation "curse.maven:mmmmmmmmmmmm-225738:7206981"
     implementation "curse.maven:selene-499980:7209771"
 
-    //FOR SAVING END LIBRARY NBT FILE
+    //FOR SAVING LARGE NBT FILE
     //implementation "curse.maven:huge-structure-blocks-474114:5628956"
 
 }

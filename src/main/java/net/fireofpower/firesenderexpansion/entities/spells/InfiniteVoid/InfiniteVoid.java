@@ -7,6 +7,8 @@ import io.redspace.ironsspellbooks.damage.SpellDamageSource;
 import io.redspace.ironsspellbooks.registries.MobEffectRegistry;
 import io.redspace.ironsspellbooks.registries.ParticleRegistry;
 import io.redspace.ironsspellbooks.registries.SoundRegistry;
+import net.acetheeldritchking.aces_spell_utils.entity.spells.AbstractDomainEntity;
+import net.acetheeldritchking.aces_spell_utils.utils.AcesSpellUtilsConfig;
 import net.fireofpower.firesenderexpansion.capabilities.magic.VoidDimensionManager;
 import net.fireofpower.firesenderexpansion.registries.EffectRegistry;
 import net.fireofpower.firesenderexpansion.registries.EntityRegistry;
@@ -30,6 +32,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity {
@@ -108,10 +111,12 @@ public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity {
         if(getOwner() instanceof LivingEntity living) {
             double ownerHealthPercentage = living.getHealth() / living.getMaxHealth();
             if (!opposingDomains.isEmpty() && ownerHealthPercentage < (double) (totalRefinement - getRefinement()) / totalRefinement){
+                System.out.println("Health Diff");
                 destroyDomain();
             }
         }else{
             //if the clasher is not alive then just dont even try to clash
+            System.out.println("Nonliving Diff");
             destroyDomain();
         }
     }

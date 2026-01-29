@@ -6,7 +6,6 @@ import io.redspace.ironsspellbooks.damage.DamageSources;
 import io.redspace.ironsspellbooks.entity.spells.AbstractMagicProjectile;
 import io.redspace.ironsspellbooks.util.ParticleHelper;
 import net.fireofpower.firesenderexpansion.Config;
-import net.fireofpower.firesenderexpansion.entities.spells.InfiniteVoid.AbstractDomainEntity;
 import net.fireofpower.firesenderexpansion.registries.EntityRegistry;
 import net.fireofpower.firesenderexpansion.registries.ItemRegistry;
 import net.fireofpower.firesenderexpansion.registries.EffectRegistry;
