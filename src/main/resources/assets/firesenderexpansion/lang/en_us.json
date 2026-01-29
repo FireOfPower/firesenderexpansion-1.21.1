@@ -114,6 +114,7 @@
   "msg.firesenderexpansion.cannot_teleport": "You cannot teleport while anchored",
   "msg.firesenderexpansion.cannot_adapt": "You cannot adapt to this place",
   "msg.firesenderexpansion.cannot_cast": "You cannot cast this right now",
+  "msg.firesenderexpansion.bypass_shroud": "Your shroud blows away in the abyssal winds",
   "msg.firesenderexpansion.fail_step": "Scintillating Step cannot teleport across dimensions",
   "msg.firesenderexpansion.too_close": "Must be cast at long range",
 
