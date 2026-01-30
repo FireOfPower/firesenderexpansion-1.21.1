@@ -1,7 +1,6 @@
 package net.fireofpower.firesenderexpansion.events;
 
 import com.mojang.blaze3d.shaders.Shader;
-import io.redspace.ironsspellbooks.api.config.IronConfigParameters;
 import io.redspace.ironsspellbooks.api.config.ModifyDefaultConfigValuesEvent;
 import io.redspace.ironsspellbooks.api.config.SpellConfigParameter;
 import io.redspace.ironsspellbooks.api.events.SpellOnCastEvent;
@@ -11,7 +10,6 @@ import io.redspace.ironsspellbooks.api.registry.AttributeRegistry;
 import io.redspace.ironsspellbooks.api.registry.SchoolRegistry;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
 import io.redspace.ironsspellbooks.api.spells.SchoolType;
-import io.redspace.ironsspellbooks.config.SpellConfigParameters;
 import io.redspace.ironsspellbooks.damage.DamageSources;
 import io.redspace.ironsspellbooks.item.curios.CurioBaseItem;
 import io.redspace.ironsspellbooks.item.weapons.AttributeContainer;
@@ -192,7 +190,7 @@ public class ServerEvents {
         return String.format("%02d:%02d" , minutes , seconds);
     }
 
-    @EventBusSubscriber(modid = MODID, bus = EventBusSubscriber.Bus.GAME)
+    @EventBusSubscriber(modid = MODID/*, bus = EventBusSubscriber.Bus.GAME*/)
     public static class StartupEvents{
 
         @SubscribeEvent
@@ -209,7 +207,7 @@ public class ServerEvents {
         @SubscribeEvent
         public static void modifyTelekinesisSchool(ModifyDefaultConfigValuesEvent event){
             if(event.getSpell() instanceof TelekinesisSpell){
-                event.setDefaultValue(IronConfigParameters.SCHOOL, SchoolRegistry.ENDER.get());
+                event.setDefaultValue(SpellConfigParameter.SCHOOL, SchoolRegistry.ENDER.get());
             }
         }
     }

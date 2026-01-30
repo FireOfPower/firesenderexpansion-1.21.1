@@ -8,6 +8,7 @@ import io.redspace.ironsspellbooks.damage.DamageSources;
 import io.redspace.ironsspellbooks.entity.mobs.AntiMagicSusceptible;
 import io.redspace.ironsspellbooks.entity.spells.AbstractMagicProjectile;
 import io.redspace.ironsspellbooks.registries.SoundRegistry;
+import io.redspace.ironsspellbooks.util.ModTags;
 import io.redspace.ironsspellbooks.util.ParticleHelper;
 import net.fireofpower.firesenderexpansion.ClientConfig;
 import net.fireofpower.firesenderexpansion.Config;
@@ -126,7 +127,7 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
                         .filter(proj -> proj.distanceTo(this) < 5)
                         .forEach(e -> {
                             if (e instanceof Projectile proj && !proj.equals(this)) {
-                                if(Config.HOLLOW_CRYSTAL_BREAK_PROJECTILES.get()) {
+                                if(Config.HOLLOW_CRYSTAL_BREAK_PROJECTILES.get() && !proj.getType().is(ModTags.CANT_PARRY) /* Probably shouldn't destroy it if it's important enough to not be parried */) {
                                     proj.discard();
                                 }
                                 if(Utils.shouldBreakHollowCrystal(proj)) {
@@ -268,20 +269,6 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
     @Override
     public Optional<Holder<SoundEvent>> getImpactSound() {
         return Optional.of(SoundRegistry.EARTHQUAKE_LOOP);
-    }
-
-    @Override
-    public void setOwner(@Nullable Entity owner) {
-        if(this.getOwner() == null) {
-            super.setOwner(owner);
-        }
-    }
-
-    @Override
-    public void shoot(double x, double y, double z, float velocity, float inaccuracy) {
-        if(this.getDeltaMovement().length() == 0) {
-            super.shoot(x, y, z, velocity, inaccuracy);
-        }
     }
 
     private final AnimationController<HollowCrystal> animationController = new AnimationController<>(this, "controller", 0, this::predicate);
