@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "firesenderexpansion:hollow_crystal"
+    "firesenderexpansion:hollow_crystal",
+    "firesenderexpansion:gate_portal"
   ]
 }
