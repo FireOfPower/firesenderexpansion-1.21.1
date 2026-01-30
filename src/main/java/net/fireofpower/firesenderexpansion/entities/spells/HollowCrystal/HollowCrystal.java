@@ -191,8 +191,8 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
                     }
                 }
             }
-            super.tick();
         }
+        super.tick();
     }
 
     @Override
