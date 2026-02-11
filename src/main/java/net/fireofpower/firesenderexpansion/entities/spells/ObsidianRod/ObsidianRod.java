@@ -146,6 +146,7 @@ public class ObsidianRod extends AbstractMagicProjectile implements GeoEntity {
 
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
         builder.define(EFFECT_LENGTH, 0);
     }
 }
