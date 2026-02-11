@@ -1,5 +1,6 @@
 package net.fireofpower.firesenderexpansion.network;
 
+import net.fireofpower.firesenderexpansion.ClientConfig;
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -33,7 +34,7 @@ public class PayloadHandler {
         Minecraft mc = Minecraft.getInstance();
         GameRenderer render = mc.gameRenderer;
         LocalPlayer clientPlayer = mc.player;
-        if(clientPlayer != null) {
+        if(clientPlayer != null && ClientConfig.HOLLOW_CRYSTAL_FLASH.get()) {
             render.loadEffect(ResourceLocation.fromNamespaceAndPath(modid,location));
         }
     }
@@ -42,7 +43,7 @@ public class PayloadHandler {
         Minecraft mc = Minecraft.getInstance();
         GameRenderer render = mc.gameRenderer;
         LocalPlayer clientPlayer = mc.player;
-        if(clientPlayer != null) {
+        if(clientPlayer != null && ClientConfig.HOLLOW_CRYSTAL_FLASH.get()) {
             render.shutdownEffect();
         }
     }

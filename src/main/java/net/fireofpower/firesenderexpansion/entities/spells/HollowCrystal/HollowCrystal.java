@@ -87,9 +87,11 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
         }
         if(tickCount == getDelay()){
             shoot(getOwner().getLookAngle());
-            CameraShakeManager.addCameraShake(new CameraShakeData(level(),20, position(), 20));
+            if(!level().isClientSide()) {
+                CameraShakeManager.addCameraShake(new CameraShakeData(level(), 20, position(), 20));
+            }
             handleShootParticles();
-            if(getOwner() instanceof ServerPlayer owner && ClientConfig.HOLLOW_CRYSTAL_FLASH.get()) {
+            if(getOwner() instanceof ServerPlayer owner) {
                 PacketDistributor.sendToPlayer(owner, new AddShaderEffectPacket(FiresEnderExpansion.MODID, "shaders/light_burst_shader.json"));
                 Timer timer = new Timer();
                 timer.schedule(new TimerTask() {
