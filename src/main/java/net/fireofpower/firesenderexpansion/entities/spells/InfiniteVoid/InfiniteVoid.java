@@ -111,12 +111,12 @@ public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity {
         if(getOwner() instanceof LivingEntity living) {
             double ownerHealthPercentage = living.getHealth() / living.getMaxHealth();
             if (!opposingDomains.isEmpty() && ownerHealthPercentage < (double) (totalRefinement - getRefinement()) / totalRefinement){
-                System.out.println("Health Diff");
+                //System.out.println("Health Diff");
                 destroyDomain();
             }
         }else{
             //if the clasher is not alive then just dont even try to clash
-            System.out.println("Nonliving Diff");
+            //System.out.println("Nonliving Diff");
             destroyDomain();
         }
     }
