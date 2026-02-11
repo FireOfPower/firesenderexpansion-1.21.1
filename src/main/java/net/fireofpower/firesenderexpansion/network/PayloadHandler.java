@@ -2,6 +2,7 @@ package net.fireofpower.firesenderexpansion.network;
 
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.core.particles.ParticleTypes;
@@ -14,7 +15,7 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import org.joml.Vector3f;
 
-@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD, modid = FiresEnderExpansion.MODID)
+@EventBusSubscriber(modid = FiresEnderExpansion.MODID)
 public class PayloadHandler {
     @SubscribeEvent
     public static void register(final RegisterPayloadHandlersEvent event) {
@@ -47,8 +48,8 @@ public class PayloadHandler {
     }
 
     public static void doParticleBurst(double xPos, double yPos, double zPos, double xRot, double yRot){
-        Level world = Minecraft.getInstance().level;
-        if (world != null) {
+        ClientLevel world = Minecraft.getInstance().level;
+        if (world != null && world.isClientSide()) {
             double radius = 0.05;
             double angleIncrement = 1.0 * Math.toRadians(0.5 / radius);
             float speedFactor = 0.1f;
