@@ -58,7 +58,7 @@ public class VoidDimensionManager {
                     System.out.println("Manifest Domain: Void found an issue, sending player to 0,200,0 in the Overworld");
                     livingEntity.changeDimension(new DimensionTransition(entity.level().getServer().getLevel(Level.OVERWORLD), Vec3.ZERO.add(0,200,0), Vec3.ZERO, 0, 0, DimensionTransition.DO_NOTHING));
                 }
-                if(entity instanceof LivingEntity livingEntity && livingEntity.hasEffect(MobEffectRegistry.ABYSSAL_SHROUD)){
+                if(entity instanceof LivingEntity livingEntity && livingEntity.hasEffect(MobEffectRegistry.ABYSSAL_SHROUD) && !livingEntity.hasEffect(EffectRegistry.ASCENDED_CASTER_EFFECT)){
                     livingEntity.removeEffect(MobEffectRegistry.ABYSSAL_SHROUD);
                     // display a message to the player
                     if(livingEntity instanceof ServerPlayer serverPlayer) {
