@@ -87,10 +87,11 @@ public class TeleportAoe extends AoeEntity implements AntiMagicSusceptible {
                 i--;
             }
         }
-        if(tickCount > duration){
+        if(tickCount > getDuration()){
             //when we are done, remove the shader from everyone who's being tracked
             for(int i = 0; i < trackedShaderTargets.size(); i++){
                 PacketDistributor.sendToPlayer(trackedShaderTargets.get(i), new RemoveShaderEffectPacket());
+                System.out.println("Despawning, telling " + trackedShaderTargets.get(i) + " to lose shader");
                 trackedShaderTargets.remove(i);
                 i--;
             }
@@ -146,5 +147,12 @@ public class TeleportAoe extends AoeEntity implements AntiMagicSusceptible {
 
     public void setDuration(int duration) {
         this.entityData.set(DURATION,duration);
+    }
+
+    @Override
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(RADIUS, 8f);
+        builder.define(DURATION,0);
     }
 }
