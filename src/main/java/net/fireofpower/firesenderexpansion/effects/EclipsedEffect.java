@@ -1,5 +1,6 @@
 package net.fireofpower.firesenderexpansion.effects;
 
+import io.redspace.ironsspellbooks.capabilities.magic.PocketDimensionManager;
 import io.redspace.ironsspellbooks.effect.MagicMobEffect;
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
 import net.fireofpower.firesenderexpansion.registries.EffectRegistry;
@@ -33,8 +34,8 @@ public class EclipsedEffect extends MagicMobEffect {
         AttributeInstance instanceAtkPower = pLivingEntity.getAttributes().getInstance(Attributes.ATTACK_DAMAGE);
 
         if (instanceAtkPower != null && instanceAtkSpeed != null && buffTracking.containsKey(pLivingEntity)) {
-            instanceAtkPower.addOrUpdateTransientModifier(new AttributeModifier(FiresEnderExpansion.id("eclipsed.power"), buffTracking.get(pLivingEntity) * -0.05, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
-            instanceAtkSpeed.addOrUpdateTransientModifier(new AttributeModifier(FiresEnderExpansion.id("eclipsed.speed"), buffTracking.get(pLivingEntity) * -0.05, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+            instanceAtkPower.addOrUpdateTransientModifier(new AttributeModifier(FiresEnderExpansion.id("eclipsed.power"), Math.clamp(buffTracking.get(pLivingEntity),0,10) * -0.05, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+            instanceAtkSpeed.addOrUpdateTransientModifier(new AttributeModifier(FiresEnderExpansion.id("eclipsed.speed"), Math.clamp(buffTracking.get(pLivingEntity),0,10) * -0.05, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
         }
     }
 

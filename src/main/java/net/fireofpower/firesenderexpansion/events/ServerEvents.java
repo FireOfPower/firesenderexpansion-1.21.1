@@ -15,7 +15,9 @@ import io.redspace.ironsspellbooks.item.curios.CurioBaseItem;
 import io.redspace.ironsspellbooks.item.weapons.AttributeContainer;
 import io.redspace.ironsspellbooks.registries.ItemRegistry;
 import io.redspace.ironsspellbooks.spells.eldritch.TelekinesisSpell;
+import io.redspace.ironsspellbooks.spells.nature.RootSpell;
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
+import net.fireofpower.firesenderexpansion.capabilities.magic.VoidDimensionManager;
 import net.fireofpower.firesenderexpansion.effects.InfiniteVoidEffect;
 import net.fireofpower.firesenderexpansion.entities.spells.InfiniteVoid.InfiniteVoid;
 import net.fireofpower.firesenderexpansion.registries.EffectRegistry;
@@ -68,7 +70,6 @@ public class ServerEvents {
     @SubscribeEvent
     public static void onPlayerCastEvent(SpellPreCastEvent event)
     {
-        event.getSchoolType();
         var entity = event.getEntity();
         boolean hasAnchoredEffect = entity.hasEffect(EffectRegistry.ANCHORED_EFFECT);
         if (entity instanceof ServerPlayer player && !player.level().isClientSide())
@@ -143,6 +144,17 @@ public class ServerEvents {
                         .withStyle(s -> s.withColor(TextColor.fromRgb(0xF35F5F)))));
                 serverPlayer.level().playSound(null, serverPlayer.getX(), serverPlayer.getY(), serverPlayer.getZ(),
                         SoundEvents.FIRE_EXTINGUISH, SoundSource.PLAYERS, 0.5f, 1f);
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void preventRootInVoidDimension(SpellPreCastEvent event){
+        if(event.getSpellId().equals(SpellRegistry.ROOT_SPELL.get().getSpellId()) && event.getEntity().level().dimension().equals(VoidDimensionManager.VOID_DIMENSION)){
+            event.setCanceled(true);
+            if(event.getEntity() instanceof ServerPlayer serverPlayer){
+                serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("msg.firesenderexpansion.root_void_fail")
+                        .withStyle(s -> s.withColor(TextColor.fromRgb(0xF35F5F)))));
             }
         }
     }

@@ -117,6 +117,7 @@
   "msg.firesenderexpansion.bypass_shroud": "Your shroud blows away in the abyssal winds",
   "msg.firesenderexpansion.fail_step": "Scintillating Step cannot teleport across dimensions",
   "msg.firesenderexpansion.too_close": "Must be cast at long range",
+  "msg.firesenderexpansion.root_void_fail": "There is nothing for the roots to grow from",
 
 
   "entity.firesenderexpansion.porphyromancer": "Porphyromancer",
