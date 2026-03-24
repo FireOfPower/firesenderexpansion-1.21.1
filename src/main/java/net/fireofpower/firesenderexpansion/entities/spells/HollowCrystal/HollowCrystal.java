@@ -61,6 +61,7 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
     private static final EntityDataAccessor<Integer> DELAY = SynchedEntityData.defineId(HollowCrystal.class, EntityDataSerializers.INT);
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private Map<HollowCrystal,List<Entity>> victims = new HashMap<>();
+    private final int maxLifetime = 1200;
     private static final EntityDataAccessor<Boolean> DATA_IS_PLAYING_BREAK_ANIM = SynchedEntityData.defineId(HollowCrystal.class, EntityDataSerializers.BOOLEAN);
 
 
@@ -85,8 +86,13 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
         if(victims.get(this) == null){
             victims.put(this,new ArrayList<>());
         }
+        if(tickCount >= maxLifetime){
+            discard();
+        }
         if(tickCount == getDelay()){
-            shoot(getOwner().getLookAngle());
+            if(getOwner() != null) {
+                shoot(getOwner().getLookAngle());
+            }
             if(!level().isClientSide()) {
                 CameraShakeManager.addCameraShake(new CameraShakeData(level(), 20, position(), 20));
             }
@@ -165,12 +171,8 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
                             if (canHitEntity(e)) {
                                 damageEntity(e);
                             }
-                            if (Objects.equals(this.getOwner(), e)) {
-                                damageOwner();
-                                //the method bloat is real :sob:
-                            }
                         });
-                discardThis();
+                discard();
             }
             if (getTimeAlive() > 0) {
                 setTimeAlive(getTimeAlive() - 1);
@@ -203,21 +205,19 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
     }
 
     private void handleShootParticles(){
-        if(!level().isClientSide) {
+        if(!level().isClientSide && getOwner() != null) {
             Vec3 spawnLoc = getOwner().position().add(getOwner().getForward().normalize().scale(2)).add(0, 1.5, 0);
             PacketDistributor.sendToPlayersTrackingEntityAndSelf(this, new DoParticleBurstPacket(spawnLoc.x,spawnLoc.y,spawnLoc.z, getOwner().getXRot(), getOwner().getYRot()));//MagicManager.spawnParticles(level(), ParticleTypes.END_ROD, spots.x, spots.y, spots.z, 1, 0, 0, 0, 0, false);
         }
     }
 
     private void damageEntity(Entity entity) {
-        if (!victims.get(this).contains(entity)) {
+        if (!victims.get(this).contains(entity) && ! Objects.equals(entity, getOwner())) {
             DamageSources.applyDamage(entity, damage, SpellRegistries.HOLLOW_CRYSTAL.get().getDamageSource(this, getOwner()));
             victims.get(this).add(entity);
+        }else if (!victims.get(this).contains(entity)){
+            DamageSources.applyDamage(entity,damage/2,SpellRegistries.HOLLOW_CRYSTAL.get().getDamageSource(this,getOwner()));
         }
-    }
-
-    private void damageOwner(){
-        DamageSources.applyDamage(this.getOwner(),damage/2,SpellRegistries.HOLLOW_CRYSTAL.get().getDamageSource(this,getOwner()));
     }
 
     @Override
@@ -264,10 +264,6 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
         return 3.0F;
     }
 
-    public void discardThis(){
-        this.discard();
-    }
-
     @Override
     public Optional<Holder<SoundEvent>> getImpactSound() {
         return Optional.of(SoundRegistry.EARTHQUAKE_LOOP);
@@ -281,43 +277,19 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
     }
 
     @Override
-    protected void onHit(HitResult hitresult) {
-        HitResult.Type hitresult$type = hitresult.getType();
-        if (hitresult$type == HitResult.Type.ENTITY) {
-            EntityHitResult entityhitresult = (EntityHitResult) hitresult;
-            Entity entity = entityhitresult.getEntity();
-            if (entity.getType().is(EntityTypeTags.REDIRECTABLE_PROJECTILE) && entity instanceof Projectile) {
-                Projectile projectile = (Projectile) entity;
-                projectile.deflect(ProjectileDeflection.AIM_DEFLECT, this.getOwner(), this.getOwner(), true);
-            }
-
-            this.onHitEntity(entityhitresult);
-            this.level().gameEvent(GameEvent.PROJECTILE_LAND, hitresult.getLocation(), GameEvent.Context.of(this, (BlockState) null));
-        }
-        else if (hitresult$type == HitResult.Type.BLOCK) {
-            BlockHitResult blockhitresult = (BlockHitResult)hitresult;
-            this.onHitBlock(blockhitresult);
-            BlockPos blockpos = blockhitresult.getBlockPos();
-            this.level().gameEvent(GameEvent.PROJECTILE_LAND, blockpos, GameEvent.Context.of(this, this.level().getBlockState(blockpos)));
-        }
-    }
-
-    @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return cache;
     }
 
     private PlayState predicate(AnimationState<HollowCrystal> event) {
-        if (!isPlayingBreakAnimation())
-        {
+        if (!isPlayingBreakAnimation()) {
             if (tickCount < 20) {
                 event.getController().setAnimation(DefaultAnimations.ATTACK_CAST);
             }else{
                 event.getController().setAnimation(DefaultAnimations.IDLE);
             }
         }
-        else
-        {
+        else {
             event.getController().setAnimation(DefaultAnimations.DIE);
         }
         return PlayState.CONTINUE;
@@ -334,9 +306,7 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
     }
 
     @Override
-    public void onAntiMagic(MagicData playerMagicData) {
-
-    }
+    public void onAntiMagic(MagicData playerMagicData) {}
 
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
