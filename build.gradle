@@ -164,6 +164,9 @@ dependencies {
     // ISS ***************************************************************************************************
     implementation "io.redspace:irons_spellbooks:${irons_spells_version}"
 
+    // IPL ***************************************************************************************************
+    implementation "curse.maven:irons-patreon-library-1492763:7830106"
+
     // GECKOLIB ***************************************************************************************************
     implementation "software.bernie.geckolib:geckolib-neoforge-${minecraft_version}:${geckolib_version}"
     // PLAYER ANIMATOR ********************************************************************************************

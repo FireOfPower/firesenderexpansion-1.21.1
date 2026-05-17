@@ -39,7 +39,7 @@ import java.util.Optional;
 
 public abstract class UnstableWeaponEntity extends AbstractMagicProjectile implements GeoEntity {
 
-    private float speed = 2;
+    private float speed = 2f;
     private boolean isHoming = false;
     private float homingStrength = 0;
     private Vec3 location;
@@ -190,7 +190,7 @@ public abstract class UnstableWeaponEntity extends AbstractMagicProjectile imple
                 }
             }
         }
-        if(tickCount > 2000){
+        if(tickCount > 100){
             this.discard();
         }
         super.tick();
