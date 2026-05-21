@@ -1,6 +1,10 @@
 {
   "replace": false,
   "values": [
-    "#c:bosses"
+    "#c:bosses",
+    {
+      "id": "dummmmmmy:target_dummy",
+      "required": false
+    }
   ]
 }
