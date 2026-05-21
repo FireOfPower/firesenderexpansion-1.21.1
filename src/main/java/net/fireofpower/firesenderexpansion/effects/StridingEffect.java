@@ -32,7 +32,7 @@ import java.util.UUID;
 public class StridingEffect extends MagicMobEffect {
 
     public StridingEffect() {
-        super(MobEffectCategory.HARMFUL, Utils.rgbToInt(255,0,136));
+        super(MobEffectCategory.NEUTRAL, Utils.rgbToInt(255,0,136));
     }
 
     @Override
