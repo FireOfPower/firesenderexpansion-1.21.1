@@ -10,6 +10,7 @@ import io.redspace.ironsspellbooks.registries.SoundRegistry;
 import net.acetheeldritchking.aces_spell_utils.entity.spells.AbstractDomainEntity;
 import net.acetheeldritchking.aces_spell_utils.utils.AcesSpellUtilsConfig;
 import net.fireofpower.firesenderexpansion.capabilities.magic.VoidDimensionManager;
+import net.fireofpower.firesenderexpansion.damage.VoidSureHitDamageSource;
 import net.fireofpower.firesenderexpansion.registries.EffectRegistry;
 import net.fireofpower.firesenderexpansion.registries.EntityRegistry;
 import net.fireofpower.firesenderexpansion.registries.SpellRegistries;
@@ -159,7 +160,7 @@ public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity {
                     //sound
                     voidLevel.playSound(null, livingEntity.blockPosition(), SoundRegistry.DEVOUR_BITE.get(), SoundSource.PLAYERS, 5, 10);
                     //damage
-                    DamageSources.applyDamage(livingEntity, 5f, SpellDamageSource.source(getOwner(), SpellRegistries.INFINITE_VOID.get()));
+                    livingEntity.hurt(new VoidSureHitDamageSource(livingEntity),5);
                     //apply effect
                     livingEntity.addEffect(new MobEffectInstance(EffectRegistry.VOIDTORN_EFFECT,100,0));
                 }

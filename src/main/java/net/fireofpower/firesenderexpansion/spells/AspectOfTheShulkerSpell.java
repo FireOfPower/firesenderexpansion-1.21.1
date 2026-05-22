@@ -26,7 +26,7 @@ public class AspectOfTheShulkerSpell extends AbstractSpell {
     @Override
     public List<MutableComponent> getUniqueInfo(int spellLevel, LivingEntity caster) {
         return List.of(
-                Component.translatable("ui.irons_spellbooks.effect_length", Utils.timeFromTicks(getSpellPower(spellLevel, caster) * 20, 1))
+                Component.translatable("ui.irons_spellbooks.effect_length", Utils.timeFromTicks(getDuration(spellLevel,caster), 1))
         );
     }
 
@@ -48,14 +48,18 @@ public class AspectOfTheShulkerSpell extends AbstractSpell {
 
     @Override
     public void onCast(Level level, int spellLevel, LivingEntity entity, CastSource castSource, MagicData playerMagicData) {
-        entity.addEffect(new MobEffectInstance(EffectRegistry.ASPECT_OF_THE_SHULKER_EFFECT, (int) getSpellPower(spellLevel, entity) * 7, 0, false, false, true));
+        entity.addEffect(new MobEffectInstance(EffectRegistry.ASPECT_OF_THE_SHULKER_EFFECT, getDuration(spellLevel,entity), 0, false, false, true));
 
         super.onCast(level, spellLevel, entity, castSource, playerMagicData);
     }
 
+    public int getDuration(int spellLevel, LivingEntity caster){
+        return (int) (getSpellPower(spellLevel, caster) * 15);
+    }
+
     @Override
     public Optional<SoundEvent> getCastFinishSound() {
-        return Optional.of(SoundEvents.SHULKER_BOX_OPEN);
+        return Optional.of(SoundEvents.SHULKER_AMBIENT);
     }
 
     @Override

@@ -15,6 +15,8 @@ public class Config
     public static final ModConfigSpec.BooleanValue ALLOW_SWORD_HAIL;
     public static final ModConfigSpec.BooleanValue HOLLOW_CRYSTAL_BREAK_PROJECTILES;
 
+    public static final ModConfigSpec.ConfigValue<Integer> SHULKER_ASPECT_INTERNAL_COOLDOWN;
+
     static{
         {
             BUILDER.push("General");
@@ -26,6 +28,9 @@ public class Config
 
             BUILDER.comment("Should Hollow Crystal break any projectiles it touches? Default is true");
             HOLLOW_CRYSTAL_BREAK_PROJECTILES = BUILDER.worldRestart().define("hollow_crystal_break_projectiles",true);
+
+            BUILDER.comment("What is the internal cooldown (in ticks) for Aspect of the Shulker to trigger? Default is 20");
+            SHULKER_ASPECT_INTERNAL_COOLDOWN = BUILDER.worldRestart().define("shulker_aspect_internal_cooldown",20);
 
             BUILDER.pop();
         }

@@ -96,11 +96,4 @@ public class VoidDimensionManager {
         }
         VoidDimensionManager.INSTANCE.tick(event.getLevel());
     }
-
-    @SubscribeEvent
-    public static void knockbackPreventer(LivingKnockBackEvent event){
-        if(event.getEntity().level().dimension().equals(VOID_DIMENSION) && event.getEntity().hasEffect(EffectRegistry.VOIDTORN_EFFECT)){
-            event.setCanceled(true);
-        }
-    }
 }

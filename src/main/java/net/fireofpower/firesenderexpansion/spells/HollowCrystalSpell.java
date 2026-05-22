@@ -81,15 +81,13 @@ public class HollowCrystalSpell extends AbstractSpell {
             playerMagicData.getPlayerRecasts().addRecast(new RecastInstance(getSpellId(), spellLevel, getRecastCount(spellLevel, entity), ticksOfEffect, castSource, null), playerMagicData);
         }
         if(entity.hasEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT)){
-            if(!entity.isCrouching()) {
+            if(!(entity.isCrouching() && entity instanceof ServerPlayer serverPlayer  && net.fireofpower.firesenderexpansion.util.Utils.hasCurio(serverPlayer, ItemRegistry.CRYSTAL_HEART.get()))) {
                 entity.addEffect(new MobEffectInstance(EffectRegistry.HOLLOW_CRYSTAL_EFFECT, ticksOfEffect, entity.getEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT).getAmplifier() + 1, false, false, true));
                 if(playerMagicData.getPlayerRecasts().getRemainingRecastsForSpell(getSpellId()) != 1) {
                     spawnParticles(entity);
                 }
             }else{
-                if(entity instanceof ServerPlayer serverPlayer  && net.fireofpower.firesenderexpansion.util.Utils.hasCurio(serverPlayer, ItemRegistry.CRYSTAL_HEART.get())) {
-                    handleFiring(serverPlayer, spellLevel);
-                }
+                handleFiring(serverPlayer, spellLevel);
             }
         }else{
             if(spellLevel > 1) {

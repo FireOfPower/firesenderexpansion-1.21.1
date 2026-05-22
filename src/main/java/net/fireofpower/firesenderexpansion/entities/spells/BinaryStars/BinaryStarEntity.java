@@ -92,7 +92,7 @@ public class BinaryStarEntity extends AbstractMagicProjectile implements GeoEnti
     @Nullable
     UUID homingTargetUUID;
 
-    boolean readyToBreak;
+    //boolean readyToBreak;
     @Nullable
     Entity cachedTarget;
 
@@ -145,36 +145,36 @@ public class BinaryStarEntity extends AbstractMagicProjectile implements GeoEnti
         }
 
 
-        if(cachedTarget != null && distanceTo(cachedTarget) > 64 && !this.readyToBreak){
-            if(this.level() instanceof ServerLevel serverLevel){
-                serverLevel.sendParticles(ParticleRegistry.UNSTABLE_ENDER_PARTICLE.get(),this.position().x,this.position().y,this.position().z,20,0,0,0,0.1);
-            }
-            setPos(this.cachedTarget.position().add(0,3 + this.cachedTarget.getBbHeight(),0));
-            setDeltaMovement(0,-1 * getDeltaMovement().length(),0);
-            this.readyToBreak = true;
-            if(this.level() instanceof ServerLevel serverLevel){
-                serverLevel.sendParticles(ParticleRegistry.UNSTABLE_ENDER_PARTICLE.get(),this.position().x,this.position().y,this.position().z,20,0,0,0,0.1);
-            }
-        }
+//        if(cachedTarget != null && distanceTo(cachedTarget) > 64 && !this.readyToBreak){
+//            if(this.level() instanceof ServerLevel serverLevel){
+//                serverLevel.sendParticles(ParticleRegistry.UNSTABLE_ENDER_PARTICLE.get(),this.position().x,this.position().y,this.position().z,20,0,0,0,0.1);
+//            }
+//            setPos(this.cachedTarget.position().add(0,3 + this.cachedTarget.getBbHeight(),0));
+//            setDeltaMovement(0,-1 * getDeltaMovement().length(),0);
+//            this.readyToBreak = true;
+//            if(this.level() instanceof ServerLevel serverLevel){
+//                serverLevel.sendParticles(ParticleRegistry.UNSTABLE_ENDER_PARTICLE.get(),this.position().x,this.position().y,this.position().z,20,0,0,0,0.1);
+//            }
+//        }
     }
 
     @Override
     protected void onHitBlock(BlockHitResult result) {
-        Vec3 blockPos = result.getBlockPos().getCenter();
-        if(this.readyToBreak && this.position().y <= this.cachedTarget.position().y){
-            MagicManager.spawnParticles(this.level(), new BlastwaveParticleOptions(SchoolRegistry.ENDER.get().getTargetingColor(), 2),
-                    blockPos.x, blockPos.y + 2, blockPos.z, 1, 0, 0, 0, 0, true);
-            this.level().getEntitiesOfClass(LivingEntity.class,
-                            this.getBoundingBox()
-                                    .inflate(5))
-                    .stream()
-                    .forEach(e -> {
-                        if(canHitEntity(e)){
-                            DamageSources.applyDamage(e, damage, SpellRegistries.BINARY_STARS.get().getDamageSource(this, getOwner()));
-                        }
-                    });
-            this.discard();
-        }
+//        Vec3 blockPos = result.getBlockPos().getCenter();
+//        if(this.readyToBreak && this.position().y <= this.cachedTarget.position().y){
+//            MagicManager.spawnParticles(this.level(), new BlastwaveParticleOptions(SchoolRegistry.ENDER.get().getTargetingColor(), 2),
+//                    blockPos.x, blockPos.y + 2, blockPos.z, 1, 0, 0, 0, 0, true);
+//            this.level().getEntitiesOfClass(LivingEntity.class,
+//                            this.getBoundingBox()
+//                                    .inflate(5))
+//                    .stream()
+//                    .forEach(e -> {
+//                        if(canHitEntity(e)){
+//                            DamageSources.applyDamage(e, damage, SpellRegistries.BINARY_STARS.get().getDamageSource(this, getOwner()));
+//                        }
+//                    });
+//            this.discard();
+//        }
         super.onHitBlock(result);
     }
 
