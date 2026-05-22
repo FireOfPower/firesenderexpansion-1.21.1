@@ -1,0 +1,8 @@
+{
+  "entries": [
+    {"dimension": "minecraft:overworld"},
+    {"dimension": "minecraft:the_nether"},
+    {"dimension": "minecraft:the_end"},
+    {"dimension": "irons_spellbooks:pocket_dimension"}
+  ]
+}

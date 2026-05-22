@@ -51,7 +51,7 @@ import java.util.function.Supplier;
 public class FiresEnderExpansion
 {
     public static final String MODID = "firesenderexpansion";
-    private static final Logger LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = LogUtils.getLogger();
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
 
     public FiresEnderExpansion(IEventBus modEventBus, ModContainer modContainer)
