@@ -6,10 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.UUID;
 
 import static io.redspace.ironsspellbooks.player.ClientSpellCastHelper.animatePlayerStart;

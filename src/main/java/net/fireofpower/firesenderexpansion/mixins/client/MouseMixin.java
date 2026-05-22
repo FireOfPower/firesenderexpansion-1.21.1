@@ -2,15 +2,12 @@ package net.fireofpower.firesenderexpansion.mixins.client;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import io.redspace.ironsspellbooks.player.ClientMagicData;
 import net.fireofpower.firesenderexpansion.registries.EffectRegistry;
 import net.fireofpower.firesenderexpansion.spells.HollowCrystalSpell;
 import net.minecraft.client.MouseHandler;
 import net.minecraft.client.player.LocalPlayer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-
-import java.util.Objects;
 
 @Mixin(MouseHandler.class)
 public class MouseMixin {

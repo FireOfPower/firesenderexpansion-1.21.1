@@ -165,10 +165,11 @@ dependencies {
     implementation "io.redspace:irons_spellbooks:${irons_spells_version}"
 
     // IPL ***************************************************************************************************
-    implementation "curse.maven:irons-lib-1492763:7907336"
+    implementation "io.redspace:irons_lib:${irons_lib_version}"
 
     // GECKOLIB ***************************************************************************************************
     implementation "software.bernie.geckolib:geckolib-neoforge-${minecraft_version}:${geckolib_version}"
+
     // PLAYER ANIMATOR ********************************************************************************************
     implementation "dev.kosmx.player-anim:player-animation-lib-forge:${player_animator_version}"
 
@@ -179,9 +180,6 @@ dependencies {
 
     // CURIOS *****************************************************************************************************
     implementation "curse.maven:curios-309927:6529130"
-
-    // Spell Collector Lib
-    implementation "curse.maven:spell-collector-lib-1149858:6174572"
 
     //ACES SPELL UTILS
     implementation "curse.maven:aces-spell-utils-1299492:8079666"

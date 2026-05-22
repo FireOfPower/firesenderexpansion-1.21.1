@@ -1,7 +1,6 @@
 package net.fireofpower.firesenderexpansion.items.armor.end_lord;
 
 import io.redspace.ironsspellbooks.api.registry.AttributeRegistry;
-import io.redspace.ironsspellbooks.entity.armor.GenericCustomArmorRenderer;
 import io.redspace.ironsspellbooks.item.weapons.AttributeContainer;
 import net.fireofpower.firesenderexpansion.items.armor.FEEArmorMaterials;
 import net.fireofpower.firesenderexpansion.items.armor.ImbueableFEEGeckolibArmorItem;

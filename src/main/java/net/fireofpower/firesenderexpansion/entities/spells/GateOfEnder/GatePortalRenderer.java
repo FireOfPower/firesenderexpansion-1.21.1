@@ -3,10 +3,8 @@ package net.fireofpower.firesenderexpansion.entities.spells.GateOfEnder;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import dev.kosmx.playerAnim.core.util.Vec3d;
 import io.redspace.ironsspellbooks.render.RenderHelper;
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
-import net.fireofpower.firesenderexpansion.entities.spells.HollowCrystal.HollowCrystal;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -20,7 +18,6 @@ import software.bernie.geckolib.renderer.GeoEntityRenderer;
 public class GatePortalRenderer extends GeoEntityRenderer<GatePortal> {
     public GatePortalRenderer(EntityRendererProvider.Context context) {
         super(context, new GatePortalModel(ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "gate_portal")));
-        //addRenderLayer(new AutoGlowingGeoLayer<>(this));
 
         this.shadowRadius = 0.0f;
     }

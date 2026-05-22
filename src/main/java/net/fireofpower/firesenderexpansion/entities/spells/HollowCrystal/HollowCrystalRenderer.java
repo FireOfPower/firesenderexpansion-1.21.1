@@ -5,7 +5,6 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import io.redspace.ironsspellbooks.render.RenderHelper;
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
-import net.fireofpower.firesenderexpansion.entities.spells.UnstableSwords.UnstableWeaponEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -14,12 +13,10 @@ import net.minecraft.util.Mth;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
-import software.bernie.geckolib.renderer.layer.AutoGlowingGeoLayer;
 
 public class HollowCrystalRenderer extends GeoEntityRenderer<HollowCrystal> {
     public HollowCrystalRenderer(EntityRendererProvider.Context context) {
         super(context, new HollowCrystalModel(ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "hollow_crystal")));
-        //addRenderLayer(new AutoGlowingGeoLayer<>(this));
 
         this.shadowRadius = 0.5f;
     }

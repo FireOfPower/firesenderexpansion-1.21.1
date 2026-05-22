@@ -1,22 +1,15 @@
 package net.fireofpower.firesenderexpansion.items.curios;
 
 import io.redspace.ironsspellbooks.compat.Curios;
-import io.redspace.ironsspellbooks.entity.mobs.IMagicSummon;
 import io.redspace.ironsspellbooks.item.curios.SimpleDescriptiveCurio;
 import io.redspace.ironsspellbooks.util.ItemPropertiesHelper;
 import net.fireofpower.firesenderexpansion.registries.EffectRegistry;
-import net.fireofpower.firesenderexpansion.registries.ItemRegistry;
-import net.fireofpower.firesenderexpansion.util.Utils;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
-import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import top.theillusivec4.curios.api.SlotContext;
 
 public class AnchoringRingCurio extends SimpleDescriptiveCurio {

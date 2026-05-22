@@ -1,11 +1,9 @@
 package net.fireofpower.firesenderexpansion.effects;
 
-import io.redspace.ironsspellbooks.capabilities.magic.PocketDimensionManager;
 import io.redspace.ironsspellbooks.effect.MagicMobEffect;
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
 import net.fireofpower.firesenderexpansion.registries.EffectRegistry;
 import net.fireofpower.firesenderexpansion.util.Utils;
-import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
@@ -18,7 +16,6 @@ import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 @EventBusSubscriber
 public class EclipsedEffect extends MagicMobEffect {

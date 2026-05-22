@@ -3,7 +3,6 @@ package net.fireofpower.firesenderexpansion.mixins;
 import io.redspace.ironsspellbooks.capabilities.magic.PortalManager;
 import io.redspace.ironsspellbooks.entity.spells.portal.PortalEntity;
 import net.fireofpower.firesenderexpansion.registries.EffectRegistry;
-import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket;
@@ -16,8 +15,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import static net.fireofpower.firesenderexpansion.events.ServerEvents.convertTicksToTime;
 
 @Mixin(PortalManager.class)
 public class AnchoredPortalStopperMixin {

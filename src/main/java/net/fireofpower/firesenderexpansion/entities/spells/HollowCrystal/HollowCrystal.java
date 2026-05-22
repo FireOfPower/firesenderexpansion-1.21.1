@@ -7,6 +7,7 @@ import io.redspace.ironsspellbooks.capabilities.magic.MagicManager;
 import io.redspace.ironsspellbooks.damage.DamageSources;
 import io.redspace.ironsspellbooks.entity.mobs.AntiMagicSusceptible;
 import io.redspace.ironsspellbooks.entity.spells.AbstractMagicProjectile;
+import io.redspace.ironsspellbooks.registries.ParticleRegistry;
 import io.redspace.ironsspellbooks.registries.SoundRegistry;
 import io.redspace.ironsspellbooks.util.ModTags;
 import io.redspace.ironsspellbooks.util.ParticleHelper;
@@ -62,7 +63,7 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
     private static final EntityDataAccessor<Integer> TIME_ALIVE = SynchedEntityData.defineId(HollowCrystal.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> DELAY = SynchedEntityData.defineId(HollowCrystal.class, EntityDataSerializers.INT);
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
-    private Map<HollowCrystal,List<Entity>> victims = new HashMap<>();
+    private final Map<HollowCrystal,List<Entity>> victims = new HashMap<>();
     private final int maxLifetime = 1200;
     private static final EntityDataAccessor<Boolean> DATA_IS_PLAYING_BREAK_ANIM = SynchedEntityData.defineId(HollowCrystal.class, EntityDataSerializers.BOOLEAN);
 
@@ -85,9 +86,7 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
 
     @Override
     public void tick() {
-        if(victims.get(this) == null){
-            victims.put(this,new ArrayList<>());
-        }
+        victims.computeIfAbsent(this, k -> new ArrayList<>());
         if(tickCount >= maxLifetime){
             discard();
         }

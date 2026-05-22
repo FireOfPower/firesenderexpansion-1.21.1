@@ -3,20 +3,14 @@ package net.fireofpower.firesenderexpansion.gui.overlays;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.redspace.ironsspellbooks.IronsSpellbooks;
-import io.redspace.ironsspellbooks.registries.MobEffectRegistry;
-import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
 import net.fireofpower.firesenderexpansion.registries.EffectRegistry;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.LayeredDraw;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class ScreenEffectsOverlay implements LayeredDraw.Layer {
     public static final ScreenEffectsOverlay instance = new ScreenEffectsOverlay();

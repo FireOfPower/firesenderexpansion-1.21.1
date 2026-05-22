@@ -1,7 +1,5 @@
 package net.fireofpower.firesenderexpansion;
 
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
 public class ClientConfig {
