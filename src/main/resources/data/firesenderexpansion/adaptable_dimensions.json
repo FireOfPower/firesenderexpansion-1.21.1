@@ -1,8 +1,28 @@
 {
   "entries": [
-    {"dimension": "minecraft:overworld"},
-    {"dimension": "minecraft:the_nether"},
-    {"dimension": "minecraft:the_end"},
-    {"dimension": "irons_spellbooks:pocket_dimension"}
+    {
+      "dimension": "minecraft:overworld",
+      "id": "minecraft:night_vision",
+      "duration": 400,
+      "amplifier": 0
+    },
+    {
+      "dimension": "minecraft:the_nether",
+      "id": "minecraft:fire_resistance",
+      "duration": 400,
+      "amplifier": 0
+    },
+    {
+      "dimension": "minecraft:the_end",
+      "id": "minecraft:slow_falling",
+      "duration": 200,
+      "amplifier": 0
+    },
+    {
+      "dimension": "irons_spellbooks:pocket_dimension",
+      "id": "minecraft:saturation",
+      "duration": 2,
+      "amplifier": 0
+    }
   ]
 }

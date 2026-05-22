@@ -1,33 +1,23 @@
 package net.fireofpower.firesenderexpansion.effect_dimension_matcher;
 
-import net.minecraft.core.Holder;
-import net.minecraft.world.effect.MobEffect;
-
-import javax.annotation.Nullable;
-
 public class EffectDetails {
-    @Nullable
-    Holder<MobEffect> effect;
-    int duration;
+    private String effect;
+    private int duration;
+    private int amplifier;
 
-    public EffectDetails(Holder<MobEffect> effect, int duration){
+    public EffectDetails(String effect, int duration, int amplifier){
         this.effect = effect;
         this.duration = duration;
+        this.amplifier = amplifier;
     }
 
-    public Holder<MobEffect> getEffect() {
+    public String getEffect() {
         return effect;
-    }
-
-    public void setEffect(Holder<MobEffect> effect) {
-        this.effect = effect;
     }
 
     public int getDuration() {
         return duration;
     }
 
-    public void setDuration(int duration) {
-        this.duration = duration;
-    }
+    public int getAmplifier(){return amplifier;}
 }

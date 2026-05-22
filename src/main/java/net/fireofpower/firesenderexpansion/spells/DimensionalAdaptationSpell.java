@@ -8,9 +8,12 @@ import io.redspace.ironsspellbooks.api.util.Utils;
 import io.redspace.ironsspellbooks.capabilities.magic.PocketDimensionManager;
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
 import net.fireofpower.firesenderexpansion.capabilities.magic.VoidDimensionManager;
+import net.fireofpower.firesenderexpansion.effect_dimension_matcher.EffectDetails;
 import net.fireofpower.firesenderexpansion.effect_dimension_matcher.EffectDimensionMatcher;
 import net.fireofpower.firesenderexpansion.registries.ItemRegistry;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -37,7 +40,7 @@ public class DimensionalAdaptationSpell extends AbstractSpell {
     private final ResourceLocation spellId = ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "dimensional_adaptation");
 
     private final DefaultConfig defaultConfig = new DefaultConfig()
-            .setMaxLevel(5)
+            .setMaxLevel(6)
             .setCooldownSeconds(60)
             .setMinRarity(SpellRarity.RARE)
             .setSchoolResource(SchoolRegistry.ENDER_RESOURCE)
@@ -46,58 +49,39 @@ public class DimensionalAdaptationSpell extends AbstractSpell {
     @Override
     public List<MutableComponent> getUniqueInfo(int spellLevel, LivingEntity caster) {
         return List.of(
-                Component.translatable("ui.irons_spellbooks.effect_length", Utils.timeFromTicks(getDuration(spellLevel,caster), 1))
+                Component.translatable("ui.firesenderexpansion.duration_multiplier", Utils.stringTruncation(getDurationMultiplier(spellLevel,caster), 1))
         );
     }
 
     public DimensionalAdaptationSpell()
     {
         this.manaCostPerLevel = 25;
-        this.baseSpellPower = 30;
-        this.spellPowerPerLevel = 8;
+        this.baseSpellPower = 10;
+        this.spellPowerPerLevel = 2;
         this.castTime = 0;
         this.baseManaCost = 55;
     }
 
     @Override
     public void onCast(Level level, int spellLevel, LivingEntity entity, CastSource castSource, MagicData playerMagicData) {
-        entity.addEffect(new MobEffectInstance(EffectDimensionMatcher.INSTANCE.getEffectDetailsForDimension(entity.level().dimension()).getEffect(), getDuration(spellLevel,entity), 0, false, false, true));
-        //        if(entity.level().dimension() == Level.OVERWORLD){
-//            entity.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, getDuration(spellLevel,entity), 0, false, false, true));
-//        } else if (entity.level().dimension() == Level.NETHER){
-//            entity.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, getDuration(spellLevel,entity), 0, false, false, true));
-//        } else if (entity.level().dimension() == Level.END){
-//            entity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, getDuration(spellLevel,entity), 0, false, false, true));
-//        }else if (entity.level().dimension() == PocketDimensionManager.POCKET_DIMENSION){
-//            entity.addEffect(new MobEffectInstance(MobEffects.SATURATION, getDuration(spellLevel,entity), 0, false, false, true));
-//        } else if (entity.level().dimension() == VoidDimensionManager.VOID_DIMENSION){
-//            if(entity instanceof ServerPlayer serverPlayer){
-//                serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("msg.firesenderexpansion.cannot_adapt")
-//                        .withStyle(s -> s.withColor(TextColor.fromRgb(0xF35F5F)))));
-//                serverPlayer.level().playSound(null, serverPlayer.position().x, serverPlayer.position().y, serverPlayer.position().z,
-//                        SoundEvents.FIRE_EXTINGUISH, SoundSource.PLAYERS, 0.5f, 1f);
-//            }
-//        }
+        //System.out.println("Applying " + EffectDimensionMatcher.INSTANCE.getEffectDetailsForDimension(entity.level().dimension().location().getNamespace() + ":" + entity.level().dimension().location().getPath()).getEffect());
+        if(EffectDimensionMatcher.INSTANCE.getEffectDetailsForDimension(entity.level().dimension().location().getNamespace() + ":" + entity.level().dimension().location().getPath()).getEffect() == null){
+            if(entity instanceof ServerPlayer serverPlayer){
+                serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("msg.firesenderexpansion.cannot_adapt")
+                        .withStyle(s -> s.withColor(TextColor.fromRgb(0xF35F5F)))));
+                serverPlayer.level().playSound(null, serverPlayer.position().x, serverPlayer.position().y, serverPlayer.position().z,
+                        SoundEvents.ENDERMAN_SCREAM, SoundSource.PLAYERS, 0.5f, 1f);
+            }
+        }else {
+            EffectDetails details = EffectDimensionMatcher.INSTANCE.getEffectDetailsForDimension(entity.level().dimension().location().getNamespace() + ":" + entity.level().dimension().location().getPath());
+            Holder<MobEffect> savedEffect = BuiltInRegistries.MOB_EFFECT.wrapAsHolder(BuiltInRegistries.MOB_EFFECT.get(ResourceLocation.tryBySeparator(details.getEffect(), ':')));
+            entity.addEffect(new MobEffectInstance(savedEffect, (int) (getDurationMultiplier(spellLevel, entity) * details.getDuration()), details.getAmplifier(), false, false, true));
+        }
         super.onCast(level, spellLevel, entity, castSource, playerMagicData);
     }
 
-    public int getDuration(int spellLevel, LivingEntity entity){
-        if(entity == null){
-            return (int) getSpellPower(spellLevel, entity) * 7;
-        }
-        if(entity.level().dimension() == Level.OVERWORLD){
-            return (int) getSpellPower(spellLevel, entity) * 7;
-        } else if (entity.level().dimension() == Level.NETHER){
-            return (int) getSpellPower(spellLevel, entity) * 5;
-        } else if (entity.level().dimension() == Level.END){
-            return (int) getSpellPower(spellLevel, entity) * 7;
-        } else if (entity.level().dimension() == PocketDimensionManager.POCKET_DIMENSION){
-            return 2;
-        } else if (entity.level().dimension() == VoidDimensionManager.VOID_DIMENSION){
-            return 0;
-        }else{
-            return 0;
-        }
+    public float getDurationMultiplier(int spellLevel, LivingEntity entity){
+        return getSpellPower(spellLevel,entity) / 10;
     }
 
     @Override

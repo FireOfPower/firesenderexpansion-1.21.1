@@ -21,7 +21,7 @@ public class SpellRegistries {
         return SPELLS.register(spell.getSpellName(), () -> spell);
     }
 
-    public static final Supplier<AbstractSpell> PARTIAL_TELEPORT = registerSpell(new PartialTeleportSpell());
+    public static final Supplier<AbstractSpell> ARCANE_SLICE = registerSpell(new ArcaneSliceSpell());
     public static final Supplier<AbstractSpell> ASPECT_OF_THE_SHULKER = registerSpell(new AspectOfTheShulkerSpell());
     public static final Supplier<AbstractSpell> HOLLOW_CRYSTAL = registerSpell(new HollowCrystalSpell());
     public static final Supplier<AbstractSpell> DIMENSIONAL_ADAPTATION = registerSpell(new DimensionalAdaptationSpell());

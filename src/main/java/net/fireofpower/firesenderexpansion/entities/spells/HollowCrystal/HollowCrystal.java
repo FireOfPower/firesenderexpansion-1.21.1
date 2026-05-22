@@ -20,12 +20,14 @@ import net.fireofpower.firesenderexpansion.registries.EntityRegistry;
 import net.fireofpower.firesenderexpansion.registries.ItemRegistry;
 import net.fireofpower.firesenderexpansion.registries.SpellRegistries;
 import net.fireofpower.firesenderexpansion.util.Utils;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -308,6 +310,9 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
     @Override
     public void onAntiMagic(MagicData playerMagicData) {
         //TODO: Check if the counterspeller is the owner
+        ServerPlayer owner;
+        //for(Player player : Minecraft.getInstance().getCurrentServer().players.)
+        //if(playerMagicData.getSyncedData().getServerPlayerId())
         triggerBreakAnimation();
         this.setDeltaMovement(0, 0, 0);
         setTimeAlive(60);

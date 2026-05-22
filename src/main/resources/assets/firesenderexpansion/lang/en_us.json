@@ -40,9 +40,9 @@
   "item.firesenderexpansion.end_lord_leggings": "End Lord Leggings",
   "item.firesenderexpansion.end_lord_boots": "End Lord Boots",
 
-  "spell.firesenderexpansion.partial_teleport": "Partial Teleport",
-  "spell.firesenderexpansion.partial_teleport.guide": "Selectively teleport a part of a something's body. Deals more damage the less mana they have.",
-  "death.attack.firesenderexpansion.partial_teleport": "%1$s was bisected by %2$s's plane of ender energy",
+  "spell.firesenderexpansion.arcane_slice": "Arcane Slice",
+  "spell.firesenderexpansion.arcane_slice.guide": "Selectively teleport a part of a something's body. Deals more damage the less mana they have.",
+  "death.attack.firesenderexpansion.arcane_slice": "%1$s was bisected by %2$s",
 
   "spell.firesenderexpansion.aspect_of_the_shulker": "Aspect of the Shulker",
   "spell.firesenderexpansion.aspect_of_the_shulker.guide": "Manifest a homing shulker bullet when you hit an entity with a magic attack.",
@@ -87,6 +87,7 @@
   "ui.firesenderexpansion.force": "%d Force",
   "ui.firesenderexpansion.radius": "%d Radius",
   "ui.firesenderexpansion.numSwords": "%d Swords",
+  "ui.firesenderexpansion.duration_multiplier": "%dx Duration",
 
   "effect.firesenderexpansion.aspect_of_the_shulker_effect": "Aspect of the Shulker",
   "effect.firesenderexpansion.aspect_of_the_shulker_effect.description": "Magical damage additionally spawns a homing shulker bullet, on a small cooldown",

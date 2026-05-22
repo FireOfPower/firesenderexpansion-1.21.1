@@ -3,6 +3,7 @@ package net.fireofpower.firesenderexpansion;
 import io.redspace.ironsspellbooks.item.SpellBook;
 import io.redspace.ironsspellbooks.render.PocketDimensionEffects;
 import io.redspace.ironsspellbooks.render.SpellBookCurioRenderer;
+import net.fireofpower.firesenderexpansion.effect_dimension_matcher.EffectDimensionMatcher;
 import net.fireofpower.firesenderexpansion.entities.mobs.porphyromancer.PorphyromancerRenderer;
 import net.fireofpower.firesenderexpansion.entities.mobs.void_wyrm.VoidWyrmRenderer;
 import net.fireofpower.firesenderexpansion.entities.spells.BinaryStars.BinaryStarRenderer;
@@ -25,7 +26,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterDimensionSpecialEffectsEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
@@ -60,6 +64,8 @@ public class FiresEnderExpansion
         modEventBus.addListener(ModSetup::init);
         CREATIVE_MODE_TABS.register(modEventBus);
 
+        NeoForge.EVENT_BUS.register(this);
+
         SpellRegistries.register(modEventBus);
         EffectRegistry.register(modEventBus);
         EntityRegistry.register(modEventBus);
@@ -70,6 +76,11 @@ public class FiresEnderExpansion
         // Register our mod's ModConfigSpec so that FML can create and load the config file for us
         modContainer.registerConfig(ModConfig.Type.SERVER, Config.SPEC, String.format("%s-server.toml", FiresEnderExpansion.MODID));
         modContainer.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC, String.format("%s-client.toml", FiresEnderExpansion.MODID));
+    }
+
+    @SubscribeEvent
+    public void onAddReloadListeners(AddReloadListenerEvent event) {
+        event.addListener(EffectDimensionMatcher.INSTANCE);
     }
 
     public static final Supplier<CreativeModeTab> FEE_TAB = CREATIVE_MODE_TABS.register("example", () -> CreativeModeTab.builder()

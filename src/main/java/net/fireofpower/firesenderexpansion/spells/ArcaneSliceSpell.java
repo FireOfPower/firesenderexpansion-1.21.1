@@ -9,8 +9,9 @@ import io.redspace.ironsspellbooks.api.util.AnimationHolder;
 import io.redspace.ironsspellbooks.api.util.Utils;
 import io.redspace.ironsspellbooks.capabilities.magic.TargetEntityCastData;
 import io.redspace.ironsspellbooks.damage.DamageSources;
+import io.redspace.ironsspellbooks.registries.ParticleRegistry;
+import io.redspace.ironsspellbooks.registries.SoundRegistry;
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -20,13 +21,13 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 import java.util.Optional;
 
-public class PartialTeleportSpell extends AbstractSpell {
-    private final ResourceLocation spellId = ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "partial_teleport");
+public class ArcaneSliceSpell extends AbstractSpell {
+    private final ResourceLocation spellId = ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "arcane_slice");
 
     private final DefaultConfig defaultConfig = new DefaultConfig()
             .setMinRarity(SpellRarity.RARE)
@@ -43,7 +44,7 @@ public class PartialTeleportSpell extends AbstractSpell {
         );
     }
 
-    public PartialTeleportSpell(){
+    public ArcaneSliceSpell(){
         this.manaCostPerLevel = 15;
         this.baseSpellPower = 10;
         this.spellPowerPerLevel = 5;
@@ -59,7 +60,7 @@ public class PartialTeleportSpell extends AbstractSpell {
 
     @Override
     public Optional<SoundEvent> getCastFinishSound() {
-        return Optional.of(SoundEvents.ENDERMAN_TELEPORT);
+        return Optional.of(SoundRegistry.SHADOW_SLASH.get());
     }
 
     @Override
@@ -86,14 +87,20 @@ public class PartialTeleportSpell extends AbstractSpell {
         if (targetEntityData instanceof TargetEntityCastData targetData) {
             LivingEntity targetEntity = targetData.getTarget((ServerLevel)world);
             if (targetEntity != null) {
-                int squareSize = (int)(targetEntity.getBbWidth() + 1.5f) * 16;
-                if(squareSize > 100){
-                    squareSize = 100;
+                double degree = Math.PI / (Math.random() * 2 + 4);
+                if(Math.random() < 0.5){
+                    degree *= -1;
                 }
-                for(int x = 0; x < squareSize; x++){
-                    for(int y = 0; y < squareSize; y++){
-                        ((ServerLevel) world).sendParticles(ParticleTypes.PORTAL, targetEntity.position().x - squareSize/32.0 + x/16.0, targetEntity.position().y + targetEntity.getBbHeight()/2 - 0.5 - squareSize/32.0 + y/16.0, targetEntity.position().z - squareSize/32.0 + y/16.0,1,0,0,0,0);
-                    }
+                double cosPsi = Math.cos(Math.toRadians(entity.getYRot()));
+                double sinPsi = Math.sin(Math.toRadians(entity.getYRot()));
+                double cosTheta = Math.cos(Math.toRadians(entity.getXRot()));
+                double sinTheta = Math.sin(Math.toRadians(entity.getXRot()));
+                for(int i = -20; i < 20; i++) {
+                    double radius = i * 0.1;
+                    double xOffset = Math.cos(degree) * radius;
+                    double yOffset = Math.sin(degree) * radius;
+                    Vec3 origin = targetEntity.position().add(xOffset * cosPsi - yOffset * sinTheta * sinPsi, yOffset * cosTheta, xOffset * sinPsi + yOffset * sinTheta * cosPsi);
+                    ((ServerLevel) world).sendParticles(ParticleRegistry.UNSTABLE_ENDER_PARTICLE.get(), origin.x, origin.y + targetEntity.getBbHeight()/2, origin.z,1,0,0,0,0);
                 }
                 DamageSources.applyDamage(targetEntity,getDamage(spellLevel,entity,targetEntity),this.getDamageSource(entity));
             }
