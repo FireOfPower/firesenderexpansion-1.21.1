@@ -309,13 +309,20 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
 
     @Override
     public void onAntiMagic(MagicData playerMagicData) {
-        //TODO: Check if the counterspeller is the owner
-        ServerPlayer owner;
-        //for(Player player : Minecraft.getInstance().getCurrentServer().players.)
-        //if(playerMagicData.getSyncedData().getServerPlayerId())
-        triggerBreakAnimation();
-        this.setDeltaMovement(0, 0, 0);
-        setTimeAlive(60);
+        if(ctsByOwner(playerMagicData)) {
+            triggerBreakAnimation();
+            this.setDeltaMovement(0, 0, 0);
+            setTimeAlive(60);
+        }
+    }
+
+    private boolean ctsByOwner(MagicData playerMagicData){
+        for(Player player : this.level().players()){
+            if(MagicData.getPlayerMagicData(player).equals(playerMagicData)){
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
