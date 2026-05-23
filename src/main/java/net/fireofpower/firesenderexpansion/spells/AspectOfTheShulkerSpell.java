@@ -34,7 +34,7 @@ public class AspectOfTheShulkerSpell extends AbstractSpell {
             .setMinRarity(SpellRarity.UNCOMMON)
             .setSchoolResource(SchoolRegistry.ENDER_RESOURCE)
             .setMaxLevel(5)
-            .setCooldownSeconds(40)
+            .setCooldownSeconds(80)
             .build();
 
     public AspectOfTheShulkerSpell()

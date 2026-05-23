@@ -105,7 +105,7 @@ public class InfiniteVoidSpell extends AbstractSpell {
     }
 
     public float getRefinement(int spellLevel, LivingEntity caster){
-        return getSpellPower(spellLevel, caster) * 100;
+        return getSpellPower(spellLevel, caster);
     }
 
     @Override

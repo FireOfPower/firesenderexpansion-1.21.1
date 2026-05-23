@@ -46,7 +46,7 @@ public class GateOfEnderSpell extends AbstractSpell {
 
     public GateOfEnderSpell(){
         this.manaCostPerLevel = 1;
-        this.baseSpellPower = 10;
+        this.baseSpellPower = 15;
         this.spellPowerPerLevel = 0;
         this.castTime = 200;
         this.baseManaCost = 15;
@@ -96,7 +96,7 @@ public class GateOfEnderSpell extends AbstractSpell {
                 int swords = getNumSwords(spellLevel,entity);
                 assert targeted != null;
                 for (int i = 0; i < swords / 2; i++) {
-                    shootTargetedSword(level,spellLevel,entity,targeted);
+                    shootTargetedSword(level,spellLevel,entity,targeted, 5 + i);
                 }
             }else {
                 if(entity.isCrouching() && Config.ALLOW_SWORD_HAIL.get()){
@@ -109,14 +109,14 @@ public class GateOfEnderSpell extends AbstractSpell {
                     //normal function
                     int swords = getNumSwords(spellLevel, entity);
                     for (int i = 0; i < swords; i++) {
-                        this.shootRandomSword(level, spellLevel, entity);
+                        this.shootRandomSword(level, spellLevel, entity, 5 + i);
                     }
                 }
             }
         }
     }
 
-    public void shootTargetedSword(Level world, int spellLevel, LivingEntity caster, LivingEntity targeted){
+    public void shootTargetedSword(Level world, int spellLevel, LivingEntity caster, LivingEntity targeted, int delay){
         assert targeted != null;
         float radius = 3;
         if(targeted.getBbWidth() < targeted.getBbHeight()){
@@ -126,7 +126,7 @@ public class GateOfEnderSpell extends AbstractSpell {
         }
         double angle = Math.random() * 2 * Math.PI; //0-360
         Vec3 spawnPos = targeted.position().add(Math.cos(angle) * radius, Math.random() * radius ,Math.sin(angle) * radius);
-        GatePortal gate = new GatePortal(world,caster);
+        GatePortal gate = new GatePortal(world,caster, delay);
         gate.setPos(spawnPos);
         Vec3 lookAngle = targeted.position().add(0,targeted.getBbHeight()/2,0).subtract(spawnPos);
         float xRot = ((float)(Mth.atan2(lookAngle.horizontalDistance(), lookAngle.y) * (180F / Math.PI)) - 90.0F);
@@ -137,7 +137,7 @@ public class GateOfEnderSpell extends AbstractSpell {
         gate.setYRot(Mth.wrapDegrees(yRot));
     }
 
-    public void shootRandomSword(Level world, int spellLevel, LivingEntity entity) {
+    public void shootRandomSword(Level world, int spellLevel, LivingEntity entity, int delay) {
         double degree = Math.random() * Math.PI * 1.5 - Math.PI * 0.25;
         double radius = Math.random() * 3 + 1;
         radius *= getRadius(spellLevel,entity) / 3;
@@ -148,7 +148,7 @@ public class GateOfEnderSpell extends AbstractSpell {
         double cosTheta = Math.cos(Math.toRadians(entity.getXRot()));
         double sinTheta = Math.sin(Math.toRadians(entity.getXRot()));
         Vec3 origin = entity.position().add(xOffset* cosPsi- yOffset * sinTheta * sinPsi,yOffset * cosTheta,xOffset * sinPsi + yOffset * sinTheta * cosPsi);
-        GatePortal gate = new GatePortal(world,entity);
+        GatePortal gate = new GatePortal(world,entity, delay);
         gate.setPos(origin);
         Vec3 lookAngle = entity.getLookAngle();
         float xRot = ((float)(Mth.atan2(lookAngle.horizontalDistance(), lookAngle.y) * (180F / Math.PI)) - 90.0F);
@@ -170,7 +170,7 @@ public class GateOfEnderSpell extends AbstractSpell {
         double cosTheta = Math.cos(Math.toRadians(-90));
         double sinTheta = Math.sin(Math.toRadians(-90));
         Vec3 origin = entity.position().add(xOffset* cosPsi- yOffset * sinTheta * sinPsi,yOffset * cosTheta + 1,xOffset * sinPsi + yOffset * sinTheta * cosPsi);
-        GatePortal gate = new GatePortal(world,entity);
+        GatePortal gate = new GatePortal(world,entity, 5);
         gate.setPos(origin);
         Vec3 lookAngle = new Vec3(0,1,0);
         float xRot = ((float)(Mth.atan2(lookAngle.horizontalDistance(), lookAngle.y) * (180F / Math.PI)) - 90.0F);
@@ -183,7 +183,7 @@ public class GateOfEnderSpell extends AbstractSpell {
     }
 
     private float getDamage(int spellLevel, LivingEntity entity) {
-        return spellLevel + ((float) (getSpellPower(spellLevel, entity) * 0.5));
+        return (float) (getSpellPower(spellLevel, entity) * 0.5);
     }
 
     private float getRadius(int spellLevel, LivingEntity entity){
@@ -191,7 +191,7 @@ public class GateOfEnderSpell extends AbstractSpell {
     }
 
     private int getNumSwords(int spellLevel, LivingEntity caster){
-        return (int)(getSpellPower(spellLevel,caster) * 0.2) + spellLevel;
+        return (int)(getSpellPower(spellLevel,caster) * 0.1) + spellLevel;
     }
 
     @Override

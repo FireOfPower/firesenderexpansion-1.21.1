@@ -94,7 +94,7 @@ public class ScintillatingStrideSpell extends AbstractSpell {
     }
 
     private float getForce(int spellLevel, LivingEntity entity) {
-        return getSpellPower(spellLevel, entity) * 0.1f;
+        return 1 + getSpellPower(spellLevel, entity) * 0.02f;
     }
 
     private float getRadius(int spellLevel, LivingEntity entity){

@@ -87,7 +87,7 @@ public class EntityRegistry {
 
     public static final DeferredHolder<EntityType<?>, EntityType<TeleportAoe>> TELEPORT_AREA =
             ENTITIES.register("teleport_area", () -> EntityType.Builder.<TeleportAoe>of(TeleportAoe::new, MobCategory.MISC)
-                    .sized(16f, .8f)
+                    .sized(12f, .8f)
                     .clientTrackingRange(64)
                     .build(ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "teleport_area").toString()));
 

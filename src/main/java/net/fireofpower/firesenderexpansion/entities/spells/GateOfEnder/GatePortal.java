@@ -31,10 +31,13 @@ import java.util.Optional;
 public class GatePortal extends AbstractMagicProjectile implements GeoEntity {
     public float speed = 0;
     public boolean swordHoming = false;
-    public GatePortal(Level level, LivingEntity shooter) {
+    public int delay = 5;
+
+    public GatePortal(Level level, LivingEntity shooter, int delay) {
         this((EntityType) EntityRegistry.GATE_PORTAL.get(), level);
         this.setOwner(shooter);
         this.setNoGravity(true);
+        this.delay = delay;
     }
 
     public GatePortal(EntityType<GatePortal> gatePortalEntityType, Level level) {
@@ -78,7 +81,7 @@ public class GatePortal extends AbstractMagicProjectile implements GeoEntity {
 
     @Override
     public void tick() {
-        if(tickCount == 5){
+        if(tickCount == delay){
             shootSword();
         }
         if(tickCount > 20){

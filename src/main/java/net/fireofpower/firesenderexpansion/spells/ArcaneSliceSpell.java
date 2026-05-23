@@ -1,6 +1,7 @@
 package net.fireofpower.firesenderexpansion.spells;
 
 import io.redspace.ironsspellbooks.api.config.DefaultConfig;
+import io.redspace.ironsspellbooks.api.entity.IMagicEntity;
 import io.redspace.ironsspellbooks.api.magic.MagicData;
 import io.redspace.ironsspellbooks.api.registry.AttributeRegistry;
 import io.redspace.ironsspellbooks.api.registry.SchoolRegistry;
@@ -45,7 +46,7 @@ public class ArcaneSliceSpell extends AbstractSpell {
 
     public ArcaneSliceSpell(){
         this.manaCostPerLevel = 15;
-        this.baseSpellPower = 10;
+        this.baseSpellPower = 12;
         this.spellPowerPerLevel = 5;
         this.castTime = 0;
         this.baseManaCost = 75;
@@ -110,12 +111,11 @@ public class ArcaneSliceSpell extends AbstractSpell {
 
     private float getDamage(int spellLevel, LivingEntity caster, LivingEntity target)
     {
-        if(target instanceof ServerPlayer){
-            ServerPlayer player = (ServerPlayer) target;
+        if(target instanceof ServerPlayer player){
             MagicData magicData = MagicData.getPlayerMagicData(player);
             double maxMana = target.getAttributeValue(AttributeRegistry.MAX_MANA);
-            if(maxMana != 0){
-                return (float) ((getSpellPower(spellLevel,caster) * 0.77 * (1.5f - (magicData.getMana() / maxMana) / 2 )));
+            if(maxMana > 0){
+                return (float) ((getSpellPower(spellLevel,caster) * 0.77 * (1.5f - (magicData.getMana() / maxMana) / 2)));
             }
         }
         return ((float)(getSpellPower(spellLevel, caster) * 0.77));

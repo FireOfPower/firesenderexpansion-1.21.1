@@ -76,7 +76,7 @@ public class ObsidianRodSpell extends AbstractSpell {
     }
 
     private int getEffectLength(int spellLevel, LivingEntity caster) {
-        return (int) (this.getSpellPower(spellLevel, caster) * 3);
+        return (int) (this.getSpellPower(spellLevel, caster) * 2);
     }
 
     private float getDamage(int spellLevel, LivingEntity caster) {

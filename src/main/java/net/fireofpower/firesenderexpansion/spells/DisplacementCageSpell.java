@@ -38,13 +38,13 @@ public class DisplacementCageSpell extends AbstractSpell {
             .setMinRarity(SpellRarity.COMMON)
             .setSchoolResource(SchoolRegistry.ENDER_RESOURCE)
             .setMaxLevel(10)
-            .setCooldownSeconds(25)
+            .setCooldownSeconds(40)
             .build();
 
     public DisplacementCageSpell() {
         this.manaCostPerLevel = 10;
-        this.baseSpellPower = 2;
-        this.spellPowerPerLevel = 1;
+        this.baseSpellPower = 10;
+        this.spellPowerPerLevel = 3;
         this.castTime = 20;
         this.baseManaCost = 40;
     }
@@ -104,11 +104,11 @@ public class DisplacementCageSpell extends AbstractSpell {
     }
 
     private float getRadius(int spellLevel, LivingEntity caster) {
-        return 8;
+        return 6;
     }
 
     private int getDuration(int spellLevel, LivingEntity caster) {
-        return spellLevel * 10 + (int)(getSpellPower(spellLevel,caster)) * 5;
+        return spellLevel * 5 + (int)(getSpellPower(spellLevel,caster)) * 3;
     }
 
     @Override
