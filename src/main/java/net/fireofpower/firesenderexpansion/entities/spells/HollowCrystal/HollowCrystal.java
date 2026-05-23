@@ -183,7 +183,8 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
             if (getTimeAlive() > 0) {
                 setTimeAlive(getTimeAlive() - 1);
                 for (int i = 0; i < 10; i++) {
-                    this.level().addParticle(ParticleTypes.END_ROD, particleRangeX(0), particleRangeY(0), particleRangeZ(0), Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5);
+                    float speedMultiplier = 1;
+                    this.level().addParticle(ParticleTypes.END_ROD, particleRangeX(0), particleRangeY(0), particleRangeZ(0), speedMultiplier * (Math.random() - 0.5), speedMultiplier * (Math.random() - 0.5), speedMultiplier * (Math.random() - 0.5));
                 }
             } else {
                 this.level().addParticle(ParticleHelper.PORTAL_FRAME, particleRangeX(5), particleRangeY(5), particleRangeZ(5), 0, 0, 0);
@@ -308,6 +309,28 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
 
     public void triggerBreakAnimation()
     {
+        if(getOwner() instanceof ServerPlayer owner) {
+            PacketDistributor.sendToPlayer(owner, new AddShaderEffectPacket(FiresEnderExpansion.MODID, "shaders/light_burst_shader.json"));
+            Timer timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    PacketDistributor.sendToPlayer(owner, new AddShaderEffectPacket(FiresEnderExpansion.MODID, "shaders/dark_burst_shader.json"));
+                }
+            }, 100);
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    PacketDistributor.sendToPlayer(owner, new AddShaderEffectPacket(FiresEnderExpansion.MODID, "shaders/light_burst_shader.json"));
+                }
+            }, 200);
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    PacketDistributor.sendToPlayer(owner, new RemoveShaderEffectPacket());
+                }
+            }, 300);
+        }
         entityData.set(DATA_IS_PLAYING_BREAK_ANIM, true);
     }
 
