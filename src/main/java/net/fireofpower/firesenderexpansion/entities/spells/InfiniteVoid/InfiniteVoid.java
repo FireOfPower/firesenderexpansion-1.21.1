@@ -155,9 +155,10 @@ public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity {
                     //sound
                     voidLevel.playSound(null, livingEntity.blockPosition(), SoundRegistry.DEVOUR_BITE.get(), SoundSource.PLAYERS, 5, 10);
                     //damage
-                    livingEntity.hurt(new VoidSureHitDamageSource(livingEntity),5);
-                    //apply effect
-                    livingEntity.addEffect(new MobEffectInstance(EffectRegistry.VOIDTORN_EFFECT,100,0));
+                    if(livingEntity.hurt(new VoidSureHitDamageSource(livingEntity),5)) {
+                        //apply effect
+                        livingEntity.addEffect(new MobEffectInstance(EffectRegistry.VOIDTORN_EFFECT, 100, 0));
+                    }
                 }
     }
 

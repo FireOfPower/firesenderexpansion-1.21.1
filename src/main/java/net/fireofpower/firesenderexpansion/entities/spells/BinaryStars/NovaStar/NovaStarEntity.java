@@ -25,10 +25,9 @@ public class NovaStarEntity extends BinaryStarEntity {
     @Override
     protected void onHitEntity(EntityHitResult pResult) {
         if(canHitEntity(pResult.getEntity())){
-            if(pResult.getEntity() instanceof LivingEntity livingEntity){
+            if(pResult.getEntity() instanceof LivingEntity livingEntity && DamageSources.applyDamage(pResult.getEntity(), damage, SpellRegistries.BINARY_STARS.get().getDamageSource(this, getOwner()))){
                 livingEntity.addEffect(new MobEffectInstance(EffectRegistry.NOVA_BURN_EFFECT,getDuration()));
             }
-            DamageSources.applyDamage(pResult.getEntity(), damage, SpellRegistries.BINARY_STARS.get().getDamageSource(this, getOwner()));
         }
     }
 }

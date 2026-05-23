@@ -27,7 +27,6 @@ public class NovaBurnEffect extends MagicMobEffect {
     public static void onSpellCastEvent(SpellPreCastEvent event){
         LivingEntity caster = event.getEntity();
         if(caster.hasEffect(EffectRegistry.NOVA_BURN_EFFECT)){
-            System.out.println("Hurting " + caster + " for 3 * " + getNumPositiveEffects(caster) + " * " + caster.getEffect(EffectRegistry.NOVA_BURN_EFFECT).getAmplifier());
             float amount = 5 * getNumPositiveEffects(caster) * caster.getEffect(EffectRegistry.NOVA_BURN_EFFECT).getAmplifier();
             caster.hurt(new NovaBurnDamageSource(caster),amount);
         }

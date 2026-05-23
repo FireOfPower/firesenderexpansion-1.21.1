@@ -79,9 +79,8 @@ public class ObsidianRod extends AbstractMagicProjectile implements GeoEntity {
     @Override
     protected void onHitEntity(EntityHitResult pResult) {
         var target = pResult.getEntity();
-        DamageSources.applyDamage(target, damage,
-                SpellRegistries.OBSIDIAN_ROD.get().getDamageSource(this, getOwner()));
-        if (target instanceof LivingEntity livingTarget)
+        if (target instanceof LivingEntity livingTarget && DamageSources.applyDamage(target, damage,
+                SpellRegistries.OBSIDIAN_ROD.get().getDamageSource(this, getOwner())))
         {
             livingTarget.addEffect(new MobEffectInstance(EffectRegistry.ANCHORED_EFFECT, getEffectLength(), 0));
         }

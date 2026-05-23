@@ -25,11 +25,9 @@ public class ObsidianStarEntity extends BinaryStarEntity {
     @Override
     protected void onHitEntity(EntityHitResult pResult) {
         if(canHitEntity(pResult.getEntity())){
-            if(pResult.getEntity() instanceof LivingEntity livingEntity){
-                //System.out.println("Hit living entity, attempting to apply effect for " + getDuration());
+            if(pResult.getEntity() instanceof LivingEntity livingEntity && DamageSources.applyDamage(pResult.getEntity(), damage, SpellRegistries.BINARY_STARS.get().getDamageSource(this, getOwner()))){
                 livingEntity.addEffect(new MobEffectInstance(EffectRegistry.ECLIPSED_EFFECT,getDuration()));
             }
-            DamageSources.applyDamage(pResult.getEntity(), damage, SpellRegistries.BINARY_STARS.get().getDamageSource(this, getOwner()));
         }
     }
 }
