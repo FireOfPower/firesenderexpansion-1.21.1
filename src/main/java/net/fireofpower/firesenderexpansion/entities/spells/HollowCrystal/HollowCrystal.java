@@ -158,8 +158,13 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
                     ItemStack result = new ItemStack(ItemRegistry.CRYSTAL_HEART.get(), 1);
                     ItemEntity entity = new ItemEntity(level(), core.get().position().x(), core.get().position().y(), core.get().position().z(), result);
                     level().addFreshEntity(entity);
-                    core.get().discard();
-                    stone.get().discard();
+                    if(core.get().getItem().getCount() > 1) {
+                        core.get().getItem().shrink(-1);
+                        stone.get().getItem().shrink(-1);
+                    }else {
+                        core.get().discard();
+                        stone.get().discard();
+                    }
                 }
             }
             if (getTimeAlive() == 0 || tickCount > 600) {
