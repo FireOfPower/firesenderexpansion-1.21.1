@@ -185,7 +185,7 @@ public class ServerEvents {
             if(event.getItemStack().getItem().equals(ItemRegistry.DRAGONSKIN_SPELL_BOOK.get())){
                 if(event.getItemStack().getItem() instanceof CurioBaseItem curio){
                     curio.withSpellbookAttributes(
-                            new AttributeContainer(AttributeRegistry.ENDER_SPELL_POWER, 0.25f, AttributeModifier.Operation.ADD_VALUE),
+                            new AttributeContainer(AttributeRegistry.ENDER_SPELL_POWER, 0.2f, AttributeModifier.Operation.ADD_VALUE),
                             new AttributeContainer(AttributeRegistry.MAX_MANA,200, AttributeModifier.Operation.ADD_VALUE));
                 }
             }
