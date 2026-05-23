@@ -7,6 +7,7 @@ import io.redspace.ironsspellbooks.api.spells.*;
 import io.redspace.ironsspellbooks.api.util.AnimationHolder;
 import io.redspace.ironsspellbooks.api.util.Utils;
 import io.redspace.ironsspellbooks.capabilities.magic.TargetEntityCastData;
+import io.redspace.ironsspellbooks.damage.SpellDamageSource;
 import net.fireofpower.firesenderexpansion.Config;
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
 import net.fireofpower.firesenderexpansion.entities.spells.GateOfEnder.GatePortal;
@@ -16,6 +17,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -190,8 +192,13 @@ public class GateOfEnderSpell extends AbstractSpell {
         return (float) spellLevel / 2 + 3 * (float)Math.sqrt(getSpellPower(spellLevel,entity) * 0.25f / Math.PI);
     }
 
-    private int getNumSwords(int spellLevel, LivingEntity caster){
-        return (int)(getSpellPower(spellLevel,caster) * 0.1) + spellLevel;
+    private int getNumSwords(int spellLevel, LivingEntity caster) {
+        return (int) (getSpellPower(spellLevel, caster) * 0.1) + spellLevel;
+    }
+
+    @Override
+    public SpellDamageSource getDamageSource(Entity projectile, Entity attacker) {
+        return super.getDamageSource(projectile, attacker).setIFrames(5);
     }
 
     @Override

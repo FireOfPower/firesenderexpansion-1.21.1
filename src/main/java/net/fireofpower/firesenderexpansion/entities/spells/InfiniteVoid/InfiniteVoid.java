@@ -2,6 +2,7 @@ package net.fireofpower.firesenderexpansion.entities.spells.InfiniteVoid;
 
 import io.redspace.ironsspellbooks.capabilities.magic.MagicManager;
 
+import io.redspace.ironsspellbooks.damage.DamageSources;
 import io.redspace.ironsspellbooks.registries.MobEffectRegistry;
 import io.redspace.ironsspellbooks.registries.ParticleRegistry;
 import io.redspace.ironsspellbooks.registries.SoundRegistry;
@@ -14,6 +15,7 @@ import net.fireofpower.firesenderexpansion.util.ModTags;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -33,6 +35,7 @@ import java.util.List;
 
 public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity {
     private int duration = 15; //in seconds
+    private final int radius = 23;
 
 
     public InfiniteVoid(Level level, Entity shooter, int radius, int refinement, int duration) {
@@ -58,6 +61,33 @@ public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity {
         super.tick();
         //again tickCount is unreliable with the cross-dimensional travel
         long time = level().getGameTime() - getSpawnTime();
+        if(time < 2 * 20 + getTimeSpentClashing()){
+            List<Entity> trackingEntities = level().getEntities(null,new AABB(position().add(radius/2f,radius/2f,radius/2f),position().subtract(radius/2f,radius/2f,radius/2f)));
+            if(trackingEntities.contains(getOwner())){
+                trackingEntities.remove(getOwner());
+            }
+            for(AbstractDomainEntity entity : getClashingWith()){
+                if(trackingEntities.contains(entity.getOwner())){
+                    trackingEntities.remove(getOwner());
+                }
+            }
+            for (Entity entity : trackingEntities) {
+                if (entity != getOwner() && !DamageSources.isFriendlyFireBetween(getOwner(), entity) && !entity.isSpectator()) {
+                    float distance = (float) position().add(0,2,0).distanceTo(entity.position());
+                    if (distance > radius) {
+                        continue;
+                    }
+                    float f = 1 - distance / radius;
+                    float scale = f * f * f * f * 0.05f;
+                    //float immuneResistance = entity.getType().is(ModTags.INFINITE_VOID_IMMUNE) ? 0f : 1f;
+
+
+                    Vec3 diff = position().add(0,2,0).subtract(entity.position()).scale(scale /* * immuneResistance*/);
+                    entity.push(diff.x, diff.y, diff.z);
+                    entity.fallDistance = 0;
+                }
+            }
+        }
         if(time > (getDuration() + 2 /* plus two for the spawn animation */) * 20L /* to because it's stored in seconds, but needs to be in ticks */ + getTimeSpentClashing() /* it'd be annoying if you lost all your duration while clashing :( */){
             destroyDomain();
         }
