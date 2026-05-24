@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:jigsaw",
+  "start_pool": "firesenderexpansion:endventurer_house",
+  "size": 2,
+  "exclusion_zone": {
+    "chunk_count": 10,
+    "other_set": "minecraft:end_city"
+  },
+  "max_distance_from_center": 20,
+  "step": "surface_structures",
+  "use_expansion_hack": false,
+  "start_height": {
+    "absolute": 64
+  },
+  "biomes": "#firesenderexpansion:has_structure/endventurer_house",
+  "terrain_adaptation": "beard_thin",
+  "spawn_overrides": {
+  }
+}

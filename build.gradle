@@ -189,6 +189,7 @@ dependencies {
 
     //OPTIONAL:
 
+    implementation "curse.maven:worldedit-225608:5830452"
     implementation "curse.maven:mmmmmmmmmmmm-225738:7206981"
     implementation "curse.maven:selene-499980:7209771"
 

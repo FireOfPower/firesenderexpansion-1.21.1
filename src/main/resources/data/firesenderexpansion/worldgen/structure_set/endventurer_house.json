@@ -1,0 +1,15 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 38297124,
+    "frequency": 0.1,
+    "separation": 15,
+    "spacing": 45
+  },
+  "structures": [
+    {
+      "structure": "firesenderexpansion:endventurer_house",
+      "weight": 1
+    }
+  ]
+}
