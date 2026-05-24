@@ -77,7 +77,7 @@ public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity {
                     if (distance > radius) {
                         continue;
                     }
-                    float f = 1 - distance / radius;
+                    float f = 1 + radius / distance;
                     float scale = f * f * f * f * 0.05f;
                     //float immuneResistance = entity.getType().is(ModTags.INFINITE_VOID_IMMUNE) ? 0f : 1f;
 

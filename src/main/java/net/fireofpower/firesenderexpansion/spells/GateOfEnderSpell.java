@@ -198,7 +198,7 @@ public class GateOfEnderSpell extends AbstractSpell {
 
     @Override
     public SpellDamageSource getDamageSource(Entity projectile, Entity attacker) {
-        return super.getDamageSource(projectile, attacker).setIFrames(5);
+        return super.getDamageSource(projectile, attacker);
     }
 
     @Override

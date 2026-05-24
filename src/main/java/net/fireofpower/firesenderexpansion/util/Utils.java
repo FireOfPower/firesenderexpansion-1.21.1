@@ -6,6 +6,9 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ChunkPos;
 import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
+
+import java.util.function.Predicate;
 
 public class Utils {
     public static boolean shouldBreakHollowCrystal(Projectile target){
@@ -13,7 +16,8 @@ public class Utils {
     }
     public static boolean hasCurio(Player player, Item item)
     {
-        return CuriosApi.getCuriosHelper().findEquippedCurio(item, player).isPresent();
+        if(!CuriosApi.getCuriosInventory(player).isPresent()) { return false; }
+        return CuriosApi.getCuriosInventory(player).stream().anyMatch(iCuriosItemHandler -> iCuriosItemHandler.isEquipped(item));
     }
 
     public static ChunkPos getChunkPos(BlockPos blockPos) {
