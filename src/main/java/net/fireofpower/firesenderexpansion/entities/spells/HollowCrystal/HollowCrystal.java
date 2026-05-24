@@ -159,8 +159,8 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
                     ItemEntity entity = new ItemEntity(level(), core.get().position().x(), core.get().position().y(), core.get().position().z(), result);
                     level().addFreshEntity(entity);
                     if(core.get().getItem().getCount() > 1) {
-                        core.get().getItem().shrink(-1);
-                        stone.get().getItem().shrink(-1);
+                        core.get().getItem().shrink(1);
+                        stone.get().getItem().shrink(1);
                     }else {
                         core.get().discard();
                         stone.get().discard();
