@@ -72,7 +72,7 @@ public class ItemRegistry {
 
     public static final DeferredHolder<Item, Item> ENDCHIRIDION = ITEMS.register("endchiridion", () ->
             new SpellBook(10).withSpellbookAttributes(
-                    new AttributeContainer(AttributeRegistry.SPELL_POWER, .15F, AttributeModifier.Operation.ADD_MULTIPLIED_BASE),
+                    new AttributeContainer(AttributeRegistry.SPELL_POWER, .1F, AttributeModifier.Operation.ADD_MULTIPLIED_BASE),
                     new AttributeContainer(AttributeRegistry.CAST_TIME_REDUCTION,.2F,AttributeModifier.Operation.ADD_MULTIPLIED_BASE),
                     new AttributeContainer(AttributeRegistry.MAX_MANA, 200, AttributeModifier.Operation.ADD_VALUE)
             ));
