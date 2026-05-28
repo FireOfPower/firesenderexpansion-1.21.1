@@ -31,6 +31,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity {
@@ -63,26 +64,25 @@ public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity {
         long time = level().getGameTime() - getSpawnTime();
         if(time < 2 * 20 + getTimeSpentClashing()){
             List<Entity> trackingEntities = level().getEntities(null,new AABB(position().add(radius/2f,radius/2f,radius/2f),position().subtract(radius/2f,radius/2f,radius/2f)));
-            if(trackingEntities.contains(getOwner())){
-                trackingEntities.remove(getOwner());
-            }
+            trackingEntities.remove(getOwner());
+            trackingEntities.remove(this);
             for(AbstractDomainEntity entity : getClashingWith()){
-                if(trackingEntities.contains(entity.getOwner())){
-                    trackingEntities.remove(getOwner());
-                }
+                trackingEntities.remove(entity.getOwner());
+                trackingEntities.remove(entity);
             }
             for (Entity entity : trackingEntities) {
-                if (entity != getOwner() && !DamageSources.isFriendlyFireBetween(getOwner(), entity) && !entity.isSpectator()) {
+                if (!DamageSources.isFriendlyFireBetween(getOwner(), entity)) {
                     float distance = (float) position().add(0,2,0).distanceTo(entity.position());
                     if (distance > radius) {
                         continue;
                     }
-                    float f = 1 + radius / distance;
-                    float scale = f * f * f * f * 0.05f;
-                    //float immuneResistance = entity.getType().is(ModTags.INFINITE_VOID_IMMUNE) ? 0f : 1f;
+                    float f = distance / radius * 2;
+                    float scale = f * f * 0.25f;
+                    float immuneResistance = entity.getType().is(ModTags.INFINITE_VOID_IMMUNE) ? 0f : 1f;
 
 
-                    Vec3 diff = position().add(0,2,0).subtract(entity.position()).scale(scale /* * immuneResistance*/);
+                    Vec3 diff = position().add(0,2,0).subtract(entity.position()).scale(scale * immuneResistance);
+                    System.out.println("Applying " + diff.length() + " force to " + entity);
                     entity.push(diff.x, diff.y, diff.z);
                     entity.fallDistance = 0;
                 }
