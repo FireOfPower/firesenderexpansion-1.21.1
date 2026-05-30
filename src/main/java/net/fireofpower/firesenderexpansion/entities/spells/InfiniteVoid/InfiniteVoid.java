@@ -82,7 +82,7 @@ public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity {
 
 
                     Vec3 diff = position().add(0,2,0).subtract(entity.position()).scale(scale * immuneResistance);
-                    System.out.println("Applying " + diff.length() + " force to " + entity);
+                    //System.out.println("Applying " + diff.length() + " force to " + entity);
                     entity.push(diff.x, diff.y, diff.z);
                     entity.fallDistance = 0;
                 }
