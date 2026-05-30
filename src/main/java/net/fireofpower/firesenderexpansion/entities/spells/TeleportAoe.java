@@ -3,6 +3,7 @@ package net.fireofpower.firesenderexpansion.entities.spells;
 import io.redspace.ironsspellbooks.api.events.SpellTeleportEvent;
 import io.redspace.ironsspellbooks.api.magic.MagicData;
 import io.redspace.ironsspellbooks.api.util.Utils;
+import io.redspace.ironsspellbooks.damage.DamageSources;
 import io.redspace.ironsspellbooks.entity.mobs.AntiMagicSusceptible;
 import io.redspace.ironsspellbooks.entity.spells.AoeEntity;
 import net.fireofpower.firesenderexpansion.registries.EffectRegistry;
@@ -64,7 +65,7 @@ public class TeleportAoe extends AoeEntity implements AntiMagicSusceptible {
             //update the trackedTargets list
             Vec3 distFromCircleCenter = new Vec3((float) (targets.get(i).position().x - this.position().x), 0, (float) (targets.get(i).position().z - this.position().z));
             //if we're not already tracking them, then start tracking them and apply the shader
-            if(!trackedTargets.contains(targets.get(i)) && distFromCircleCenter.horizontalDistance() < getRadius() && !Objects.equals(targets.get(i),getOwner())){
+            if(!trackedTargets.contains(targets.get(i)) && distFromCircleCenter.horizontalDistance() < getRadius() && !Objects.equals(targets.get(i),getOwner()) && !DamageSources.isFriendlyFireBetween(getOwner(),targets.get(i)) && !(targets.get(i) instanceof ServerPlayer serverPlayer && (serverPlayer.isSpectator() || serverPlayer.isCreative()))){
                 trackedTargets.add(targets.get(i));
                 level().playSound((Player) null, targets.get(i).position().x, targets.get(i).position().y, targets.get(i).position().z, SoundEvents.ENDERMAN_TELEPORT, SoundSource.PLAYERS, 2.0F, 1.0F);
             }
