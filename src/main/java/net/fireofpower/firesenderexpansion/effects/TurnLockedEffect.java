@@ -28,7 +28,7 @@ public class TurnLockedEffect extends MobEffect {
 
     @SubscribeEvent
     public static void preventMilk(MobEffectEvent.Remove event){
-        if(event.getCure().equals(EffectCures.MILK) || event.getCure().equals(EffectCures.PROTECTED_BY_TOTEM)){
+        if(event.getCure() != null && (event.getCure().equals(EffectCures.MILK) || event.getCure().equals(EffectCures.PROTECTED_BY_TOTEM))){
             event.setCanceled(true);
         }
     }
