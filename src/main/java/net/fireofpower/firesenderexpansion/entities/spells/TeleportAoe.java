@@ -44,8 +44,8 @@ import java.util.Optional;
 @EventBusSubscriber
 public class TeleportAoe extends AoeEntity implements AntiMagicSusceptible {
     private static final EntityDataAccessor<Integer> DURATION = SynchedEntityData.defineId(TeleportAoe.class, EntityDataSerializers.INT);
-    private float tpRadius = 0.5f;
     private final List<LivingEntity> trackedTargets = new ArrayList<>();
+    static final double MAX_HEIGHT = 256;
 
     public TeleportAoe(EntityType<? extends Projectile> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
@@ -60,7 +60,10 @@ public class TeleportAoe extends AoeEntity implements AntiMagicSusceptible {
     public void tick() {
 
         //get everyone sorta nearby (it's a square instead of a circle with radius dimensions)
-        List<LivingEntity> targets = this.level().getEntitiesOfClass(LivingEntity.class, new AABB(this.getX() - getRadius(), this.getY() - getRadius(), this.getZ() - getRadius(), this.getX() + getRadius(), this.getY() + getRadius(), this.getZ() + getRadius()));
+        List<LivingEntity> targets = this.level().getEntitiesOfClass(LivingEntity.class, new AABB(this.getX() - getRadius(), this.getY() - MAX_HEIGHT, this.getZ() - getRadius(), this.getX() + getRadius(), this.getY() + MAX_HEIGHT, this.getZ() + getRadius()));
+        for(LivingEntity e : targets){
+            System.out.println("Tracking " + e);
+        }
         for(int i = 0; i < targets.size(); i++) {
             //update the trackedTargets list
             Vec3 distFromCircleCenter = new Vec3((float) (targets.get(i).position().x - this.position().x), 0, (float) (targets.get(i).position().z - this.position().z));
@@ -104,10 +107,14 @@ public class TeleportAoe extends AoeEntity implements AntiMagicSusceptible {
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void allowFreeTeleportation(EntityTeleportEvent event) {
-        TeleportAoe aoe = new TeleportAoe(event.getEntity().level());
-        List<TeleportAoe> nearby = event.getEntity().level().getEntitiesOfClass(TeleportAoe.class,new AABB(new Vec3(event.getEntity().position().subtract(aoe.getRadius(),aoe.getRadius(),aoe.getRadius()).toVector3f()), new Vec3(event.getEntity().position().add(aoe.getRadius(),aoe.getRadius(),aoe.getRadius()).toVector3f())));
-        for(int i = 0; i < nearby.size(); i++){
-            nearby.get(i).trackedTargets.remove(event.getEntity());
+        if(!(event instanceof SpellTeleportEvent spellTeleportEvent && spellTeleportEvent.getSpell().equals(SpellRegistries.DISPLACEMENT_CAGE.get()))) {
+            TeleportAoe aoe = new TeleportAoe(event.getEntity().level());
+            List<TeleportAoe> nearby = event.getEntity().level().getEntitiesOfClass(TeleportAoe.class,
+                    new AABB(new Vec3(event.getEntity().position().subtract(aoe.getRadius(), MAX_HEIGHT, aoe.getRadius()).toVector3f()),
+                            new Vec3(event.getEntity().position().add(aoe.getRadius(), MAX_HEIGHT, aoe.getRadius()).toVector3f())));
+            for (int i = 0; i < nearby.size(); i++) {
+                nearby.get(i).trackedTargets.remove(event.getEntity());
+            }
         }
     }
 
