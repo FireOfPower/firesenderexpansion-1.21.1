@@ -14,8 +14,8 @@ import net.fireofpower.firesenderexpansion.registries.EntityRegistry;
 import net.fireofpower.firesenderexpansion.util.ModTags;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -31,7 +31,6 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 
 public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity {
@@ -149,13 +148,19 @@ public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity {
 
     @Override
     public void targetSureHit() {
+        final int SUREHIT_BIG_DANGER_RADIUS = 30;
         //only attack every 3 seconds
-        if(level() instanceof ServerLevel serverLevel && tickCount % 60 == 0) {
+        //attack more often if it's far away from the caster
+        if(level() instanceof ServerLevel serverLevel && tickCount % 20 == 0) {
             ServerLevel voidLevel = serverLevel.getServer().getLevel(VoidDimensionManager.VOID_DIMENSION);
             if(voidLevel != null) {
                 voidLevel.getAllEntities().forEach(e -> {
                     if (canTarget(e)) {
-                        handleSureHit(e);
+                        if (tickCount % 60 == 0) {
+                            handleSureHit(e);
+                        } else if (tickCount % 20 == 0 && voidLevel.getEntitiesOfClass(LivingEntity.class, new AABB(e.position().subtract(SUREHIT_BIG_DANGER_RADIUS, SUREHIT_BIG_DANGER_RADIUS, SUREHIT_BIG_DANGER_RADIUS), e.position().add(SUREHIT_BIG_DANGER_RADIUS, SUREHIT_BIG_DANGER_RADIUS, SUREHIT_BIG_DANGER_RADIUS))).stream().noneMatch(player -> player.hasEffect(EffectRegistry.ASCENDED_CASTER_EFFECT))) {
+                            handleSureHit(e);
+                        }
                     }
                 });
             }
@@ -178,9 +183,9 @@ public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity {
                         if (i % 2 == 0) {
                             MagicManager.spawnParticles(voidLevel, ParticleTypes.SQUID_INK, particlePos.x, particlePos.y - 0.5, particlePos.z, 1, 0, 0, 0, 0, false);
                         } else {
-                            MagicManager.spawnParticles(voidLevel, ParticleTypes.SQUID_INK, particlePos.x, particlePos.y + 0.5, particlePos.z, 1, 0, 0, 0, 0, false);
+                            //MagicManager.spawnParticles(voidLevel, ParticleTypes.SQUID_INK, particlePos.x, particlePos.y + 0.5, particlePos.z, 1, 0, 0, 0, 0, false);
                         }
-                        MagicManager.spawnParticles(voidLevel, ParticleRegistry.UNSTABLE_ENDER_PARTICLE.get(), particlePos.x, particlePos.y, particlePos.z, 1, 0, 0, 0, 0, false);
+                        //MagicManager.spawnParticles(voidLevel, ParticleRegistry.UNSTABLE_ENDER_PARTICLE.get(), particlePos.x, particlePos.y, particlePos.z, 1, 0, 0, 0, 0, false);
                     }
                     //sound
                     voidLevel.playSound(null, livingEntity.blockPosition(), SoundRegistry.DEVOUR_BITE.get(), SoundSource.PLAYERS, 5, 10);
