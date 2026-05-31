@@ -9,8 +9,13 @@ import net.fireofpower.firesenderexpansion.util.Utils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.EffectCures;
 import net.neoforged.neoforge.common.NeoForgeMod;
+import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
 
+@EventBusSubscriber
 public class AscendedCasterEffect extends MagicMobEffect implements AntiMagicSusceptible {
 
     public AscendedCasterEffect() {
@@ -24,5 +29,12 @@ public class AscendedCasterEffect extends MagicMobEffect implements AntiMagicSus
     @Override
     public void onAntiMagic(MagicData playerMagicData) {
 
+    }
+
+    @SubscribeEvent
+    public static void preventMilk(MobEffectEvent.Remove event){
+        if(event.getCure().equals(EffectCures.MILK) || event.getCure().equals(EffectCures.PROTECTED_BY_TOTEM)){
+            event.setCanceled(true);
+        }
     }
 }

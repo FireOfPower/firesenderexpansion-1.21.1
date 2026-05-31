@@ -130,6 +130,7 @@ public class ScintillatingStrideSpell extends AbstractSpell {
     public void onRecastFinished(ServerPlayer serverPlayer, RecastInstance recastInstance, RecastResult recastResult, ICastDataSerializable castDataSerializable) {
         super.onRecastFinished(serverPlayer, recastInstance, recastResult, castDataSerializable);
         if(recastResult.isSuccess()) {
+            if(serverPlayer.hasEffect(EffectRegistry.STRIDING_EFFECT)){
             //Pre-return
             for (int i = 0; i < 20; i++) {
                 spawnParticles(serverPlayer);
@@ -141,8 +142,6 @@ public class ScintillatingStrideSpell extends AbstractSpell {
             serverPlayer.level().getEntitiesOfClass(LivingEntity.class, serverPlayer.getBoundingBox().inflate(getRadius(recastInstance.getSpellLevel(), serverPlayer))).stream().forEach(e -> {
                 DamageSources.applyDamage(e, getDamage(recastInstance.getSpellLevel(), serverPlayer), getDamageSource(serverPlayer));
             });
-            //Trigger return
-            if(serverPlayer.hasEffect(EffectRegistry.STRIDING_EFFECT)){
                 serverPlayer.removeEffect(EffectRegistry.STRIDING_EFFECT);
             }
         }

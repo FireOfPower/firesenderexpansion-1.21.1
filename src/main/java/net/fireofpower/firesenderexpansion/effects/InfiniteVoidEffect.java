@@ -20,7 +20,9 @@ import net.minecraft.world.level.portal.DimensionTransition;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.EffectCures;
 import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
+import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
 
 import java.util.*;
 
@@ -61,6 +63,13 @@ public class InfiniteVoidEffect extends MagicMobEffect implements AntiMagicSusce
     @Override
     public void onAntiMagic(MagicData magicData) {
 
+    }
+
+    @SubscribeEvent
+    public static void preventMilk(MobEffectEvent.Remove event){
+        if(event.getCure().equals(EffectCures.MILK) || event.getCure().equals(EffectCures.PROTECTED_BY_TOTEM)){
+            event.setCanceled(true);
+        }
     }
 
     @SubscribeEvent
