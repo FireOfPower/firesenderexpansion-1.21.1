@@ -1,5 +1,6 @@
 package net.fireofpower.firesenderexpansion.effects;
 
+import net.fireofpower.firesenderexpansion.registries.EffectRegistry;
 import net.fireofpower.firesenderexpansion.util.Utils;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
@@ -29,7 +30,9 @@ public class TurnLockedEffect extends MobEffect {
     @SubscribeEvent
     public static void preventMilk(MobEffectEvent.Remove event){
         if(event.getCure() != null && (event.getCure().equals(EffectCures.MILK) || event.getCure().equals(EffectCures.PROTECTED_BY_TOTEM))){
-            event.setCanceled(true);
+            if(event.getEffect().equals(EffectRegistry.LOCKED_CAMERA_EFFECT)) {
+                event.setCanceled(true);
+            }
         }
     }
 }

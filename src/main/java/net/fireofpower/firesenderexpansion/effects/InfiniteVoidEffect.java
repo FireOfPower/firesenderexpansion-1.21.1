@@ -68,7 +68,9 @@ public class InfiniteVoidEffect extends MagicMobEffect implements AntiMagicSusce
     @SubscribeEvent
     public static void preventMilk(MobEffectEvent.Remove event){
         if(event.getCure() != null && (event.getCure().equals(EffectCures.MILK) || event.getCure().equals(EffectCures.PROTECTED_BY_TOTEM))){
-            event.setCanceled(true);
+            if(event.getEffect().equals(EffectRegistry.INFINITE_VOID_EFFECT)) {
+                event.setCanceled(true);
+            }
         }
     }
 

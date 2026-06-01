@@ -5,6 +5,7 @@ import io.redspace.ironsspellbooks.api.registry.AttributeRegistry;
 import io.redspace.ironsspellbooks.effect.MagicMobEffect;
 import io.redspace.ironsspellbooks.entity.mobs.AntiMagicSusceptible;
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
+import net.fireofpower.firesenderexpansion.registries.EffectRegistry;
 import net.fireofpower.firesenderexpansion.util.Utils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectCategory;
@@ -34,7 +35,9 @@ public class AscendedCasterEffect extends MagicMobEffect implements AntiMagicSus
     @SubscribeEvent
     public static void preventMilk(MobEffectEvent.Remove event){
         if(event.getCure() != null && (event.getCure().equals(EffectCures.MILK) || event.getCure().equals(EffectCures.PROTECTED_BY_TOTEM))){
-            event.setCanceled(true);
+            if(event.getEffect().equals(EffectRegistry.ASCENDED_CASTER_EFFECT)) {
+                event.setCanceled(true);
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
 package net.fireofpower.firesenderexpansion.effects;
 
 import io.redspace.ironsspellbooks.effect.MagicMobEffect;
+import net.fireofpower.firesenderexpansion.registries.EffectRegistry;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -16,7 +17,9 @@ public class HollowCrystalEffect extends MagicMobEffect {
     @SubscribeEvent
     public static void preventMilk(MobEffectEvent.Remove event){
         if(event.getCure() != null && (event.getCure().equals(EffectCures.MILK) || event.getCure().equals(EffectCures.PROTECTED_BY_TOTEM))){
-            event.setCanceled(true);
+            if(event.getEffect().equals(EffectRegistry.HOLLOW_CRYSTAL_EFFECT)) {
+                event.setCanceled(true);
+            }
         }
     }
 }
