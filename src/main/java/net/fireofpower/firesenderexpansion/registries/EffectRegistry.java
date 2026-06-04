@@ -1,9 +1,12 @@
 package net.fireofpower.firesenderexpansion.registries;
 
+import io.redspace.ironsspellbooks.IronsSpellbooks;
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
 import net.fireofpower.firesenderexpansion.effects.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -14,7 +17,7 @@ public class EffectRegistry {
     public static final DeferredHolder<MobEffect, MobEffect> ASPECT_OF_THE_SHULKER_EFFECT = MOB_EFFECTS.register("aspect_of_the_shulker_effect", () -> new AspectOfTheShulkerEffect());
     public static final DeferredHolder<MobEffect, MobEffect> HOLLOW_CRYSTAL_EFFECT = MOB_EFFECTS.register("hollow_crystal_effect", () -> new HollowCrystalEffect());
     public static final DeferredHolder<MobEffect, MobEffect> ANCHORED_EFFECT = MOB_EFFECTS.register("anchored_effect", () -> new AnchoredEffect());
-    public static final DeferredHolder<MobEffect, MobEffect> INFINITE_VOID_EFFECT = MOB_EFFECTS.register("infinite_void_effect", () -> new InfiniteVoidEffect());
+    public static final DeferredHolder<MobEffect, MobEffect> INFINITE_VOID_EFFECT = MOB_EFFECTS.register("infinite_void_effect", () -> new InfiniteVoidEffect().addAttributeModifier(Attributes.GRAVITY, FiresEnderExpansion.id("void_gravity"), -1.02, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
     public static final DeferredHolder<MobEffect, MobEffect> ASCENDED_CASTER_EFFECT = MOB_EFFECTS.register("ascended_caster_effect", () -> new AscendedCasterEffect());
     public static final DeferredHolder<MobEffect, MobEffect> NOVA_BURN_EFFECT = MOB_EFFECTS.register("nova_burn_effect", () -> new NovaBurnEffect());
     public static final DeferredHolder<MobEffect, MobEffect> ECLIPSED_EFFECT = MOB_EFFECTS.register("eclipsed_effect", () -> new EclipsedEffect());

@@ -61,9 +61,6 @@ public class TeleportAoe extends AoeEntity implements AntiMagicSusceptible {
 
         //get everyone sorta nearby (it's a square instead of a circle with radius dimensions)
         List<LivingEntity> targets = this.level().getEntitiesOfClass(LivingEntity.class, new AABB(this.getX() - getRadius(), this.getY() - MAX_HEIGHT, this.getZ() - getRadius(), this.getX() + getRadius(), this.getY() + MAX_HEIGHT, this.getZ() + getRadius()));
-        for(LivingEntity e : targets){
-            System.out.println("Tracking " + e);
-        }
         for(int i = 0; i < targets.size(); i++) {
             //update the trackedTargets list
             Vec3 distFromCircleCenter = new Vec3((float) (targets.get(i).position().x - this.position().x), 0, (float) (targets.get(i).position().z - this.position().z));

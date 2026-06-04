@@ -8,6 +8,7 @@ import net.fireofpower.firesenderexpansion.util.Utils;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.block.RespawnAnchorBlock;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
@@ -67,13 +68,15 @@ public class NovaBurnEffect extends MagicMobEffect {
 
     @SubscribeEvent
     public static void onEffectsRemoved(MobEffectEvent.Remove event){
-        if(event.getEntity().hasEffect(EffectRegistry.ECLIPSED_EFFECT)){
+        if(event.getEntity().hasEffect(EffectRegistry.NOVA_BURN_EFFECT)){
+            if(event.getEffectInstance() != null){
             if(event.getEffectInstance().getEffect().value().isBeneficial()){
                 if(buffTracking.containsKey(event.getEntity())) {
                     buffTracking.replace(event.getEntity(), buffTracking.get(event.getEntity()) - 1);
                 }else{
                     buffTracking.put(event.getEntity(), getNumPositiveEffects(event.getEntity()));
                 }
+            }
             }
         }
     }

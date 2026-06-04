@@ -81,11 +81,13 @@ public class EclipsedEffect extends MagicMobEffect {
     @SubscribeEvent
     public static void onEffectsRemoved(MobEffectEvent.Remove event){
         if(event.getEntity().hasEffect(EffectRegistry.ECLIPSED_EFFECT)){
-            if(event.getEffectInstance().getEffect().value().isBeneficial()){
-                if(buffTracking.containsKey(event.getEntity())) {
-                    buffTracking.replace(event.getEntity(), buffTracking.get(event.getEntity()) - 1);
-                }else{
-                    buffTracking.put(event.getEntity(), getNumPositiveEffects(event.getEntity()));
+            if(event.getEffectInstance() != null) {
+                if (event.getEffectInstance().getEffect().value().isBeneficial()) {
+                    if (buffTracking.containsKey(event.getEntity())) {
+                        buffTracking.replace(event.getEntity(), buffTracking.get(event.getEntity()) - 1);
+                    } else {
+                        buffTracking.put(event.getEntity(), getNumPositiveEffects(event.getEntity()));
+                    }
                 }
             }
             updateAttributeModifiers(event.getEntity());

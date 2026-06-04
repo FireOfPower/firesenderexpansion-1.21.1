@@ -5,6 +5,7 @@ import io.redspace.ironsspellbooks.item.SpellBook;
 import io.redspace.ironsspellbooks.item.curios.CurioBaseItem;
 import io.redspace.ironsspellbooks.item.weapons.AttributeContainer;
 import io.redspace.ironsspellbooks.util.ItemPropertiesHelper;
+import net.acetheeldritchking.aces_spell_utils.utils.ASRarities;
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
 import net.fireofpower.firesenderexpansion.items.InfusedObsidianFragments;
 import net.fireofpower.firesenderexpansion.items.curios.CrystalHeartCurio;
@@ -17,8 +18,11 @@ import net.fireofpower.firesenderexpansion.items.curios.EnderTreasuryKeyCurio;
 import net.fireofpower.firesenderexpansion.items.weapons.void_staff.VoidStaffItem;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
+import net.minecraft.world.level.block.BedBlock;
+import net.minecraft.world.level.block.RespawnAnchorBlock;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.common.DeferredSpawnEggItem;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -41,6 +45,7 @@ public class ItemRegistry {
     public static final DeferredHolder<Item,Item> STABILIZED_CORE_OF_ENDER = ITEMS.register("stabilized_core_of_ender", StabilizedCoreOfEnder::new);
     public static final DeferredItem<Item> PORPHYROMANCER_SPAWN_EGG = ITEMS.register("porphyromancer_spawn_egg", () -> new DeferredSpawnEggItem(EntityRegistry.PORPHYROMANCER, 0x0f0517, 0x3f195e, new Item.Properties()));
     public static final DeferredItem<Item> VOID_STAFF_HOLDER = ITEMS.register("void_staff_holder", VoidStaffHolder::new);
+    public static final DeferredHolder<Item, Item> INFUSED_ANCHOR_ITEM = ITEMS.register("infused_anchor", () -> new BlockItem(BlockRegistry.INFUSED_ANCHOR.get(), new Item.Properties().rarity(ASRarities.COSMIC_RARITY_PROXY.getValue())));
 
     //Armor
     public static final DeferredHolder<Item, Item> END_LORD_HELMET = ITEMS.register("end_lord_helmet", () -> new EndLordArmorItem(ArmorItem.Type.HELMET, ItemPropertiesHelper

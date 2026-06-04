@@ -35,6 +35,8 @@
   "item.firesenderexpansion.infused_obsidian_fragments.desc": "Obtained by slamming obsidian rods into ancient debris",
   "item.firesenderexpansion.infused_obsidian_fragments.guide":"Cast Obsidian Rods on ancient debris, making sure that the projectiles collide with the block",
 
+  "block.firesenderexpansion.infused_anchor": "Infused Anchor",
+
   "item.firesenderexpansion.end_lord_helmet": "End Lord Headpiece",
   "item.firesenderexpansion.end_lord_chestplate": "End Lord Chestplate",
   "item.firesenderexpansion.end_lord_leggings": "End Lord Leggings",
@@ -133,6 +135,7 @@
 
 
   "msg.firesenderexpansion.cannot_teleport": "You cannot teleport while anchored",
+  "msg.firesenderexpansion.wrong_dimension": "That does not work in this dimension",
   "msg.firesenderexpansion.cannot_adapt": "You cannot adapt to this place",
   "msg.firesenderexpansion.cannot_cast": "You cannot cast this right now",
   "msg.firesenderexpansion.bypass_shroud": "Your shroud blows away in the abyssal winds",

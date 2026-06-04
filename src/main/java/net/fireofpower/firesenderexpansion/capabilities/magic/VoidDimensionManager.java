@@ -40,7 +40,7 @@ public class VoidDimensionManager {
         if (serverLevel.getGameTime() % 100 == 0) {
             serverLevel.getAllEntities().forEach(entity -> {
                 if(entity instanceof LivingEntity livingEntity && shouldKickOut(livingEntity)){
-                    System.out.println("Manifest Domain: Void found an issue, sending player to 0,200,0 in the Overworld");
+                    FiresEnderExpansion.LOGGER.debug("Manifest Domain: Void found an issue, sending player to 0,200,0 in the Overworld");
                     livingEntity.changeDimension(new DimensionTransition(entity.level().getServer().getLevel(Level.OVERWORLD), Vec3.ZERO.add(0,200,0), Vec3.ZERO, 0, 0, DimensionTransition.DO_NOTHING));
                 }
                 if(entity instanceof LivingEntity livingEntity && livingEntity.hasEffect(MobEffectRegistry.ABYSSAL_SHROUD) && !livingEntity.hasEffect(EffectRegistry.ASCENDED_CASTER_EFFECT)){

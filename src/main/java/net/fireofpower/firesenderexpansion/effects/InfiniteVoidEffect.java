@@ -2,8 +2,10 @@ package net.fireofpower.firesenderexpansion.effects;
 
 
 import io.redspace.ironsspellbooks.api.magic.MagicData;
+import io.redspace.ironsspellbooks.effect.IMobEffectEndCallback;
 import io.redspace.ironsspellbooks.effect.MagicMobEffect;
 import io.redspace.ironsspellbooks.entity.mobs.AntiMagicSusceptible;
+import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
 import net.fireofpower.firesenderexpansion.capabilities.magic.VoidDimensionManager;
 import net.fireofpower.firesenderexpansion.registries.EffectRegistry;
 import net.fireofpower.firesenderexpansion.util.ModTags;
@@ -12,6 +14,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.TicketType;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -27,7 +30,7 @@ import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
 import java.util.*;
 
 @EventBusSubscriber
-public class InfiniteVoidEffect extends MagicMobEffect implements AntiMagicSusceptible {
+public class InfiniteVoidEffect extends MobEffect implements IMobEffectEndCallback {
 
     public InfiniteVoidEffect() {
         super(MobEffectCategory.NEUTRAL, Utils.rgbToInt(0,0,0));
@@ -49,20 +52,14 @@ public class InfiniteVoidEffect extends MagicMobEffect implements AntiMagicSusce
 
     @Override
     public void onEffectRemoved(LivingEntity pLivingEntity, int pAmplifier) {
-        super.onEffectRemoved(pLivingEntity, pAmplifier);
         if(!recordedPositions.containsKey(pLivingEntity.getUUID()) || recordedPositions.get(pLivingEntity.getUUID()).dimension.equals(VoidDimensionManager.VOID_DIMENSION)){
-            System.out.println("Manifest Domain: Void found an issue while saving previous location, returning affected entities to 0,100,0 in the overworld.");
+            FiresEnderExpansion.LOGGER.debug("Manifest Domain: Void found an issue while saving previous location, returning affected entities to 0,100,0 in the overworld.");
             pLivingEntity.changeDimension(new DimensionTransition(Objects.requireNonNull(pLivingEntity.getServer()).getLevel(Level.OVERWORLD),new Vec3(0, 100,0),pLivingEntity.getLookAngle(),pLivingEntity.getXRot(),pLivingEntity.getYRot(),DimensionTransition.DO_NOTHING));
         }else if(!(pLivingEntity.getType().is(ModTags.INFINITE_VOID_IMMUNE) || pLivingEntity.isDeadOrDying())) {
             ServerChunkCache cache = pLivingEntity.getServer().getLevel(VoidDimensionManager.VOID_DIMENSION).getChunkSource();
             cache.addRegionTicket(TicketType.POST_TELEPORT, Utils.getChunkPos(pLivingEntity.getOnPos()), 10, 239, true);
             pLivingEntity.changeDimension(new DimensionTransition(pLivingEntity.getServer().getLevel(recordedPositions.get(pLivingEntity.getUUID()).dimension), recordedPositions.get(pLivingEntity.getUUID()).position, Vec3.ZERO, pLivingEntity.getXRot(), pLivingEntity.getYRot(), DimensionTransition.DO_NOTHING));
         }
-    }
-
-    @Override
-    public void onAntiMagic(MagicData magicData) {
-
     }
 
     @SubscribeEvent
