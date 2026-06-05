@@ -336,11 +336,11 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
 
     @Override
     public void onAntiMagic(MagicData playerMagicData) {
-        if(ctsByOwner(playerMagicData)) {
-            triggerBreakAnimation();
-            this.setDeltaMovement(0, 0, 0);
-            setTimeAlive(60);
-        }
+//        if(ctsByOwner(playerMagicData)) {
+//            triggerBreakAnimation();
+//            this.setDeltaMovement(0, 0, 0);
+//            setTimeAlive(60);
+//        }
     }
 
     private boolean ctsByOwner(MagicData playerMagicData){
