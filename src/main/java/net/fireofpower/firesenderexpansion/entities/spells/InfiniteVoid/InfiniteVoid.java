@@ -110,7 +110,7 @@ public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity {
                 //teleportation bad here since ppl can easily run away forever
                 target.addEffect(new MobEffectInstance(EffectRegistry.ANCHORED_EFFECT, (duration) * 20, 0, false, false, true));
                 //lets people float
-                target.addEffect(new MobEffectInstance(MobEffectRegistry.ANTIGRAVITY, (duration) * 20, 0, false, false, true));
+                //target.addEffect(new MobEffectInstance(MobEffectRegistry.ANTIGRAVITY, (duration) * 20, 0, false, false, true));
                 //the transportation is handled by the InfiniteVoidEffect
                 target.addEffect(new MobEffectInstance(EffectRegistry.INFINITE_VOID_EFFECT, (duration) * 20, 0, false, false, true));
             }
@@ -119,7 +119,7 @@ public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity {
             //all of the above plus the "beneficial" caster effect that gives big buffs and prevents the surehit
             living.addEffect(new MobEffectInstance(EffectRegistry.ASCENDED_CASTER_EFFECT, (duration) * 20, 0, false, false, true));
             living.addEffect(new MobEffectInstance(EffectRegistry.ANCHORED_EFFECT, (duration) * 20, 0, false, false, true));
-            living.addEffect(new MobEffectInstance(MobEffectRegistry.ANTIGRAVITY, (duration) * 20, 0, false, false, true));
+            //living.addEffect(new MobEffectInstance(MobEffectRegistry.ANTIGRAVITY, (duration) * 20, 0, false, false, true));
             living.addEffect(new MobEffectInstance(EffectRegistry.INFINITE_VOID_EFFECT, (duration) * 20, 0, false, false, true));
         }
     }
