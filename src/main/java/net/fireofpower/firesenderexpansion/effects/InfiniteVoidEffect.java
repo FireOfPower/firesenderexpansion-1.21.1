@@ -17,6 +17,9 @@ import net.minecraft.server.level.TicketType;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeMap;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.portal.DimensionTransition;
@@ -41,7 +44,7 @@ public class InfiniteVoidEffect extends MobEffect implements IMobEffectEndCallba
         super.onEffectAdded(pLivingEntity, pAmplifier);
         if(!pLivingEntity.getType().is(ModTags.INFINITE_VOID_IMMUNE)) {
             recordPosition(pLivingEntity);
-            Vec3 newPos = pLivingEntity.position().add(0,500,0);
+            Vec3 newPos = new Vec3(pLivingEntity.position().x,256, pLivingEntity.position().z);
             if(pLivingEntity.getServer() != null) {
                 if (pLivingEntity.getServer().getLevel(VoidDimensionManager.VOID_DIMENSION) != null) {
                     pLivingEntity.changeDimension(new DimensionTransition(Objects.requireNonNull(pLivingEntity.getServer()).getLevel(VoidDimensionManager.VOID_DIMENSION), newPos, Vec3.ZERO, pLivingEntity.getXRot(), pLivingEntity.getYRot(), DimensionTransition.DO_NOTHING));
@@ -52,6 +55,7 @@ public class InfiniteVoidEffect extends MobEffect implements IMobEffectEndCallba
 
     @Override
     public void onEffectRemoved(LivingEntity pLivingEntity, int pAmplifier) {
+        removeAttributeModifiers(pLivingEntity.getAttributes());
         if(!recordedPositions.containsKey(pLivingEntity.getUUID()) || recordedPositions.get(pLivingEntity.getUUID()).dimension.equals(VoidDimensionManager.VOID_DIMENSION)){
             FiresEnderExpansion.LOGGER.debug("Manifest Domain: Void found an issue while saving previous location, returning affected entities to 0,100,0 in the overworld.");
             pLivingEntity.changeDimension(new DimensionTransition(Objects.requireNonNull(pLivingEntity.getServer()).getLevel(Level.OVERWORLD),new Vec3(0, 100,0),pLivingEntity.getLookAngle(),pLivingEntity.getXRot(),pLivingEntity.getYRot(),DimensionTransition.DO_NOTHING));

@@ -17,6 +17,7 @@ import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
 import net.fireofpower.firesenderexpansion.network.AddShaderEffectPacket;
 import net.fireofpower.firesenderexpansion.network.DoParticleBurstPacket;
 import net.fireofpower.firesenderexpansion.network.RemoveShaderEffectPacket;
+import net.fireofpower.firesenderexpansion.registries.EffectRegistry;
 import net.fireofpower.firesenderexpansion.registries.EntityRegistry;
 import net.fireofpower.firesenderexpansion.registries.ItemRegistry;
 import net.fireofpower.firesenderexpansion.registries.SpellRegistries;
@@ -336,11 +337,11 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
 
     @Override
     public void onAntiMagic(MagicData playerMagicData) {
-//        if(ctsByOwner(playerMagicData)) {
-//            triggerBreakAnimation();
-//            this.setDeltaMovement(0, 0, 0);
-//            setTimeAlive(60);
-//        }
+        if(ctsByOwner(playerMagicData) && getOwner() instanceof LivingEntity living && living.hasEffect(EffectRegistry.ASCENDED_CASTER_EFFECT)) {
+            triggerBreakAnimation();
+            this.setDeltaMovement(0, 0, 0);
+            setTimeAlive(60);
+        }
     }
 
     private boolean ctsByOwner(MagicData playerMagicData){

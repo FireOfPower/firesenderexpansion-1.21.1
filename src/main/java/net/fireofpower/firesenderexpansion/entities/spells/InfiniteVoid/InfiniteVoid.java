@@ -34,7 +34,7 @@ import java.util.List;
 
 
 public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity {
-    private int duration = 15; //in seconds
+    private int duration = 30; //in seconds
     private final int radius = 23;
 
 
@@ -43,7 +43,7 @@ public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity {
         //the parts that won't change per-cast
         this.setSpawnAnimTime(40);
         this.setOpen(false);
-        setDuration(15); //no this isnt necessary but its good practice imo
+        setDuration(30); //no this isnt necessary but its good practice imo
 
         //the parts that will
         this.setOwner(shooter);
@@ -70,9 +70,9 @@ public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity {
                 trackingEntities.remove(entity);
             }
             for (Entity entity : trackingEntities) {
-                if (!DamageSources.isFriendlyFireBetween(getOwner(), entity)) {
-                    float distance = (float) position().add(0,2,0).distanceTo(entity.position());
-                    if (distance > radius) {
+                if (!DamageSources.isFriendlyFireBetween(getOwner(), entity) && getClashingWith().isEmpty()) {
+                    float distance = (float) position().distanceTo(entity.position());
+                    if (distance > radius || distance < radius / 2f) {
                         continue;
                     }
                     float f = distance / radius * 2;
@@ -80,7 +80,7 @@ public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity {
                     float immuneResistance = entity.getType().is(ModTags.INFINITE_VOID_IMMUNE) ? 0f : 1f;
 
 
-                    Vec3 diff = position().add(0,2,0).subtract(entity.position()).scale(scale * immuneResistance);
+                    Vec3 diff = position().subtract(entity.position()).scale(scale * immuneResistance);
                     //System.out.println("Applying " + diff.length() + " force to " + entity);
                     entity.push(diff.x, diff.y, diff.z);
                     entity.fallDistance = 0;
@@ -107,10 +107,6 @@ public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity {
         }
         for (int i = 0; i < targets.size(); i++) {
             if (targets.get(i) instanceof LivingEntity target && !target.getType().equals(EntityRegistry.INFINITE_VOID.get()) && !target.getType().is(ModTags.INFINITE_VOID_IMMUNE)) {
-                //teleportation bad here since ppl can easily run away forever
-                target.addEffect(new MobEffectInstance(EffectRegistry.ANCHORED_EFFECT, (duration) * 20, 0, false, false, true));
-                //lets people float
-                //target.addEffect(new MobEffectInstance(MobEffectRegistry.ANTIGRAVITY, (duration) * 20, 0, false, false, true));
                 //the transportation is handled by the InfiniteVoidEffect
                 target.addEffect(new MobEffectInstance(EffectRegistry.INFINITE_VOID_EFFECT, (duration) * 20, 0, false, false, true));
             }
@@ -118,8 +114,6 @@ public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity {
         if(entity instanceof LivingEntity living){
             //all of the above plus the "beneficial" caster effect that gives big buffs and prevents the surehit
             living.addEffect(new MobEffectInstance(EffectRegistry.ASCENDED_CASTER_EFFECT, (duration) * 20, 0, false, false, true));
-            living.addEffect(new MobEffectInstance(EffectRegistry.ANCHORED_EFFECT, (duration) * 20, 0, false, false, true));
-            //living.addEffect(new MobEffectInstance(MobEffectRegistry.ANTIGRAVITY, (duration) * 20, 0, false, false, true));
             living.addEffect(new MobEffectInstance(EffectRegistry.INFINITE_VOID_EFFECT, (duration) * 20, 0, false, false, true));
         }
     }
@@ -155,11 +149,11 @@ public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity {
             ServerLevel voidLevel = serverLevel.getServer().getLevel(VoidDimensionManager.VOID_DIMENSION);
             if(voidLevel != null) {
                 voidLevel.getAllEntities().forEach(e -> {
-                    if (canTarget(e)) {
-                        if (tickCount % 60 == 0) {
-                            handleSureHit(e);
-                        } else if (tickCount % 20 == 0 && voidLevel.getEntitiesOfClass(LivingEntity.class, new AABB(e.position().subtract(SUREHIT_BIG_DANGER_RADIUS, SUREHIT_BIG_DANGER_RADIUS, SUREHIT_BIG_DANGER_RADIUS), e.position().add(SUREHIT_BIG_DANGER_RADIUS, SUREHIT_BIG_DANGER_RADIUS, SUREHIT_BIG_DANGER_RADIUS))).stream().noneMatch(player -> player.hasEffect(EffectRegistry.ASCENDED_CASTER_EFFECT))) {
-                            handleSureHit(e);
+                    if (e instanceof LivingEntity living && canTarget(living)) {
+                        if (tickCount % 100 == 0) {
+                            handleSureHit(living);
+                        } else if (voidLevel.getEntitiesOfClass(LivingEntity.class, new AABB(e.position().subtract(SUREHIT_BIG_DANGER_RADIUS, SUREHIT_BIG_DANGER_RADIUS, SUREHIT_BIG_DANGER_RADIUS), e.position().add(SUREHIT_BIG_DANGER_RADIUS, SUREHIT_BIG_DANGER_RADIUS, SUREHIT_BIG_DANGER_RADIUS))).stream().noneMatch(player -> player.hasEffect(EffectRegistry.ASCENDED_CASTER_EFFECT))) {
+                            handleSureHit(living);
                         }
                     }
                 });

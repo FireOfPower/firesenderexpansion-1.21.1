@@ -10,6 +10,7 @@ import io.redspace.ironsspellbooks.api.util.AnimationHolder;
 import io.redspace.ironsspellbooks.api.util.Utils;
 import io.redspace.ironsspellbooks.capabilities.magic.TargetEntityCastData;
 import io.redspace.ironsspellbooks.damage.DamageSources;
+import io.redspace.ironsspellbooks.registries.MobEffectRegistry;
 import io.redspace.ironsspellbooks.registries.ParticleRegistry;
 import io.redspace.ironsspellbooks.registries.SoundRegistry;
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
@@ -47,7 +48,7 @@ public class ArcaneSliceSpell extends AbstractSpell {
     public ArcaneSliceSpell(){
         this.manaCostPerLevel = 15;
         this.baseSpellPower = 12;
-        this.spellPowerPerLevel = 5;
+        this.spellPowerPerLevel = 3;
         this.castTime = 0;
         this.baseManaCost = 75;
     }

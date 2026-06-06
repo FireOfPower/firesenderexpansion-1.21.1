@@ -8,8 +8,12 @@
       "features": false,
       "layers": [
         {
-          "height": 0,
-          "block": "minecraft:water"
+          "height": 250,
+          "block": "minecraft:air"
+        },
+        {
+          "height": 256,
+          "block": "minecraft:barrier"
         }
       ]
     }

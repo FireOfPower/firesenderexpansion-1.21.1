@@ -2,6 +2,7 @@ package net.fireofpower.firesenderexpansion.events;
 
 import io.redspace.ironsspellbooks.api.config.ModifyDefaultConfigValuesEvent;
 import io.redspace.ironsspellbooks.api.config.SpellConfigParameter;
+import io.redspace.ironsspellbooks.api.events.CustomizeScrollModNameEvent;
 import io.redspace.ironsspellbooks.api.events.SpellPreCastEvent;
 import io.redspace.ironsspellbooks.api.events.SpellTeleportEvent;
 import io.redspace.ironsspellbooks.api.registry.AttributeRegistry;
@@ -11,17 +12,22 @@ import io.redspace.ironsspellbooks.item.curios.CurioBaseItem;
 import io.redspace.ironsspellbooks.item.weapons.AttributeContainer;
 import io.redspace.ironsspellbooks.registries.ItemRegistry;
 import io.redspace.ironsspellbooks.spells.eldritch.TelekinesisSpell;
+import net.minecraft.network.chat.Style;
+import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
 import net.fireofpower.firesenderexpansion.capabilities.magic.VoidDimensionManager;
 import net.fireofpower.firesenderexpansion.registries.EffectRegistry;
 import net.fireofpower.firesenderexpansion.registries.SpellRegistries;
 import net.fireofpower.firesenderexpansion.util.Utils;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.CommonColors;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
@@ -34,7 +40,9 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.ItemAttributeModifierEvent;
 import net.neoforged.neoforge.event.entity.EntityTeleportEvent;
 import net.neoforged.neoforge.event.entity.living.LivingExperienceDropEvent;
+import org.jline.utils.Colors;
 
+import java.util.List;
 import java.util.Objects;
 
 import static io.redspace.ironsspellbooks.spells.ender.TeleportSpell.particleCloud;
@@ -195,6 +203,27 @@ public class ServerEvents {
         public static void modifyTelekinesisSchool(ModifyDefaultConfigValuesEvent event){
             if(event.getSpell() instanceof TelekinesisSpell){
                 event.setDefaultValue(SpellConfigParameter.SCHOOL, SchoolRegistry.ENDER.get());
+            }
+        }
+
+        @SubscribeEvent
+        public static void modifyModNameDisplay(CustomizeScrollModNameEvent event){
+            if(event.getModId().equals(MODID)){
+                String text = event.getModName().getString();
+                String[] split = text.split(" ");
+                MutableComponent result = Component.empty();
+                for(int i = 0; i < split.length; i++){
+                    if(i == 0) {
+                        result.append(Component.literal(split[i]).withStyle(ChatFormatting.DARK_PURPLE));
+                        result.append(" ");
+                    }else if(i == 1){
+                        result.append(Component.literal(split[i]).withStyle(ChatFormatting.LIGHT_PURPLE));
+                        result.append(" ");
+                    }else {
+                        result.append(Component.literal(split[i]).withStyle(ChatFormatting.DARK_PURPLE));
+                    }
+                }
+                event.setModName(result);
             }
         }
     }

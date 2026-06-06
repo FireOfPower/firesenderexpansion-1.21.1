@@ -192,6 +192,8 @@ dependencies {
     implementation "curse.maven:worldedit-225608:5830452"
     implementation "curse.maven:mmmmmmmmmmmm-225738:7206981"
     implementation "curse.maven:selene-499980:7209771"
+    implementation "curse.maven:apothic-attributes-898963:7445079"
+    implementation "curse.maven:placebo-283644:6926281"
 
     //FOR SAVING LARGE NBT FILE
     //implementation "curse.maven:huge-structure-blocks-474114:5628956"

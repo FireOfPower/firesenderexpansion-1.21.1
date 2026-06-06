@@ -1,7 +1,7 @@
 {
   "ultrawarm": false,
   "natural": false,
-  "piglin_safe": true,
+  "piglin_safe": false,
   "respawn_anchor_works": false,
   "bed_works": false,
   "has_raids": false,
@@ -13,7 +13,7 @@
   "effects": "irons_spellbooks:pocket_dimension",
   "infiniburn": "#minecraft:infiniburn_overworld",
   "min_y": 0,
-  "height": 32,
+  "height": 256,
   "monster_spawn_light_level": 0,
   "monster_spawn_block_light_limit": 0,
   "fixed_time": 6000

@@ -29,7 +29,7 @@ import java.util.Optional;
 
 public class InfiniteVoidSpell extends AbstractSpell {
     private final ResourceLocation spellId = ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "infinite_void");
-    private final int duration = 15;
+    private final int duration = 30;
     private final int range = 20;
 
     @Override
