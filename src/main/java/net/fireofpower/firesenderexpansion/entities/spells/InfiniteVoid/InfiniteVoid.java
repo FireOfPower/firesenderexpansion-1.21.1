@@ -6,7 +6,7 @@ import io.redspace.ironsspellbooks.damage.DamageSources;
 import io.redspace.ironsspellbooks.registries.MobEffectRegistry;
 import io.redspace.ironsspellbooks.registries.ParticleRegistry;
 import io.redspace.ironsspellbooks.registries.SoundRegistry;
-import net.acetheeldritchking.aces_spell_utils.entity.spells.AbstractDomainEntity;
+import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
 import net.fireofpower.firesenderexpansion.capabilities.magic.VoidDimensionManager;
 import net.fireofpower.firesenderexpansion.damage.VoidSureHitDamageSource;
 import net.fireofpower.firesenderexpansion.registries.EffectRegistry;
@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity {
+public class InfiniteVoid extends net.fireofpower.firesenderexpansion.entities.spells.InfiniteVoid.AbstractDomainEntity implements GeoEntity {
     private int duration = 30; //in seconds
     private final int radius = 23;
 
@@ -59,13 +59,14 @@ public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity {
     @Override
     public void tick() {
         super.tick();
+        FiresEnderExpansion.LOGGER.debug("clashing: {} isClient: {}",isClashing(),level().isClientSide());
         //again tickCount is unreliable with the cross-dimensional travel
         long time = level().getGameTime() - getSpawnTime();
         if(time < 2 * 20 + getTimeSpentClashing()){
             List<Entity> trackingEntities = level().getEntities(null,new AABB(position().add(radius/2f,radius/2f,radius/2f),position().subtract(radius/2f,radius/2f,radius/2f)));
             trackingEntities.remove(getOwner());
             trackingEntities.remove(this);
-            for(AbstractDomainEntity entity : getClashingWith()){
+            for(net.fireofpower.firesenderexpansion.entities.spells.InfiniteVoid.AbstractDomainEntity entity : getClashingWith()){
                 trackingEntities.remove(entity.getOwner());
                 trackingEntities.remove(entity);
             }
@@ -88,6 +89,7 @@ public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity {
             }
         }
         if(time > (getDuration() + 2 /* plus two for the spawn animation */) * 20L /* to because it's stored in seconds, but needs to be in ticks */ + getTimeSpentClashing() /* it'd be annoying if you lost all your duration while clashing :( */){
+            FiresEnderExpansion.LOGGER.debug("Duration Diff (Suspicion: getTimeSpentClashing is {})",getTimeSpentClashing());
             destroyDomain();
         }
     }
@@ -120,23 +122,27 @@ public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity {
 
     @Override
     public void handleDomainClash(ArrayList<AbstractDomainEntity> opposingDomains) {
-        int totalRefinement = getRefinement();
-        for(int i = 0; i < opposingDomains.size(); i++){
-            totalRefinement += opposingDomains.get(i).getRefinement();
-        }
-        //basically what this does is the higher someone's refinement is, the lower they can get before they lose the clash
-        //If two equally refined people clash, this threshold is 50% health
-        //The more people that are in the clash, the easier it is for a domain to break
-        if(getOwner() instanceof LivingEntity living) {
-            double ownerHealthPercentage = living.getHealth() / living.getMaxHealth();
-            if (!opposingDomains.isEmpty() && ownerHealthPercentage < (double) (totalRefinement - getRefinement()) / totalRefinement){
-                //System.out.println("Health Diff");
+        if(!level().isClientSide) {
+            int totalRefinement = getRefinement();
+            for (int i = 0; i < opposingDomains.size(); i++) {
+                totalRefinement += opposingDomains.get(i).getRefinement();
+            }
+            //basically what this does is the higher someone's refinement is, the lower they can get before they lose the clash
+            //If two equally refined people clash, this threshold is 50% health
+            //The more people that are in the clash, the easier it is for a domain to break
+            if (getOwner() instanceof LivingEntity living) {
+                double ownerHealthPercentage = living.getHealth() / living.getMaxHealth();
+                if (!opposingDomains.isEmpty() && ownerHealthPercentage < (double) (totalRefinement - getRefinement()) / totalRefinement) {
+                    //System.out.println("Health Diff");
+                    FiresEnderExpansion.LOGGER.debug("Health Diff");
+                    destroyDomain();
+                }
+            } else {
+                //if the clasher is not alive then just dont even try to clash
+                //System.out.println("Nonliving Diff");
+                FiresEnderExpansion.LOGGER.debug("Nonliving Diff");
                 destroyDomain();
             }
-        }else{
-            //if the clasher is not alive then just dont even try to clash
-            //System.out.println("Nonliving Diff");
-            destroyDomain();
         }
     }
 
@@ -217,16 +223,22 @@ public class InfiniteVoid extends AbstractDomainEntity implements GeoEntity {
     }
 
     private PlayState predicate(AnimationState<InfiniteVoid> event){
-        long time = level().getGameTime() - getSpawnTime();
+        long time = tickCount;
+        FiresEnderExpansion.LOGGER.debug("predicate tick");
         if(time < 40) {
+            FiresEnderExpansion.LOGGER.debug("Open Anim, time:{} isClient:{}", time,level().isClientSide());
             event.getController().setAnimation(RawAnimation.begin().thenPlayAndHold("misc.open_grow"));
         }else if(time < 80 && !isClashing()) {
+            FiresEnderExpansion.LOGGER.debug("Not clashing, shrinking domain time:{} isClient:{}", time,level().isClientSide());
             event.getController().setAnimation(RawAnimation.begin().thenPlayAndHold("misc.open_shrink"));
         }else if(isClashing()) {
+            FiresEnderExpansion.LOGGER.debug("Large Anim, time:{} isClient:{}", time,level().isClientSide());
             event.getController().setAnimation(RawAnimation.begin().thenPlayAndHold("misc.idle_large"));
         } else if (time < (getDuration() + 2) * 20L + getTimeSpentClashing() - 20){
+            //FiresEnderExpansion.LOGGER.debug("Idle Anim, time:{} isClient:{}", time,level().isClientSide());
             event.getController().setAnimation(DefaultAnimations.IDLE);
         }else{
+            //FiresEnderExpansion.LOGGER.debug("Close Anim, time:{} isClient:{}", time,level().isClientSide());
             event.getController().setAnimation(RawAnimation.begin().thenPlayAndHold("misc.close"));
         }
         return PlayState.CONTINUE;
