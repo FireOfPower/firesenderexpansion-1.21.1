@@ -6,6 +6,7 @@ import io.redspace.ironsspellbooks.damage.DamageSources;
 import io.redspace.ironsspellbooks.registries.MobEffectRegistry;
 import io.redspace.ironsspellbooks.registries.ParticleRegistry;
 import io.redspace.ironsspellbooks.registries.SoundRegistry;
+import net.acetheeldritchking.aces_spell_utils.entity.spells.AbstractDomainEntity;
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
 import net.fireofpower.firesenderexpansion.capabilities.magic.VoidDimensionManager;
 import net.fireofpower.firesenderexpansion.damage.VoidSureHitDamageSource;
@@ -33,7 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class InfiniteVoid extends net.fireofpower.firesenderexpansion.entities.spells.InfiniteVoid.AbstractDomainEntity implements GeoEntity {
+public class InfiniteVoid extends net.acetheeldritchking.aces_spell_utils.entity.spells.AbstractDomainEntity implements GeoEntity {
     private int duration = 30; //in seconds
     private final int radius = 23;
 
@@ -66,7 +67,7 @@ public class InfiniteVoid extends net.fireofpower.firesenderexpansion.entities.s
             List<Entity> trackingEntities = level().getEntities(null,new AABB(position().add(radius/2f,radius/2f,radius/2f),position().subtract(radius/2f,radius/2f,radius/2f)));
             trackingEntities.remove(getOwner());
             trackingEntities.remove(this);
-            for(net.fireofpower.firesenderexpansion.entities.spells.InfiniteVoid.AbstractDomainEntity entity : getClashingWith()){
+            for(net.acetheeldritchking.aces_spell_utils.entity.spells.AbstractDomainEntity entity : getClashingWith()){
                 trackingEntities.remove(entity.getOwner());
                 trackingEntities.remove(entity);
             }
