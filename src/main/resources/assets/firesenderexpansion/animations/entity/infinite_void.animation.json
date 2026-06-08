@@ -34,6 +34,9 @@
 				},
 				"Ring1": {
 					"rotation": ["-math.sin(query.anim_time * 90) * 15", "-query.anim_time * 180", "math.sin(query.anim_time * -90) * 15"]
+				},
+				"Vortex": {
+					"rotation": [0, "query.anim_time * 180", 0]
 				}
 			}
 		},
@@ -52,6 +55,9 @@
 				},
 				"Ring1": {
 					"rotation": ["-math.sin(query.anim_time * 90) * 15", "-query.anim_time * 180", "math.sin(query.anim_time * -90) * 15"]
+				},
+				"Vortex": {
+					"rotation": [0, "query.anim_time * 180", 0]
 				}
 			}
 		},
@@ -67,6 +73,9 @@
 				},
 				"Ring1": {
 					"rotation": ["-math.sin(query.anim_time * 90) * 15", "-query.anim_time * 180", "math.sin(query.anim_time * -90) * 15"]
+				},
+				"Vortex": {
+					"rotation": [0, "query.anim_time * 90", 0]
 				}
 			}
 		},
@@ -85,6 +94,9 @@
 				},
 				"Everything": {
 					"scale": 20.5
+				},
+				"Vortex": {
+					"rotation": [0, "query.anim_time * 180", 0]
 				}
 			}
 		},
@@ -103,6 +115,9 @@
 				},
 				"Ring1": {
 					"rotation": ["-math.sin(query.anim_time * 90) * 15", "-query.anim_time * 180", "math.sin(query.anim_time * -90) * 15"]
+				},
+				"Vortex": {
+					"rotation": [0, "query.anim_time * 180", 0]
 				}
 			}
 		}

@@ -7,23 +7,33 @@ import io.redspace.ironsspellbooks.registries.MobEffectRegistry;
 import io.redspace.ironsspellbooks.registries.ParticleRegistry;
 import io.redspace.ironsspellbooks.registries.SoundRegistry;
 import net.acetheeldritchking.aces_spell_utils.entity.spells.AbstractDomainEntity;
+import net.acetheeldritchking.aces_spell_utils.utils.ASUtils;
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
 import net.fireofpower.firesenderexpansion.capabilities.magic.VoidDimensionManager;
 import net.fireofpower.firesenderexpansion.damage.VoidSureHitDamageSource;
 import net.fireofpower.firesenderexpansion.registries.EffectRegistry;
 import net.fireofpower.firesenderexpansion.registries.EntityRegistry;
 import net.fireofpower.firesenderexpansion.util.ModTags;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.commands.ForceLoadCommand;
+import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.TicketType;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.ThrownEnderpearl;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.common.world.chunk.ForcedChunkManager;
+import net.neoforged.neoforge.event.level.ChunkEvent;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.*;
@@ -36,7 +46,8 @@ import java.util.List;
 
 public class InfiniteVoid extends net.acetheeldritchking.aces_spell_utils.entity.spells.AbstractDomainEntity implements GeoEntity {
     private int duration = 30; //in seconds
-    private final int radius = 23;
+    private final int radius = 10;
+    private boolean overWritingForcedChunk;
 
 
     public InfiniteVoid(Level level, Entity shooter, int radius, int refinement, int duration) {
@@ -60,10 +71,20 @@ public class InfiniteVoid extends net.acetheeldritchking.aces_spell_utils.entity
     @Override
     public void tick() {
         super.tick();
-        FiresEnderExpansion.LOGGER.debug("clashing: {} isClient: {}",isClashing(),level().isClientSide());
+        //FiresEnderExpansion.LOGGER.debug("clashing: {} isClient: {}",isClashing(),level().isClientSide());
         //again tickCount is unreliable with the cross-dimensional travel
+        if (!this.level().isClientSide() && tickCount == 1) {
+            if(level() instanceof ServerLevel level) {
+                ChunkPos pos = new ChunkPos(this.blockPosition());
+                //level.getChunkSource().addRegionTicket(TicketType.FORCED, new ChunkPos(this.blockPosition()), 3, new ChunkPos(this.blockPosition()), true);
+                if(level.getForcedChunks().contains(pos.toLong())){
+                    overWritingForcedChunk = true;
+                }
+                level.setChunkForced(pos.x, pos.z, true);
+            }
+        }
         long time = level().getGameTime() - getSpawnTime();
-        if(time < 2 * 20 + getTimeSpentClashing()){
+        if(time < 2 + getTimeSpentClashing()){
             List<Entity> trackingEntities = level().getEntities(null,new AABB(position().add(radius/2f,radius/2f,radius/2f),position().subtract(radius/2f,radius/2f,radius/2f)));
             trackingEntities.remove(getOwner());
             trackingEntities.remove(this);
@@ -90,9 +111,19 @@ public class InfiniteVoid extends net.acetheeldritchking.aces_spell_utils.entity
             }
         }
         if(time > (getDuration() + 2 /* plus two for the spawn animation */) * 20L /* to because it's stored in seconds, but needs to be in ticks */ + getTimeSpentClashing() /* it'd be annoying if you lost all your duration while clashing :( */){
-            FiresEnderExpansion.LOGGER.debug("Duration Diff (Suspicion: getTimeSpentClashing is {})",getTimeSpentClashing());
+            //FiresEnderExpansion.LOGGER.debug("Duration Diff (Suspicion: getTimeSpentClashing is {})",getTimeSpentClashing());
             destroyDomain();
         }
+    }
+
+    @Override
+    public void destroyDomain() {
+        if(level() instanceof ServerLevel level){
+            ChunkPos pos = new ChunkPos(this.blockPosition());
+
+            level.setChunkForced(pos.x,pos.z,overWritingForcedChunk);
+        }
+        super.destroyDomain();
     }
 
     @Override
@@ -135,13 +166,13 @@ public class InfiniteVoid extends net.acetheeldritchking.aces_spell_utils.entity
                 double ownerHealthPercentage = living.getHealth() / living.getMaxHealth();
                 if (!opposingDomains.isEmpty() && ownerHealthPercentage < (double) (totalRefinement - getRefinement()) / totalRefinement) {
                     //System.out.println("Health Diff");
-                    FiresEnderExpansion.LOGGER.debug("Health Diff");
+                    //FiresEnderExpansion.LOGGER.debug("Health Diff");
                     destroyDomain();
                 }
             } else {
                 //if the clasher is not alive then just dont even try to clash
                 //System.out.println("Nonliving Diff");
-                FiresEnderExpansion.LOGGER.debug("Nonliving Diff");
+                //FiresEnderExpansion.LOGGER.debug("Nonliving Diff");
                 destroyDomain();
             }
         }
@@ -149,8 +180,9 @@ public class InfiniteVoid extends net.acetheeldritchking.aces_spell_utils.entity
 
     @Override
     public void targetSureHit() {
+        //FiresEnderExpansion.LOGGER.debug("Targeting Sure Hit");
         final int SUREHIT_BIG_DANGER_RADIUS = 30;
-        //only attack every 3 seconds
+        //only attack every 5 seconds
         //attack more often if it's far away from the caster
         if(level() instanceof ServerLevel serverLevel && tickCount % 20 == 0) {
             ServerLevel voidLevel = serverLevel.getServer().getLevel(VoidDimensionManager.VOID_DIMENSION);
@@ -158,6 +190,7 @@ public class InfiniteVoid extends net.acetheeldritchking.aces_spell_utils.entity
                 voidLevel.getAllEntities().forEach(e -> {
                     if (e instanceof LivingEntity living && canTarget(living)) {
                         if (tickCount % 100 == 0) {
+                            //FiresEnderExpansion.LOGGER.debug("Sending sure hit tick to {}",living);
                             handleSureHit(living);
                         } else if (voidLevel.getEntitiesOfClass(LivingEntity.class, new AABB(e.position().subtract(SUREHIT_BIG_DANGER_RADIUS, SUREHIT_BIG_DANGER_RADIUS, SUREHIT_BIG_DANGER_RADIUS), e.position().add(SUREHIT_BIG_DANGER_RADIUS, SUREHIT_BIG_DANGER_RADIUS, SUREHIT_BIG_DANGER_RADIUS))).stream().noneMatch(player -> player.hasEffect(EffectRegistry.ASCENDED_CASTER_EFFECT))) {
                             handleSureHit(living);
@@ -191,7 +224,7 @@ public class InfiniteVoid extends net.acetheeldritchking.aces_spell_utils.entity
                     //sound
                     voidLevel.playSound(null, livingEntity.blockPosition(), SoundRegistry.DEVOUR_BITE.get(), SoundSource.PLAYERS, 5, 10);
                     //damage
-                    if(livingEntity.hurt(new VoidSureHitDamageSource(livingEntity),5)) {
+                    if(getOwner() != null && livingEntity.hurt(new VoidSureHitDamageSource(getOwner()),5)) {
                         //apply effect
                         livingEntity.addEffect(new MobEffectInstance(EffectRegistry.VOIDTORN_EFFECT, 100, 0));
                     }
@@ -224,16 +257,16 @@ public class InfiniteVoid extends net.acetheeldritchking.aces_spell_utils.entity
     }
 
     private PlayState predicate(AnimationState<InfiniteVoid> event){
-        long time = tickCount;
-        FiresEnderExpansion.LOGGER.debug("predicate tick");
+        long time = level().getGameTime() - getSpawnTime();
+        //FiresEnderExpansion.LOGGER.debug("predicate tick");
         if(time < 40) {
-            FiresEnderExpansion.LOGGER.debug("Open Anim, time:{} isClient:{}", time,level().isClientSide());
+            //FiresEnderExpansion.LOGGER.debug("Open Anim, time:{} isClient:{}", time,level().isClientSide());
             event.getController().setAnimation(RawAnimation.begin().thenPlayAndHold("misc.open_grow"));
         }else if(time < 80 && !isClashing()) {
-            FiresEnderExpansion.LOGGER.debug("Not clashing, shrinking domain time:{} isClient:{}", time,level().isClientSide());
+            //FiresEnderExpansion.LOGGER.debug("Not clashing, shrinking domain time:{} isClient:{}", time,level().isClientSide());
             event.getController().setAnimation(RawAnimation.begin().thenPlayAndHold("misc.open_shrink"));
         }else if(isClashing()) {
-            FiresEnderExpansion.LOGGER.debug("Large Anim, time:{} isClient:{}", time,level().isClientSide());
+            //FiresEnderExpansion.LOGGER.debug("Large Anim, time:{} isClient:{}", time,level().isClientSide());
             event.getController().setAnimation(RawAnimation.begin().thenPlayAndHold("misc.idle_large"));
         } else if (time < (getDuration() + 2) * 20L + getTimeSpentClashing() - 20){
             //FiresEnderExpansion.LOGGER.debug("Idle Anim, time:{} isClient:{}", time,level().isClientSide());
