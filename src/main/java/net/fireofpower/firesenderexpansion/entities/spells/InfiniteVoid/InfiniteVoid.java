@@ -78,7 +78,7 @@ public class InfiniteVoid extends net.acetheeldritchking.aces_spell_utils.entity
         super.onActivation();
         this.level().getEntitiesOfClass(LivingEntity.class, new AABB(this.position().subtract((double)this.getRadius(), (double)this.getRadius(), (double)this.getRadius()), this.position().add((double)this.getRadius(), (double)this.getRadius(), (double)this.getRadius())))
                 .stream().filter(e -> e.distanceTo(this) <= getRadius())
-                .filter(e -> !e.equals(getOwner())).forEach((e) -> {
+                .filter(e -> !e.equals(getOwner()) && !e.getType().is(ModTags.INFINITE_VOID_IMMUNE)).forEach((e) -> {
                     final int CHAIN_COUNT = 3;
                     Vec3 origin = e.getBoundingBox().getCenter();
 
