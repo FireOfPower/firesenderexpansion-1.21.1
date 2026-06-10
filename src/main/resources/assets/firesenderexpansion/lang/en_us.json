@@ -144,5 +144,6 @@
 
 
   "entity.firesenderexpansion.porphyromancer": "Porphyromancer",
-  "entity.firesenderexpansion.void_wyrm": "Void Wyrm"
+  "entity.firesenderexpansion.void_wyrm": "Void Wyrm",
+  "entity.firesenderexpansion.infinite_void":"Void Rift"
 }

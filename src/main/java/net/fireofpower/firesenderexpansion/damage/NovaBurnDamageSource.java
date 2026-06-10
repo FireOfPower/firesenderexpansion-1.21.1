@@ -18,7 +18,7 @@ public class NovaBurnDamageSource extends DamageSource {
             ResourceKey.create(Registries.DAMAGE_TYPE, ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "nova_burn"));
 
     public NovaBurnDamageSource(Entity pEntity) {
-        super(getHolderFromResource(pEntity), pEntity);
+        super(getHolderFromResource(pEntity));
     }
 
     private static Holder<DamageType> getHolderFromResource(Entity entity) {

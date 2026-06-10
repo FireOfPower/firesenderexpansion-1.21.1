@@ -51,7 +51,6 @@ import java.util.Objects;
 
 public class InfiniteVoid extends net.acetheeldritchking.aces_spell_utils.entity.spells.AbstractDomainEntity implements GeoEntity {
     private int duration = 30; //in seconds
-    private final int radius = 10;
     private boolean overWritingForcedChunk;
 
 
@@ -96,6 +95,7 @@ public class InfiniteVoid extends net.acetheeldritchking.aces_spell_utils.entity
                         }
                         spawnChain(e, worldPos);
                     }
+                    e.addEffect(new MobEffectInstance(EffectRegistry.ANCHORED_EFFECT,getSpawnAnimTime(),0,false,false));
         });
     }
 
