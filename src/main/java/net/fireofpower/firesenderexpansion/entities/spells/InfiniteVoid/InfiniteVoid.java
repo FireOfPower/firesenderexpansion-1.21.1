@@ -1,8 +1,10 @@
 package net.fireofpower.firesenderexpansion.entities.spells.InfiniteVoid;
 
+import io.redspace.ironsspellbooks.api.util.Utils;
 import io.redspace.ironsspellbooks.capabilities.magic.MagicManager;
 
 import io.redspace.ironsspellbooks.damage.DamageSources;
+import io.redspace.ironsspellbooks.entity.spells.ender_chain.EnderChain;
 import io.redspace.ironsspellbooks.registries.MobEffectRegistry;
 import io.redspace.ironsspellbooks.registries.ParticleRegistry;
 import io.redspace.ironsspellbooks.registries.SoundRegistry;
@@ -23,12 +25,14 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.TicketType;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.ThrownEnderpearl;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -42,12 +46,14 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 public class InfiniteVoid extends net.acetheeldritchking.aces_spell_utils.entity.spells.AbstractDomainEntity implements GeoEntity {
     private int duration = 30; //in seconds
     private final int radius = 10;
     private boolean overWritingForcedChunk;
+
 
 
     public InfiniteVoid(Level level, Entity shooter, int radius, int refinement, int duration) {
@@ -69,6 +75,31 @@ public class InfiniteVoid extends net.acetheeldritchking.aces_spell_utils.entity
     }
 
     @Override
+    public void onActivation() {
+        super.onActivation();
+        this.level().getEntitiesOfClass(LivingEntity.class, new AABB(this.position().subtract((double)this.getRadius(), (double)this.getRadius(), (double)this.getRadius()), this.position().add((double)this.getRadius(), (double)this.getRadius(), (double)this.getRadius())))
+                .stream().filter(e -> e.distanceTo(this) <= getRadius())
+                .filter(e -> !e.equals(getOwner())).forEach((e) -> {
+                    final int CHAIN_COUNT = 3;
+                    Vec3 origin = e.getBoundingBox().getCenter();
+
+                    float theta = Mth.TWO_PI / CHAIN_COUNT;
+                    for (int i = 0; i < CHAIN_COUNT; i++) {
+                        float angle = theta * i + Mth.TWO_PI / 4 - getYRot() * Mth.DEG_TO_RAD;
+                        float radius = 8 * 0.5f + e.getBbWidth() * .4f;
+                        Vec3 direction = new Vec3(Mth.cos(angle) * radius, 0, Mth.sin(angle) * radius);
+                        Vec3 worldPos = Utils.moveToRelativeGroundLevel(e.level(), origin.add(direction), 2);
+                        if (level().noCollision(AABB.ofSize(worldPos, 0.5, 0.5, 0.5))) {
+                            Vec3 random = Utils.getRandomVec3(2);
+                            random = random.subtract(direction.scale(direction.normalize().dot(random.normalize())));
+                            worldPos = origin.add(direction).add(random);
+                        }
+                        spawnChain(e, worldPos);
+                    }
+        });
+    }
+
+    @Override
     public void tick() {
         super.tick();
         //FiresEnderExpansion.LOGGER.debug("clashing: {} isClient: {}",isClashing(),level().isClientSide());
@@ -84,32 +115,6 @@ public class InfiniteVoid extends net.acetheeldritchking.aces_spell_utils.entity
             }
         }
         long time = level().getGameTime() - getSpawnTime();
-        if(time < 2 + getTimeSpentClashing()){
-            List<Entity> trackingEntities = level().getEntities(null,new AABB(position().add(radius/2f,radius/2f,radius/2f),position().subtract(radius/2f,radius/2f,radius/2f)));
-            trackingEntities.remove(getOwner());
-            trackingEntities.remove(this);
-            for(net.acetheeldritchking.aces_spell_utils.entity.spells.AbstractDomainEntity entity : getClashingWith()){
-                trackingEntities.remove(entity.getOwner());
-                trackingEntities.remove(entity);
-            }
-            for (Entity entity : trackingEntities) {
-                if (!DamageSources.isFriendlyFireBetween(getOwner(), entity) && getClashingWith().isEmpty()) {
-                    float distance = (float) position().distanceTo(entity.position());
-                    if (distance > radius || distance < radius / 2f) {
-                        continue;
-                    }
-                    float f = distance / radius * 2;
-                    float scale = f * f * 0.25f;
-                    float immuneResistance = entity.getType().is(ModTags.INFINITE_VOID_IMMUNE) ? 0f : 1f;
-
-
-                    Vec3 diff = position().subtract(entity.position()).scale(scale * immuneResistance);
-                    //System.out.println("Applying " + diff.length() + " force to " + entity);
-                    entity.push(diff.x, diff.y, diff.z);
-                    entity.fallDistance = 0;
-                }
-            }
-        }
         if(time > (getDuration() + 2 /* plus two for the spawn animation */) * 20L /* to because it's stored in seconds, but needs to be in ticks */ + getTimeSpentClashing() /* it'd be annoying if you lost all your duration while clashing :( */){
             //FiresEnderExpansion.LOGGER.debug("Duration Diff (Suspicion: getTimeSpentClashing is {})",getTimeSpentClashing());
             destroyDomain();
@@ -229,6 +234,15 @@ public class InfiniteVoid extends net.acetheeldritchking.aces_spell_utils.entity
                         livingEntity.addEffect(new MobEffectInstance(EffectRegistry.VOIDTORN_EFFECT, 100, 0));
                     }
                 }
+    }
+
+    private void spawnChain(LivingEntity victim, Vec3 anchor) {
+        anchor = Utils.raycastForBlock(victim.level(), this.position(), anchor, ClipContext.Fluid.NONE).getLocation();
+        EnderChain chain = new EnderChain(level(), getOwner(), victim, anchor);
+        chain.setHealth(100);
+        chain.setLifetime(getSpawnAnimTime());
+        chain.setRestraintStrength(0.35f);
+        level().addFreshEntity(chain);
     }
 
     //getters/setters

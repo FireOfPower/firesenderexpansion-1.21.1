@@ -119,7 +119,7 @@ public class HollowCrystalSpell extends AbstractSpell {
             //actual casting it
             serverPlayer.addEffect(new MobEffectInstance(EffectRegistry.LOCKED_CAMERA_EFFECT,20,serverPlayer.getEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT).getAmplifier(),true, false));
             HollowCrystal hollowCrystal = new HollowCrystal(serverPlayer.level(), serverPlayer);
-            hollowCrystal.setPos(serverPlayer.position().add(0, serverPlayer.getEyeHeight() + hollowCrystal.getBoundingBox().getYsize() * .25f - 3, 0).add(serverPlayer.getForward().multiply(10, 10, 10)));
+            hollowCrystal.setPos(serverPlayer.position().add(0, serverPlayer.getEyeHeight() + hollowCrystal.getBoundingBox().getYsize() * .25f - 3, 0).add(serverPlayer.getForward().multiply(7.5, 7.5, 7.5)));
             hollowCrystal.setDamage(getDamage(serverPlayer, spellLevel));
             hollowCrystal.setDeltaMovement(0,0,0);
             hollowCrystal.setDelay(20);
