@@ -181,6 +181,19 @@ public class MagicEndCrystal extends Mob implements IMagicSummon {
     }
 
     @Override
+    public boolean hurt(DamageSource source, float amount) {
+        //it's immune to damage sources that can just exist on the ground
+        if (source == level().damageSources().lava() ||
+                source == level().damageSources().onFire() ||
+                source == level().damageSources().cactus() ||
+                source == level().damageSources().campfire() ||
+                source == level().damageSources().drown()) {
+            return false;
+        }
+        return super.hurt(source, amount);
+    }
+
+    @Override
     public void onAntiMagic(MagicData playerMagicData) {
         IMagicSummon.super.onAntiMagic(playerMagicData);
         this.discard();
