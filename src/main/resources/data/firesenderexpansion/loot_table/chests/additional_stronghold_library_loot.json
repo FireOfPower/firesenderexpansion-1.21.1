@@ -8,6 +8,12 @@
           "type": "minecraft:item",
           "name": "firesenderexpansion:endchiridion"
         }
+      ],
+      "conditions": [
+        {
+          "condition": "minecraft:random_chance",
+          "chance": 0.25
+        }
       ]
     }
   ]

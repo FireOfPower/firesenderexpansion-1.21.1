@@ -8,6 +8,7 @@ import net.fireofpower.firesenderexpansion.entities.spells.BinaryStars.ObsidianS
 import net.fireofpower.firesenderexpansion.entities.spells.GateOfEnder.GatePortal;
 import net.fireofpower.firesenderexpansion.entities.spells.HollowCrystal.HollowCrystal;
 import net.fireofpower.firesenderexpansion.entities.spells.InfiniteVoid.InfiniteVoid;
+import net.fireofpower.firesenderexpansion.entities.spells.MagicEndCrystal.MagicEndCrystal;
 import net.fireofpower.firesenderexpansion.entities.spells.MagicShulkerBullet;
 import net.fireofpower.firesenderexpansion.entities.spells.ObsidianRod.ObsidianRod;
 import net.fireofpower.firesenderexpansion.entities.spells.TeleportAoe;
@@ -102,6 +103,12 @@ public class EntityRegistry {
                     .sized(.6f, .6f)
                     .clientTrackingRange(64)
                     .build(ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "obsidian_star").toString()));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<MagicEndCrystal>> MAGIC_END_CRYSTAL =
+            ENTITIES.register("magic_end_crystal", () -> EntityType.Builder.<MagicEndCrystal>of(MagicEndCrystal::new, MobCategory.MISC)
+                    .sized(1f, 2f)
+                    .clientTrackingRange(64)
+                    .build(ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "magic_end_crystal").toString()));
 
     public static final DeferredHolder<EntityType<?>, EntityType<VoidWyrm>> VOID_WYRM =
             ENTITIES.register("void_wyrm", () -> EntityType.Builder.<VoidWyrm>of(VoidWyrm::new, MobCategory.CREATURE)

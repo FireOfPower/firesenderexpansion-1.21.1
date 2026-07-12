@@ -12,6 +12,7 @@ import net.fireofpower.firesenderexpansion.entities.spells.BinaryStars.ObsidianS
 import net.fireofpower.firesenderexpansion.entities.spells.GateOfEnder.GatePortalRenderer;
 import net.fireofpower.firesenderexpansion.entities.spells.HollowCrystal.HollowCrystalRenderer;
 import net.fireofpower.firesenderexpansion.entities.spells.InfiniteVoid.InfiniteVoidRenderer;
+import net.fireofpower.firesenderexpansion.entities.spells.MagicEndCrystal.MagicEndCrystalRenderer;
 import net.fireofpower.firesenderexpansion.entities.spells.ObsidianRod.ObsidianRodRenderer;
 import net.fireofpower.firesenderexpansion.entities.spells.UnstableSwords.claymore.UnstableSummonedClaymoreModel;
 import net.fireofpower.firesenderexpansion.entities.spells.UnstableSwords.rapier.UnstableSummonedRapierModel;
@@ -140,6 +141,7 @@ public class FiresEnderExpansion
             event.registerEntityRenderer(EntityRegistry.UNSTABLE_SUMMONED_CLAYMORE.get(), (e) -> new UnstableSummonedSwordRenderer(e, UnstableSummonedClaymoreModel::new));
             event.registerEntityRenderer(EntityRegistry.NOVA_STAR.get(), (e) -> new BinaryStarRenderer(e, NovaStarModel::new));
             event.registerEntityRenderer(EntityRegistry.OBSIDIAN_STAR.get(), (e) -> new BinaryStarRenderer(e, ObsidianStarModel::new));
+            event.registerEntityRenderer(EntityRegistry.MAGIC_END_CRYSTAL.get(), MagicEndCrystalRenderer::new);
             event.registerEntityRenderer(EntityRegistry.VOID_WYRM.get(), VoidWyrmRenderer::new);
         }
 

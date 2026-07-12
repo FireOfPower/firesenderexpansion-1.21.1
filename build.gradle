@@ -194,6 +194,7 @@ dependencies {
     implementation "curse.maven:selene-499980:7209771"
     implementation "curse.maven:apothic-attributes-898963:7445079"
     implementation "curse.maven:placebo-283644:6926281"
+    implementation "curse.maven:jade-324717:7545219"
 
     //FOR SAVING LARGE NBT FILE
     //implementation "curse.maven:huge-structure-blocks-474114:5628956"
