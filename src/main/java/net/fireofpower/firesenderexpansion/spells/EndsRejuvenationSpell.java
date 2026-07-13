@@ -33,7 +33,7 @@ public class EndsRejuvenationSpell extends AbstractSpell {
     @Override
     public List<MutableComponent> getUniqueInfo(int spellLevel, LivingEntity caster) {
         return List.of(
-                Component.translatable("ui.irons_spellbooks.duration", Utils.stringTruncation(getHealth(caster,spellLevel),2)),
+                Component.translatable("ui.irons_spellbooks.duration", Utils.timeFromTicks(getDuration(caster,spellLevel) * 20,2)),
                 Component.translatable("ui.irons_spellbooks.summon_count", getSummonCount(caster,spellLevel)),
                 Component.translatable("ui.irons_spellbooks.hp", Utils.stringTruncation(getHealth(caster,spellLevel),2))
         );
@@ -112,7 +112,7 @@ public class EndsRejuvenationSpell extends AbstractSpell {
     }
 
     public float getDuration(LivingEntity entity, int spellLevel){
-        return getSpellPower(spellLevel,entity) / 2;
+        return (float) (getSpellPower(spellLevel,entity) / 2.0);
     }
 
     @Override

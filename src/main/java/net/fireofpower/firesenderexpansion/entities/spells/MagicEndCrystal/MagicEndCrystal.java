@@ -21,6 +21,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.animal.Pig;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.level.Level;
 
@@ -121,6 +122,10 @@ public class MagicEndCrystal extends Mob implements IMagicSummon {
 
     public boolean shouldRenderAtSqrDistance(double distance) {
         return super.shouldRenderAtSqrDistance(distance) || this.getBeamTarget().isPresent();
+    }
+
+    @Override
+    public void knockback(double strength, double x, double z) {
     }
 
     @Override

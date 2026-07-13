@@ -283,7 +283,7 @@ public class VoidWyrm extends AbstractSpellCastingMob implements GeoEntity, IAni
 
     @Override
     public boolean isPickable() {
-        return true;
+        return false;
     }
 
     @Override
