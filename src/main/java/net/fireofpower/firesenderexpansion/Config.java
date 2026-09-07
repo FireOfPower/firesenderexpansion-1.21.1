@@ -14,6 +14,7 @@ public class Config
     public static final ModConfigSpec.BooleanValue ALLOW_CRAFTING_CRYSTAL_HEART;
     public static final ModConfigSpec.BooleanValue ALLOW_SWORD_HAIL;
     public static final ModConfigSpec.BooleanValue HOLLOW_CRYSTAL_BREAK_PROJECTILES;
+    public static final ModConfigSpec.BooleanValue INFINITE_VOID_KEEPINV;
 
     public static final ModConfigSpec.ConfigValue<Integer> SHULKER_ASPECT_INTERNAL_COOLDOWN;
 
@@ -31,6 +32,9 @@ public class Config
 
             BUILDER.comment("What is the internal cooldown (in ticks) for Aspect of the Shulker to trigger? Default is 20");
             SHULKER_ASPECT_INTERNAL_COOLDOWN = BUILDER.worldRestart().define("shulker_aspect_internal_cooldown",20);
+
+            BUILDER.comment("Should Players killed in the Void Dimension have their items return to their respawn position? Default is false");
+            INFINITE_VOID_KEEPINV = BUILDER.worldRestart().define("infinite_void_item_return",false);
 
             BUILDER.pop();
         }

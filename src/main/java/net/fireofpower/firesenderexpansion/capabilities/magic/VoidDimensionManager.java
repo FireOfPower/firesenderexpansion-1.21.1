@@ -55,10 +55,6 @@ public class VoidDimensionManager {
                 }
             });
         }
-        ServerChunkCache cache = ((ServerLevel)(level)).getChunkSource();
-        if(!cache.getLevel().isLoaded(new BlockPos(0,0,0))) {
-            cache.addRegionTicket(TicketType.FORCED, Utils.getChunkPos(new BlockPos((int) 0, 0, 0)), 20, Utils.getChunkPos(new BlockPos(0, 0, 0)), true);
-        }
     }
 
     public boolean shouldKickOut(LivingEntity entity){

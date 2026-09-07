@@ -5,6 +5,7 @@ import io.redspace.ironsspellbooks.api.magic.MagicData;
 import io.redspace.ironsspellbooks.effect.IMobEffectEndCallback;
 import io.redspace.ironsspellbooks.effect.MagicMobEffect;
 import io.redspace.ironsspellbooks.entity.mobs.AntiMagicSusceptible;
+import net.fireofpower.firesenderexpansion.Config;
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
 import net.fireofpower.firesenderexpansion.capabilities.magic.VoidDimensionManager;
 import net.fireofpower.firesenderexpansion.registries.EffectRegistry;
@@ -13,6 +14,7 @@ import net.fireofpower.firesenderexpansion.util.Utils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerChunkCache;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.TicketType;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
@@ -21,7 +23,10 @@ import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.portal.DimensionTransition;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -31,6 +36,7 @@ import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
 import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @EventBusSubscriber
 public class InfiniteVoidEffect extends MobEffect implements IMobEffectEndCallback {
@@ -83,9 +89,15 @@ public class InfiniteVoidEffect extends MobEffect implements IMobEffectEndCallba
                 if(items != null){
                     items.forEach(e -> {
                         if(e != null){
-                            ServerChunkCache cache = e.getServer().getLevel(recordedPositions.get(event.getEntity().getUUID()).dimension).getChunkSource();
-                            cache.addRegionTicket(TicketType.POST_TELEPORT, Utils.getChunkPos(new BlockPos((int)recordedPositions.get(event.getEntity().getUUID()).position.x,(int)recordedPositions.get(event.getEntity().getUUID()).position.y,(int)recordedPositions.get(event.getEntity().getUUID()).position.z)), 9, 238, true);
-                            e.changeDimension(new DimensionTransition(e.getServer().getLevel(recordedPositions.get(event.getEntity().getUUID()).dimension), recordedPositions.get(event.getEntity().getUUID()).position, Vec3.ZERO, 0, 0, DimensionTransition.DO_NOTHING));
+                            if(event.getEntity() instanceof ServerPlayer serverPlayer && Config.INFINITE_VOID_KEEPINV.get()){
+                                ServerChunkCache cache = e.getServer().getLevel(recordedPositions.get(event.getEntity().getUUID()).dimension).getChunkSource();
+                                cache.addRegionTicket(TicketType.POST_TELEPORT, Utils.getChunkPos(new BlockPos((int) recordedPositions.get(event.getEntity().getUUID()).position.x, (int) recordedPositions.get(event.getEntity().getUUID()).position.y, (int) recordedPositions.get(event.getEntity().getUUID()).position.z)), 9, 238, true);
+                                e.changeDimension(new DimensionTransition(e.getServer().getLevel(serverPlayer.getRespawnDimension()), serverPlayer.getRespawnPosition().getCenter(), Vec3.ZERO, 0, 0, DimensionTransition.DO_NOTHING));
+                            }else {
+                                ServerChunkCache cache = e.getServer().getLevel(recordedPositions.get(event.getEntity().getUUID()).dimension).getChunkSource();
+                                cache.addRegionTicket(TicketType.POST_TELEPORT, Utils.getChunkPos(new BlockPos((int) recordedPositions.get(event.getEntity().getUUID()).position.x, (int) recordedPositions.get(event.getEntity().getUUID()).position.y, (int) recordedPositions.get(event.getEntity().getUUID()).position.z)), 9, 238, true);
+                                e.changeDimension(new DimensionTransition(e.getServer().getLevel(recordedPositions.get(event.getEntity().getUUID()).dimension), recordedPositions.get(event.getEntity().getUUID()).position, Vec3.ZERO, 0, 0, DimensionTransition.DO_NOTHING));
+                            }
                         }
                     });
                 }

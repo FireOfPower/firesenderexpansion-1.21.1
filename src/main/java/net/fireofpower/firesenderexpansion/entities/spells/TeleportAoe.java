@@ -6,6 +6,7 @@ import io.redspace.ironsspellbooks.api.util.Utils;
 import io.redspace.ironsspellbooks.damage.DamageSources;
 import io.redspace.ironsspellbooks.entity.mobs.AntiMagicSusceptible;
 import io.redspace.ironsspellbooks.entity.spells.AoeEntity;
+import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
 import net.fireofpower.firesenderexpansion.registries.EffectRegistry;
 import net.fireofpower.firesenderexpansion.registries.EntityRegistry;
 import net.fireofpower.firesenderexpansion.registries.SpellRegistries;
@@ -59,45 +60,47 @@ public class TeleportAoe extends AoeEntity implements AntiMagicSusceptible {
     @Override
     public void tick() {
 
-        //get everyone sorta nearby (it's a square instead of a circle with radius dimensions)
-        List<LivingEntity> targets = this.level().getEntitiesOfClass(LivingEntity.class, new AABB(this.getX() - getRadius(), this.getY() - MAX_HEIGHT, this.getZ() - getRadius(), this.getX() + getRadius(), this.getY() + MAX_HEIGHT, this.getZ() + getRadius()));
-        for(int i = 0; i < targets.size(); i++) {
-            //update the trackedTargets list
-            Vec3 distFromCircleCenter = new Vec3((float) (targets.get(i).position().x - this.position().x), 0, (float) (targets.get(i).position().z - this.position().z));
-            //if we're not already tracking them, then start tracking them and apply the shader
-            if(!trackedTargets.contains(targets.get(i)) && distFromCircleCenter.horizontalDistance() < getRadius() && !Objects.equals(targets.get(i),getOwner()) && !DamageSources.isFriendlyFireBetween(getOwner(),targets.get(i)) && !(targets.get(i) instanceof ServerPlayer serverPlayer && (serverPlayer.isSpectator() || serverPlayer.isCreative()))){
-                trackedTargets.add(targets.get(i));
-                level().playSound((Player) null, targets.get(i).position().x, targets.get(i).position().y, targets.get(i).position().z, SoundEvents.ENDERMAN_TELEPORT, SoundSource.PLAYERS, 2.0F, 1.0F);
+        if(!level().isClientSide()) {
+            //get everyone sorta nearby (it's a square instead of a circle with radius dimensions)
+            List<LivingEntity> targets = this.level().getEntitiesOfClass(LivingEntity.class, new AABB(this.getX() - getRadius(), this.getY() - MAX_HEIGHT, this.getZ() - getRadius(), this.getX() + getRadius(), this.getY() + MAX_HEIGHT, this.getZ() + getRadius()));
+            for (int i = 0; i < targets.size(); i++) {
+                //update the trackedTargets list
+                Vec3 distFromCircleCenter = new Vec3((float) (targets.get(i).position().x - this.position().x), 0, (float) (targets.get(i).position().z - this.position().z));
+                //if we're not already tracking them, then start tracking them and apply the shader
+                if (!trackedTargets.contains(targets.get(i)) && distFromCircleCenter.horizontalDistance() < getRadius() && !Objects.equals(targets.get(i), getOwner()) && !DamageSources.isFriendlyFireBetween(getOwner(), targets.get(i)) && !(targets.get(i) instanceof ServerPlayer serverPlayer && (serverPlayer.isSpectator() || serverPlayer.isCreative()))) {
+                    trackedTargets.add(targets.get(i));
+                    level().playSound((Player) null, targets.get(i).position().x, targets.get(i).position().y, targets.get(i).position().z, SoundEvents.ENDERMAN_TELEPORT, SoundSource.PLAYERS, 2.0F, 1.0F);
+                }
             }
-        }
 
-        for(int i = 0; i < trackedTargets.size(); i++){
-            LivingEntity tracked = trackedTargets.get(i);
-            Vec3 distFromCircleCenter = new Vec3((float) (tracked.position().x - this.position().x), 0, (float) (tracked.position().z - this.position().z));
-            if(distFromCircleCenter.horizontalDistance() > getRadius()) {
-                if (!tracked.getType().is(ModTags.DISPLACEMENT_CAGE_IMMUNE) || tracked instanceof ServerPlayer serverPlayer && !(serverPlayer.isCreative() || serverPlayer.isSpectator()) && !serverPlayer.getType().is(ModTags.DISPLACEMENT_CAGE_IMMUNE)) {
-                    //do the teleporty stuff
-                    Vec3 dest = position().add(position().subtract(tracked.position()).normalize().multiply(getRadius() * 0.99,0,getRadius() * 0.99)).subtract(0,position().subtract(tracked.position()).y,0);
-                    BlockPos output = new BlockPos((int) Math.round(dest.x), (int) Math.round(dest.y), (int) Math.round(dest.z));
-                    while(!level().isEmptyBlock(output)){
-                        dest = dest.add(0,1,0);
-                        output = output.offset(0,1,0);
-                    }
-                    if(!Utils.handleSpellTeleport(SpellRegistries.DISPLACEMENT_CAGE.get(), tracked, dest)) {
-                        if (trackedTargets.contains(tracked)){
-                            trackedTargets.remove(tracked);
+            for (int i = 0; i < trackedTargets.size(); i++) {
+                LivingEntity tracked = trackedTargets.get(i);
+                Vec3 distFromCircleCenter = new Vec3((float) (tracked.position().x - this.position().x), 0, (float) (tracked.position().z - this.position().z));
+                if (distFromCircleCenter.horizontalDistance() > getRadius()) {
+                    if (!tracked.getType().is(ModTags.DISPLACEMENT_CAGE_IMMUNE) || tracked instanceof ServerPlayer serverPlayer && !(serverPlayer.isCreative() || serverPlayer.isSpectator())) {
+                        //do the teleporty stuff
+                        Vec3 dest = position().add(position().subtract(tracked.position()).normalize().multiply(getRadius() * 0.99, 0, getRadius() * 0.99)).subtract(0, position().subtract(tracked.position()).y, 0);
+                        BlockPos output = new BlockPos((int) Math.round(dest.x), (int) Math.round(dest.y), (int) Math.round(dest.z));
+                        while (!level().isEmptyBlock(output)) {
+                            dest = dest.add(0, 1, 0);
+                            output = output.offset(0, 1, 0);
+                        }
+                        if (Utils.handleSpellTeleport(SpellRegistries.DISPLACEMENT_CAGE.get(), tracked, dest)) {
+                            if (trackedTargets.contains(tracked)) {
+                                trackedTargets.remove(tracked);
+                            }
                         }
                     }
                 }
             }
-        }
 
-        if(tickCount > getDuration()){
-            for(int i = 0; i < trackedTargets.size(); i++){
-                trackedTargets.remove(i);
-                i--;
+            if (tickCount > getDuration()) {
+                for (int i = 0; i < trackedTargets.size(); i++) {
+                    trackedTargets.remove(i);
+                    i--;
+                }
+                discard();
             }
-            discard();
         }
         super.tick();
     }

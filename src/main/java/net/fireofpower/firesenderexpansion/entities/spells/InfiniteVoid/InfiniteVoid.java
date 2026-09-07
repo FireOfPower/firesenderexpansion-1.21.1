@@ -79,13 +79,13 @@ public class InfiniteVoid extends net.acetheeldritchking.aces_spell_utils.entity
         this.level().getEntitiesOfClass(LivingEntity.class, new AABB(this.position().subtract((double)this.getRadius(), (double)this.getRadius(), (double)this.getRadius()), this.position().add((double)this.getRadius(), (double)this.getRadius(), (double)this.getRadius())))
                 .stream().filter(e -> e.distanceTo(this) <= getRadius())
                 .filter(e -> !e.equals(getOwner()) && !e.getType().is(ModTags.INFINITE_VOID_IMMUNE)).forEach((e) -> {
-                    final int CHAIN_COUNT = 3;
+                    final int CHAIN_COUNT = 1;
                     Vec3 origin = e.getBoundingBox().getCenter();
 
                     float theta = Mth.TWO_PI / CHAIN_COUNT;
                     for (int i = 0; i < CHAIN_COUNT; i++) {
                         float angle = theta * i + Mth.TWO_PI / 4 - getYRot() * Mth.DEG_TO_RAD;
-                        float radius = 8 * 0.5f + e.getBbWidth() * .4f;
+                        float radius = 0;//8 * 0.5f + e.getBbWidth() * .4f;
                         Vec3 direction = new Vec3(Mth.cos(angle) * radius, 0, Mth.sin(angle) * radius);
                         Vec3 worldPos = Utils.moveToRelativeGroundLevel(e.level(), origin.add(direction), 2);
                         if (level().noCollision(AABB.ofSize(worldPos, 0.5, 0.5, 0.5))) {

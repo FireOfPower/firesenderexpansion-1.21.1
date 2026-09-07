@@ -49,7 +49,7 @@ public class BinaryStarsSpell extends AbstractSpell {
 
     public BinaryStarsSpell()
     {
-        this.manaCostPerLevel = 25;
+        this.manaCostPerLevel = 5;
         this.baseSpellPower = 30;
         this.spellPowerPerLevel = 10;
         this.castTime = 0;
