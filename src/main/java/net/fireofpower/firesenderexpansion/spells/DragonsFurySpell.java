@@ -12,6 +12,12 @@ import io.redspace.ironsspellbooks.entity.spells.EarthquakeAoe;
 import io.redspace.ironsspellbooks.particle.BlastwaveParticleOptions;
 import io.redspace.ironsspellbooks.registries.MobEffectRegistry;
 import io.redspace.ironsspellbooks.util.ParticleHelper;
+import net.acetheeldritchking.aces_spell_utils.utils.DomeHandler;
+import net.acetheeldritchking.aces_spell_utils.vfx.dome.DomeConfig;
+import net.acetheeldritchking.aces_spell_utils.vfx.dome.DomePulse;
+import net.acetheeldritchking.aces_spell_utils.vfx.dome.DomeShell;
+import net.acetheeldritchking.aces_spell_utils.vfx.dome.DomeWarp;
+import net.acetheeldritchking.aces_spell_utils.vfx.ribbon.Easing;
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -90,8 +96,7 @@ public class DragonsFurySpell extends AbstractSpell {
         float range = 1.7f;
         Vec3 smiteLocation = Utils.raycastForBlock(entity.level(), entity.getEyePosition(), entity.getEyePosition().add(entity.getForward().multiply(range, 0, range)), ClipContext.Fluid.NONE).getLocation();
         Vec3 particleLocation = entity.level().clip(new ClipContext(smiteLocation, smiteLocation.add(0, -2, 0), ClipContext.Block.VISUAL, ClipContext.Fluid.NONE, CollisionContext.empty())).getLocation().add(0, 0.1, 0);
-        MagicManager.spawnParticles(entity.level(), new BlastwaveParticleOptions(SchoolRegistry.ENDER.get().getTargetingColor(), radius * 2),
-                particleLocation.x, particleLocation.y, particleLocation.z, 1, 0, 0, 0, 0, true);
+        MagicManager.spawnParticles(entity.level(), new BlastwaveParticleOptions(SchoolRegistry.ENDER.get().getTargetingColor(), radius),particleLocation.x, particleLocation.y, particleLocation.z, 1, 0, 0, 0, 0, true);
         var entities = entity.level().getEntities(entity, AABB.ofSize(smiteLocation, radius * 2, radius * 4, radius * 2));
         var damageSource = this.getDamageSource(entity);
 

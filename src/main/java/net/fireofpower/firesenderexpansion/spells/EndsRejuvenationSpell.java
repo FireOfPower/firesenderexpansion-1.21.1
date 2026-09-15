@@ -8,11 +8,18 @@ import io.redspace.ironsspellbooks.api.spells.*;
 import io.redspace.ironsspellbooks.api.util.AnimationHolder;
 import io.redspace.ironsspellbooks.api.util.Utils;
 import io.redspace.ironsspellbooks.capabilities.magic.*;
+import net.acetheeldritchking.aces_spell_utils.utils.DomeHandler;
+import net.acetheeldritchking.aces_spell_utils.vfx.dome.DomeConfig;
+import net.acetheeldritchking.aces_spell_utils.vfx.dome.DomePulse;
+import net.acetheeldritchking.aces_spell_utils.vfx.dome.DomeShell;
+import net.acetheeldritchking.aces_spell_utils.vfx.dome.DomeWarp;
+import net.acetheeldritchking.aces_spell_utils.vfx.ribbon.Easing;
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
 import net.fireofpower.firesenderexpansion.entities.spells.MagicEndCrystal.MagicEndCrystal;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -76,6 +83,8 @@ public class EndsRejuvenationSpell extends AbstractSpell {
                 crystal.setHealth(crystal.getMaxHealth());
                 SummonManager.initSummon(entity, crystal, summonTime, summonedEntitiesCastData);
                 level.addFreshEntity(crystal);
+
+                DomeHandler.trigger((ServerLevel) level, crystal.position().add(0,crystal.getBbHeight()/2.0,0), new DomeConfig(2f,10,1f, Easing.EASE_OUT_QUAD, DomeShell.of(0xFF00FF), DomePulse.of(), DomeWarp.of()));
             }
             RecastInstance recastInstance = new RecastInstance(this.getSpellId(), spellLevel, getRecastCount(spellLevel, entity), summonTime, castSource, summonedEntitiesCastData);
             recasts.addRecast(recastInstance, playerMagicData);

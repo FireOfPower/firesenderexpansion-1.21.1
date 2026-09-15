@@ -9,6 +9,9 @@ import io.redspace.ironsspellbooks.capabilities.magic.MultiTargetEntityCastData;
 import io.redspace.ironsspellbooks.capabilities.magic.RecastInstance;
 import io.redspace.ironsspellbooks.capabilities.magic.RecastResult;
 import io.redspace.ironsspellbooks.capabilities.magic.TargetEntityCastData;
+import net.acetheeldritchking.aces_spell_utils.particles.TrailParticleOptions;
+import net.acetheeldritchking.aces_spell_utils.utils.TrailHandler;
+import net.acetheeldritchking.aces_spell_utils.vfx.trail.TrailConfig;
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
 import net.fireofpower.firesenderexpansion.entities.spells.BinaryStars.NovaStar.NovaStarEntity;
 import net.fireofpower.firesenderexpansion.entities.spells.BinaryStars.ObsidianStar.ObsidianStarEntity;
@@ -141,6 +144,7 @@ public class BinaryStarsSpell extends AbstractSpell {
                         novaStar.setHomingTarget(target);
                         novaStar.setDuration(getDuration(recastInstance.getSpellLevel(),serverPlayer));
                         level.addFreshEntity(novaStar);
+                        TrailHandler.attach(novaStar, TrailConfig.of(TrailParticleOptions.of(0xFF00FF, 1.0F), 3));
                     }
                 }
                 if(targets.size() == 1 || i == 1){
@@ -157,6 +161,7 @@ public class BinaryStarsSpell extends AbstractSpell {
                         obsidianStar.setHomingTarget(target);
                         obsidianStar.setDuration(getDuration(recastInstance.getSpellLevel(),serverPlayer));
                         level.addFreshEntity(obsidianStar);
+                        TrailHandler.attach(obsidianStar, TrailConfig.of(TrailParticleOptions.of(0x000003, 1.0F), 3));
                     }
                 }
             }

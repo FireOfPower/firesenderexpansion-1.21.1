@@ -11,6 +11,8 @@ import io.redspace.ironsspellbooks.registries.ParticleRegistry;
 import io.redspace.ironsspellbooks.registries.SoundRegistry;
 import io.redspace.ironsspellbooks.util.ModTags;
 import io.redspace.ironsspellbooks.util.ParticleHelper;
+import net.acetheeldritchking.aces_spell_utils.AcesSpellUtils;
+import net.acetheeldritchking.aces_spell_utils.utils.ImpactFrameHandler;
 import net.fireofpower.firesenderexpansion.ClientConfig;
 import net.fireofpower.firesenderexpansion.Config;
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
@@ -95,31 +97,13 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
             if(getOwner() != null) {
                 shoot(getOwner().getLookAngle());
             }
-            if(!level().isClientSide()) {
-                CameraShakeManager.addCameraShake(new CameraShakeData(level(), 20, position(), 20));
-            }
             handleShootParticles();
-            if(getOwner() instanceof ServerPlayer owner) {
-                PacketDistributor.sendToPlayer(owner, new AddShaderEffectPacket(FiresEnderExpansion.MODID, "shaders/light_burst_shader.json"));
-                Timer timer = new Timer();
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        PacketDistributor.sendToPlayer(owner, new AddShaderEffectPacket(FiresEnderExpansion.MODID, "shaders/dark_burst_shader.json"));
-                    }
-                }, 100);
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        PacketDistributor.sendToPlayer(owner, new AddShaderEffectPacket(FiresEnderExpansion.MODID, "shaders/light_burst_shader.json"));
-                    }
-                }, 200);
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        PacketDistributor.sendToPlayer(owner, new RemoveShaderEffectPacket());
-                    }
-                }, 300);
+            List<ServerPlayer> serverPlayers = level().getEntitiesOfClass(ServerPlayer.class, this.getBoundingBox().inflate(5.5F * 2));
+            for (ServerPlayer player : serverPlayers){
+                if(ClientConfig.HOLLOW_CRYSTAL_FLASH.get()) {
+                    ImpactFrameHandler.trigger(player, 0xFFFFFF, 0, 0.75F, 0.5F, 10, 2);
+                }
+                CameraShakeManager.addCameraShake(new CameraShakeData(level(), 20 + (int) 8.5F, position(), 8.5F * 2));
             }
         }
         if(tickCount > getDelay()) {

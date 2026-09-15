@@ -141,11 +141,11 @@ public class MagicEndCrystal extends Mob implements IMagicSummon {
     @Override
     public void tick() {
         ++time;
-        if(tickCount == 1 && !level().isClientSide()){
-            for(int i = 0; i < 20; i++){
-                MagicManager.spawnParticles(level(),ParticleTypes.END_ROD,position().x,position().y + i / 10.0,position().z,5,Math.random() - 0.5,0,Math.random() - 0.5,0.1,false);
-            }
-        }
+//        if(tickCount == 1 && !level().isClientSide()){
+//            for(int i = 0; i < 20; i++){
+//                MagicManager.spawnParticles(level(),ParticleTypes.END_ROD,position().x,position().y + i / 10.0,position().z,5,Math.random() - 0.5,0,Math.random() - 0.5,0.1,false);
+//            }
+//        }
         super.tick();
         this.checkInsideBlocks();
         this.handlePortal();

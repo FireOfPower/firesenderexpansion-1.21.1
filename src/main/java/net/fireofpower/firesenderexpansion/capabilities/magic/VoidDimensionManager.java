@@ -59,7 +59,7 @@ public class VoidDimensionManager {
 
     public boolean shouldKickOut(LivingEntity entity){
         if(entity instanceof ServerPlayer player) {
-            if (!player.isCreative() && !player.isSpectator()) {
+            if (player.isSpectator()) {
                 return false;
             }
         }

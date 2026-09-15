@@ -12,6 +12,8 @@ import io.redspace.ironsspellbooks.capabilities.magic.PlayerRecasts;
 import io.redspace.ironsspellbooks.capabilities.magic.RecastInstance;
 import io.redspace.ironsspellbooks.capabilities.magic.RecastResult;
 import io.redspace.ironsspellbooks.registries.ParticleRegistry;
+import net.acetheeldritchking.aces_spell_utils.utils.ChromaticAberrationHandler;
+import net.acetheeldritchking.aces_spell_utils.utils.ImpactFrameHandler;
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
 import net.fireofpower.firesenderexpansion.entities.spells.HollowCrystal.HollowCrystal;
 import net.fireofpower.firesenderexpansion.network.SyncFinalCastPacket;
@@ -72,16 +74,12 @@ public class HollowCrystalSpell extends AbstractSpell {
         if(entity.hasEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT)){
             if(!(entity.isCrouching() && entity instanceof ServerPlayer serverPlayer  && net.fireofpower.firesenderexpansion.util.Utils.hasCurio(serverPlayer, ItemRegistry.CRYSTAL_HEART.get()))) {
                 entity.addEffect(new MobEffectInstance(EffectRegistry.HOLLOW_CRYSTAL_EFFECT, ticksOfEffect, entity.getEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT).getAmplifier() + 1, false, false, true));
-                if(playerMagicData.getPlayerRecasts().getRemainingRecastsForSpell(getSpellId()) != 1) {
-                    spawnParticles(entity);
-                }
             }else{
                 handleFiring(serverPlayer, spellLevel);
             }
         }else{
             if(spellLevel > 1) {
                 entity.addEffect(new MobEffectInstance(EffectRegistry.HOLLOW_CRYSTAL_EFFECT, ticksOfEffect, 1, false, false, true));
-                spawnParticles(entity);
             }else{
                 if(entity instanceof ServerPlayer serverPlayer){
                     entity.addEffect(new MobEffectInstance(EffectRegistry.HOLLOW_CRYSTAL_EFFECT, ticksOfEffect, 1, false, false, true));
@@ -123,7 +121,14 @@ public class HollowCrystalSpell extends AbstractSpell {
             hollowCrystal.setDamage(getDamage(serverPlayer, spellLevel));
             hollowCrystal.setDeltaMovement(0,0,0);
             hollowCrystal.setDelay(20);
-            CameraShakeManager.addCameraShake(new CameraShakeData(serverPlayer.level(),20, serverPlayer.position(), 20));
+
+            List<ServerPlayer> serverPlayers = serverPlayer.level().getEntitiesOfClass(ServerPlayer.class, hollowCrystal.getBoundingBox().inflate(5.5F * 2));
+            for (ServerPlayer player : serverPlayers)
+            {
+                ChromaticAberrationHandler.trigger(player,0.75f,20);
+                CameraShakeManager.addCameraShake(new CameraShakeData(hollowCrystal.level(), 20 + (int) 8.5F, hollowCrystal.position(), 8.5F * 2));
+            }
+
             serverPlayer.removeEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT);
             serverPlayer.level().addFreshEntity(hollowCrystal);
         }
@@ -142,14 +147,6 @@ public class HollowCrystalSpell extends AbstractSpell {
             return entity.getEffect(EffectRegistry.HOLLOW_CRYSTAL_EFFECT).getAmplifier() * damagePerCharge * getSpellPower(spellLevel,entity)/50;
         }else{
             return damagePerCharge * getSpellPower(spellLevel,entity)/50;
-        }
-    }
-
-    private void spawnParticles(LivingEntity entity)
-    {
-        ServerLevel level = (ServerLevel) entity.level();
-        for(int i = 0; i < 20; i++){
-            level.sendParticles(ParticleRegistry.UNSTABLE_ENDER_PARTICLE.get(), entity.getX(), entity.getY() + 1, entity.getZ(), 20, 0, 0, 0, 1.0);
         }
     }
 

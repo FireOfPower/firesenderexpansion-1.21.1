@@ -41,10 +41,9 @@ public class BinaryStarEntity extends AbstractMagicProjectile implements GeoEnti
         super(BinaryStarEntityEntityType,level);
     }
 
-
     @Override
     public void trailParticles() {
-        this.level().addParticle(ParticleHelper.PORTAL_FRAME, this.position().x, this.position().y, this.position().z, 0, 0, 0);
+        return;
     }
 
     @Override
