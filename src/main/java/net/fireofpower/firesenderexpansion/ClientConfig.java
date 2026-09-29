@@ -29,7 +29,7 @@ public class ClientConfig {
 
         BUILDER.push("VFX");
         BUILDER.push("Shaders");
-        BUILDER.comment("Should Hollow Crystal have a flash when it releases? May be harmful to photosensitive viewers. Default is false.");
+        BUILDER.comment("Should Hollow Crystal have a flash when it releases? May be harmful to photosensitive viewers. [THIS IS CURRENTLY NONFUNCTIONAL DUE TO CLIENT ACCESS ISSUES] Default is false.");
         HOLLOW_CRYSTAL_FLASH = BUILDER.define("hollow_crystal_flash", false);
         BUILDER.pop();
         BUILDER.pop();

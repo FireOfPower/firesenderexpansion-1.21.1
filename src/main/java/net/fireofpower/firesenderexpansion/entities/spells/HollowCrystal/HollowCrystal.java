@@ -100,9 +100,9 @@ public class HollowCrystal extends AbstractMagicProjectile implements GeoEntity,
             handleShootParticles();
             List<ServerPlayer> serverPlayers = level().getEntitiesOfClass(ServerPlayer.class, this.getBoundingBox().inflate(5.5F * 2));
             for (ServerPlayer player : serverPlayers){
-                if(ClientConfig.HOLLOW_CRYSTAL_FLASH.get()) {
-                    ImpactFrameHandler.trigger(player, 0xFFFFFF, 0, 0.75F, 0.5F, 10, 2);
-                }
+//                if(ClientConfig.HOLLOW_CRYSTAL_FLASH.get()) {
+//                    ImpactFrameHandler.trigger(player, 0xFFFFFF, 0, 0.75F, 0.5F, 10, 2);
+//                }
                 CameraShakeManager.addCameraShake(new CameraShakeData(level(), 20 + (int) 8.5F, position(), 8.5F * 2));
             }
         }
