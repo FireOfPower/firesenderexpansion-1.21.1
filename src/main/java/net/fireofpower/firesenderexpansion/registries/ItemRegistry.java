@@ -8,21 +8,16 @@ import io.redspace.ironsspellbooks.util.ItemPropertiesHelper;
 import net.acetheeldritchking.aces_spell_utils.utils.ASRarities;
 import net.fireofpower.firesenderexpansion.FiresEnderExpansion;
 import net.fireofpower.firesenderexpansion.items.InfusedObsidianFragments;
-import net.fireofpower.firesenderexpansion.items.curios.CrystalHeartCurio;
+import net.fireofpower.firesenderexpansion.items.curios.*;
 import net.fireofpower.firesenderexpansion.items.weapons.void_staff_holder.VoidStaffHolder;
 import net.fireofpower.firesenderexpansion.items.armor.end_lord.EndLordArmorItem;
-import net.fireofpower.firesenderexpansion.items.curios.AnchoringRingCurio;
-import net.fireofpower.firesenderexpansion.items.curios.CoreOfEnderCurio;
 import net.fireofpower.firesenderexpansion.items.StabilizedCoreOfEnder;
-import net.fireofpower.firesenderexpansion.items.curios.EnderTreasuryKeyCurio;
 import net.fireofpower.firesenderexpansion.items.weapons.void_staff.VoidStaffItem;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
-import net.minecraft.world.level.block.BedBlock;
-import net.minecraft.world.level.block.RespawnAnchorBlock;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.common.DeferredSpawnEggItem;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -74,6 +69,7 @@ public class ItemRegistry {
     public static final Supplier<CurioBaseItem> ANCHORING_RING = ITEMS.register("anchoring_ring", AnchoringRingCurio::new);
     public static final Supplier<CurioBaseItem> ENDER_TREASURY_KEY = ITEMS.register("ender_treasury_key", EnderTreasuryKeyCurio::new);
     public static final Supplier<CurioBaseItem> CRYSTAL_HEART = ITEMS.register("crystal_heart", CrystalHeartCurio::new);
+    public static final Supplier<CurioBaseItem> ANCIENT_CHAIN = ITEMS.register("ancient_chain", AncientChainCurio::new);
 
     public static final DeferredHolder<Item, Item> ENDCHIRIDION = ITEMS.register("endchiridion", () ->
             new SpellBook(10).withSpellbookAttributes(

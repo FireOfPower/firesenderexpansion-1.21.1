@@ -75,7 +75,6 @@ public class FiresEnderExpansion
         ItemRegistry.register(modEventBus);
         FEEArmorMaterials.register(modEventBus);
         SoundRegistry.register(modEventBus);
-        //not ready yet
         BlockRegistry.register(modEventBus);
 
         // Register our mod's ModConfigSpec so that FML can create and load the config file for us
@@ -107,6 +106,7 @@ public class FiresEnderExpansion
                 output.accept(ItemRegistry.ANCHORING_RING.get());
                 output.accept(ItemRegistry.CRYSTAL_HEART.get());
                 output.accept(ItemRegistry.INFUSED_ANCHOR_ITEM.get());
+                output.accept(ItemRegistry.ANCIENT_CHAIN.get());
             })
             .build()
     );

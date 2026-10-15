@@ -120,7 +120,7 @@ public class EntityRegistry {
 
     public static final DeferredHolder<EntityType<?>, EntityType<EnderChainHookEntity>> ENDER_CHAIN_HOOK =
             ENTITIES.register("ender_chain_hook", () -> EntityType.Builder.<EnderChainHookEntity>of(EnderChainHookEntity::new, MobCategory.MISC)
-                    .sized(0.5f, 0.5f)
+                    .sized(1f, 1f)
                     .clientTrackingRange(64)
                     .build(ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "ender_chain_hook").toString()));
 

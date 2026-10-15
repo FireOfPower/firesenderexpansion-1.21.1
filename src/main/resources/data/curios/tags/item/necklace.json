@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "firesenderexpansion:ender_treasury_key"
+    "firesenderexpansion:ender_treasury_key",
+    "firesenderexpansion:ancient_chain"
   ]
 }

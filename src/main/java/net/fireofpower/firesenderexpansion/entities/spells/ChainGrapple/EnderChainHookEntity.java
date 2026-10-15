@@ -102,7 +102,7 @@ public class EnderChainHookEntity extends AbstractMagicProjectile {
             this.discard();
         }
         super.tick();
-        List<LivingEntity> nearbyEntities = level().getEntitiesOfClass(LivingEntity.class,this.getBoundingBox().inflate(1));
+        List<LivingEntity> nearbyEntities = level().getEntitiesOfClass(LivingEntity.class,this.getBoundingBox());
         if(getOwner() != null) {
             nearbyEntities.remove(getOwner());
         }

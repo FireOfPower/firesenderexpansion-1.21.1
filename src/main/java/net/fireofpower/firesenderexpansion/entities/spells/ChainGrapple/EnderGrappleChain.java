@@ -35,7 +35,7 @@ import java.util.UUID;
 public class EnderGrappleChain extends EnderChain implements AntiMagicSusceptible, IEntityWithComplexSpawn {
     public static final int VISUAL_WARMUP_TIME = 3;
 
-    private int maxLength = 12;
+    private float maxLength = 12;
     private float pullStrength = 0.35f;
 
     public EnderGrappleChain(EntityType<?> type, Level level) {
@@ -49,11 +49,11 @@ public class EnderGrappleChain extends EnderChain implements AntiMagicSusceptibl
         setPos(owner.position());
     }
 
-    public int getMaxLength() {
+    public float getMaxLength() {
         return maxLength;
     }
 
-    public void setMaxLength(int maxLength) {
+    public void setMaxLength(float maxLength) {
         this.maxLength = maxLength;
     }
 
@@ -231,14 +231,14 @@ public class EnderGrappleChain extends EnderChain implements AntiMagicSusceptibl
     @Override
     protected void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
-        tag.putInt("Max Length", maxLength);
+        tag.putFloat("Max Length", maxLength);
         tag.putFloat("PullStrength", pullStrength);
     }
 
     @Override
     protected void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        this.maxLength = tag.getInt("Max Length");
+        this.maxLength = tag.getFloat("Max Length");
         this.pullStrength = tag.getFloat("PullStrength");
     }
 }

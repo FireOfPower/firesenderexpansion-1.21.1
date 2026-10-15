@@ -30,6 +30,9 @@
   "item.firesenderexpansion.anchoring_ring": "AnchoRing",
   "item.firesenderexpansion.anchoring_ring.desc": "Protects from most forms of magical teleportation",
 
+  "item.firesenderexpansion.ancient_chain": "Ancient Chain",
+  "item.firesenderexpansion.ancient_chain.desc": "Grants bonus recasts to Chain Grapple as well as making it travel twice as fast.",
+
   "item.firesenderexpansion.infused_obsidian_fragments": "Infused Obsidian Fragments",
   "item.firesenderexpansion.infused_obsidian_fragments.desc": "Obtained by slamming obsidian rods into ancient debris",
   "item.firesenderexpansion.infused_obsidian_fragments.guide":"Cast Obsidian Rods on ancient debris, making sure that the projectiles collide with the block",
@@ -82,6 +85,9 @@
   "spell.firesenderexpansion.ends_rejuvenation": "End's Rejuvenation",
   "spell.firesenderexpansion.ends_rejuvenation.guide": "Manifest a number of End Crystal summons that will heal you for 1/2 a heart every second each. They can be damaged and destroyed by enemies.",
   "entity.firesenderexpansion.magic_end_crystal": "Magical End Crystal",
+
+  "spell.firesenderexpansion.chain_grapple": "Chain Grapple",
+  "spell.firesenderexpansion.chain_grapple.guide": "Shoot out a chain that pulls you in or anything you hit towards you. Sneak to dismiss the chains.",
 
   "spell.firesenderexpansion.infinite_void": "Manifest Domain: Void",
   "spell.firesenderexpansion.infinite_void.guide": "Manifest a small vacuum in the world, drawing everyone nearby into an existence where all is void. The space will collapse shortly after existing, but while active you will also gain significant strength.",
@@ -149,5 +155,7 @@
 
   "entity.firesenderexpansion.porphyromancer": "Porphyromancer",
   "entity.firesenderexpansion.void_wyrm": "Void Wyrm",
-  "entity.firesenderexpansion.infinite_void":"Void Rift"
+  "entity.firesenderexpansion.infinite_void":"Void Rift",
+  "entity.firesenderexpansion.ender_grapple_chain": "Ender Grappling Chain",
+  "entity.firesenderexpansion.ender_chain_hook": "Ender Chain Hook"
 }
