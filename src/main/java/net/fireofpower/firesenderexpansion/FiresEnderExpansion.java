@@ -1,5 +1,6 @@
 package net.fireofpower.firesenderexpansion;
 
+import io.redspace.ironsspellbooks.entity.spells.ender_chain.EnderChainRenderer;
 import io.redspace.ironsspellbooks.item.SpellBook;
 import io.redspace.ironsspellbooks.render.PocketDimensionEffects;
 import io.redspace.ironsspellbooks.render.SpellBookCurioRenderer;
@@ -9,6 +10,8 @@ import net.fireofpower.firesenderexpansion.entities.mobs.void_wyrm.VoidWyrmRende
 import net.fireofpower.firesenderexpansion.entities.spells.BinaryStars.BinaryStarRenderer;
 import net.fireofpower.firesenderexpansion.entities.spells.BinaryStars.NovaStar.NovaStarModel;
 import net.fireofpower.firesenderexpansion.entities.spells.BinaryStars.ObsidianStar.ObsidianStarModel;
+import net.fireofpower.firesenderexpansion.entities.spells.ChainGrapple.EnderChainHookRenderer;
+import net.fireofpower.firesenderexpansion.entities.spells.ChainGrapple.EnderGrappleChainRenderer;
 import net.fireofpower.firesenderexpansion.entities.spells.GateOfEnder.GatePortalRenderer;
 import net.fireofpower.firesenderexpansion.entities.spells.HollowCrystal.HollowCrystalRenderer;
 import net.fireofpower.firesenderexpansion.entities.spells.InfiniteVoid.InfiniteVoidRenderer;
@@ -142,6 +145,8 @@ public class FiresEnderExpansion
             event.registerEntityRenderer(EntityRegistry.NOVA_STAR.get(), (e) -> new BinaryStarRenderer(e, NovaStarModel::new));
             event.registerEntityRenderer(EntityRegistry.OBSIDIAN_STAR.get(), (e) -> new BinaryStarRenderer(e, ObsidianStarModel::new));
             event.registerEntityRenderer(EntityRegistry.MAGIC_END_CRYSTAL.get(), MagicEndCrystalRenderer::new);
+            event.registerEntityRenderer(EntityRegistry.ENDER_GRAPPLE_CHAIN.get(), EnderGrappleChainRenderer::new);
+            event.registerEntityRenderer(EntityRegistry.ENDER_CHAIN_HOOK.get(), EnderChainHookRenderer::new);
             event.registerEntityRenderer(EntityRegistry.VOID_WYRM.get(), VoidWyrmRenderer::new);
         }
 

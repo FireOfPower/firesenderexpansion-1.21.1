@@ -5,6 +5,8 @@ import net.fireofpower.firesenderexpansion.entities.mobs.porphyromancer.Porphyro
 import net.fireofpower.firesenderexpansion.entities.mobs.void_wyrm.VoidWyrm;
 import net.fireofpower.firesenderexpansion.entities.spells.BinaryStars.NovaStar.NovaStarEntity;
 import net.fireofpower.firesenderexpansion.entities.spells.BinaryStars.ObsidianStar.ObsidianStarEntity;
+import net.fireofpower.firesenderexpansion.entities.spells.ChainGrapple.EnderChainHookEntity;
+import net.fireofpower.firesenderexpansion.entities.spells.ChainGrapple.EnderGrappleChain;
 import net.fireofpower.firesenderexpansion.entities.spells.GateOfEnder.GatePortal;
 import net.fireofpower.firesenderexpansion.entities.spells.HollowCrystal.HollowCrystal;
 import net.fireofpower.firesenderexpansion.entities.spells.InfiniteVoid.InfiniteVoid;
@@ -109,6 +111,18 @@ public class EntityRegistry {
                     .sized(1f, 2f)
                     .clientTrackingRange(64)
                     .build(ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "magic_end_crystal").toString()));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<EnderGrappleChain>> ENDER_GRAPPLE_CHAIN =
+            ENTITIES.register("ender_grapple_chain", () -> EntityType.Builder.<EnderGrappleChain>of(EnderGrappleChain::new, MobCategory.MISC)
+                    .sized(0.5f, 0.5f)
+                    .clientTrackingRange(64)
+                    .build(ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "ender_grapple_chain").toString()));
+
+    public static final DeferredHolder<EntityType<?>, EntityType<EnderChainHookEntity>> ENDER_CHAIN_HOOK =
+            ENTITIES.register("ender_chain_hook", () -> EntityType.Builder.<EnderChainHookEntity>of(EnderChainHookEntity::new, MobCategory.MISC)
+                    .sized(0.5f, 0.5f)
+                    .clientTrackingRange(64)
+                    .build(ResourceLocation.fromNamespaceAndPath(FiresEnderExpansion.MODID, "ender_chain_hook").toString()));
 
     public static final DeferredHolder<EntityType<?>, EntityType<VoidWyrm>> VOID_WYRM =
             ENTITIES.register("void_wyrm", () -> EntityType.Builder.<VoidWyrm>of(VoidWyrm::new, MobCategory.CREATURE)

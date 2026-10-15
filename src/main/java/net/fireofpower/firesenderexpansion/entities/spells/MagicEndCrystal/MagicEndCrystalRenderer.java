@@ -103,9 +103,9 @@ public class MagicEndCrystalRenderer extends EntityRenderer<MagicEndCrystal> {
         Entity owner = cachedOwner.get(entity);
         if (owner != null && Objects.requireNonNull(entity.getBeamTarget()).isPresent()) {
             poseStack.pushPose();
-            float f3 = (float) owner.position().x();
-            float f4 = (float) owner.position().y() - owner.getBbHeight()/2;
-            float f5 = (float) owner.position().z();
+            float f3 = (float) owner.getPosition(partialTicks).x();
+            float f4 = (float) owner.getPosition(partialTicks).y() - owner.getBbHeight()/2;
+            float f5 = (float) owner.getPosition(partialTicks).z();
             float f6 = (float) (f3 - entity.getX());
             float f7 = (float) (f4 - entity.getY());
             float f8 = (float) (f5 - entity.getZ());
